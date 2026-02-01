@@ -73,9 +73,10 @@ fn assets() -> impl Bundle {
         ["Vocals", "CC BY 4.0 by Dillon Becker"],
         ["Night Sky HDRI 001", "CC0 by ambientCG"],
         [
-            "Rest of the assets",
+            "Dark Mod assets",
             "CC BY-NC-SA 3.0 by The Dark Mod Team, converted to Bevy-friendly assets by Jan Hohenheim",
         ],
+        ["More stuffs", "TODO :)"],
     ])
 }
 
