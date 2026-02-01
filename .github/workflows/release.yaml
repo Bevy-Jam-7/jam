@@ -46,7 +46,7 @@ on:
 # Configure the release workflow by editing the following values.
 env:
   # The base filename of the binary produced by `cargo build`.
-  cargo_build_binary_name: foxtrot
+  cargo_build_binary_name: jam
 
   # The path to the assets directory.
   assets_path: assets

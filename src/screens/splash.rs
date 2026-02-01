@@ -56,7 +56,7 @@ fn spawn_splash_screen(mut commands: Commands, asset_server: Res<AssetServer>) {
                     width: Val::Percent(70.0),
                     ..default()
                 },
-                ImageNode::new(asset_server.load("embedded://foxtrot/screens/files/splash.png")),
+                ImageNode::new(asset_server.load("embedded://jam/screens/files/splash.png")),
                 ImageNodeFadeInOut {
                     total_duration: SPLASH_DURATION_SECS,
                     fade_duration: SPLASH_FADE_DURATION_SECS,
