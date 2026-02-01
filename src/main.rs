@@ -60,14 +60,14 @@ fn main() -> AppExit {
                 // This causes errors and even panics on web build on itch.
                 // See https://github.com/bevyengine/bevy_github_ci_template/issues/48.
                 meta_check: AssetMetaCheck::Never,
-                #[cfg(feature = "web")]
-                prevent_default_event_handling: true,
                 ..default()
             })
             .set(WindowPlugin {
                 primary_window: Window {
                     title: "Jam".to_string(),
                     fit_canvas_to_parent: true,
+                    #[cfg(feature = "web")]
+                    prevent_default_event_handling: true,
                     ..default()
                 }
                 .into(),
