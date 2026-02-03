@@ -97,8 +97,6 @@ def convert_textures_to_ktx2():
     files_to_process = []
     for texture_dir in TEXTURE_DIRS:
         search_path = os.path.join(BAKED_ASSETS_DIR, texture_dir)
-        if not os.path.exists(search_path):
-            continue
 
         for root, _dirs, files in os.walk(search_path):
             for file in files:
@@ -186,9 +184,6 @@ def point_material_files_to_ktx2():
 def point_gltf_textures_to_ktx2():
     GLTF_EXTENSIONS = [".glb", ".gltf"]
     models_path = os.path.join(BAKED_ASSETS_DIR, MODELS_SUB_DIR)
-
-    if not os.path.exists(models_path):
-        return
 
     for root, _dirs, files in os.walk(models_path):
         for file in files:
