@@ -122,9 +122,10 @@ def process_texture(file_path):
     """
     texture_name, _ = os.path.splitext(os.path.basename(file_path))
     root = os.path.dirname(file_path)
+    output_path = os.path.join(root, f"{texture_name}.ktx2")
+
     resize_to_pot(file_path, file_path)
 
-    output_path = os.path.join(root, f"{texture_name}.ktx2")
     # kram encode -input your_image.png -output your_image.ktx2 -mipmin 1 -zstd 0 -format bc7 -encoder bcenc
     command = [
         "kram",
