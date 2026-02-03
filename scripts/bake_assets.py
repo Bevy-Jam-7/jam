@@ -104,9 +104,6 @@ def convert_textures_to_ktx2():
                 if ext_name in TEXTURE_EXTENSIONS:
                     files_to_process.append(os.path.join(root, file))
 
-    if not files_to_process:
-        return
-
     max_workers = max(1, multiprocessing.cpu_count() - 1)
     print(f"Processing {len(files_to_process)} textures with {max_workers} workers...")
 
