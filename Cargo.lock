@@ -574,7 +574,7 @@ dependencies = [
  "bevy_app",
  "bevy_derive",
  "bevy_ecs",
- "bevy_enhanced_input 0.23.1",
+ "bevy_enhanced_input",
  "bevy_math",
  "bevy_reflect",
  "bevy_time",
@@ -972,41 +972,16 @@ dependencies = [
 
 [[package]]
 name = "bevy_enhanced_input"
-version = "0.22.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f5e4981e85546349e7ccce7e68aaf9c36e6eed556f7f29087dee184ee7941fb9"
-dependencies = [
- "bevy",
- "bevy_enhanced_input_macros 0.22.0",
- "bitflags 2.10.0",
- "log",
- "smallvec",
- "variadics_please",
-]
-
-[[package]]
-name = "bevy_enhanced_input"
 version = "0.23.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b1843a33db32fea7721ba86cfab4b4a699ac64acbb02e1b1514b7bf51ca603d7"
 dependencies = [
  "bevy",
- "bevy_enhanced_input_macros 0.23.0",
+ "bevy_enhanced_input_macros",
  "bitflags 2.10.0",
  "log",
  "smallvec",
  "variadics_please",
-]
-
-[[package]]
-name = "bevy_enhanced_input_macros"
-version = "0.22.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4680cc23f335f1b768caf91a94b1aa1d786149788644043fe8d49e5708b5cbcc"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -4637,7 +4612,7 @@ dependencies = [
  "bevy",
  "bevy-inspector-egui",
  "bevy_ahoy",
- "bevy_enhanced_input 0.22.2",
+ "bevy_enhanced_input",
  "bevy_fix_cursor_unlock_web",
  "bevy_framepace",
  "bevy_hanabi",
