@@ -409,8 +409,9 @@ checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
 
 [[package]]
 name = "avian3d"
-version = "0.6.0-dev"
-source = "git+https://github.com/avianphysics/avian#309be19b8b5f468112f73824566e7898e18b4bd2"
+version = "0.6.0-rc.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "59554a1f936b55ade114a5f6b68bf718060133296a170c5107ffe73abfa65ea9"
 dependencies = [
  "approx",
  "avian_derive",
@@ -435,7 +436,8 @@ dependencies = [
 [[package]]
 name = "avian_derive"
 version = "0.2.2"
-source = "git+https://github.com/avianphysics/avian#309be19b8b5f468112f73824566e7898e18b4bd2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "12b257f601a1535e0d4a7a7796f535e3a13de62fd422b16dff7c14d27f0d4048"
 dependencies = [
  "proc-macro-error2",
  "proc-macro2",
@@ -445,8 +447,9 @@ dependencies = [
 
 [[package]]
 name = "avian_pickup"
-version = "0.5.0-dev"
-source = "git+https://github.com/janhohenheim/avian_pickup#76acb65961213d0a30013429db4fdda8eb2ea8cb"
+version = "0.5.0-rc.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d748fb55ac2c45d7eb3e3e97e8afd79914ad5fc52abaa1685d5450de74d65296"
 dependencies = [
  "avian3d",
  "bevy_app",
@@ -463,8 +466,9 @@ dependencies = [
 
 [[package]]
 name = "avian_rerecast"
-version = "0.5.0-dev"
-source = "git+https://github.com/janhohenheim/rerecast#5290f1447b5129b9f923caee3e1e674296f0e39f"
+version = "0.5.0-rc.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f4e5ce53a4e16f59ca35289f12ec73085dfd84137d4e3db268e8256ab4f93747"
 dependencies = [
  "avian3d",
  "bevy_app",
@@ -567,8 +571,9 @@ dependencies = [
 
 [[package]]
 name = "bevy_ahoy"
-version = "0.0.3"
-source = "git+https://github.com/janhohenheim/bevy_ahoy#d37ed08f61474b5d39ea122281d592c44de5fb8c"
+version = "0.1.0-rc.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "546782948e7f8e56b7cf475727c13545d7b4b1a3ea08ebedf82a79fda3c5973b"
 dependencies = [
  "avian3d",
  "avian_pickup",
@@ -1137,13 +1142,15 @@ dependencies = [
 [[package]]
 name = "bevy_hanabi"
 version = "0.18.0"
-source = "git+https://github.com/morgenthum/bevy_hanabi?branch=bevy-0.18#294f4865e29377bc4d2561fbd992bb94c1cc1fb2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d551e95cf661cfc74bd71faf16e7cc8eed7d21b7f0ac8ca8301426338e38be36"
 dependencies = [
  "anyhow",
  "bevy",
  "bitflags 2.10.0",
  "bytemuck",
  "fixedbitset",
+ "getrandom",
  "naga",
  "naga_oil",
  "rand",
@@ -1680,7 +1687,8 @@ dependencies = [
 [[package]]
 name = "bevy_rerecast_core"
 version = "0.4.0"
-source = "git+https://github.com/janhohenheim/rerecast#5290f1447b5129b9f923caee3e1e674296f0e39f"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6e7fc8abc0a11eb1d4ba90f6b4980b639338841a66663780db1a7cdaa9b7c501"
 dependencies = [
  "anyhow",
  "bevy_app",
@@ -2004,7 +2012,7 @@ dependencies = [
 [[package]]
 name = "bevy_trenchbroom"
 version = "0.12.0"
-source = "git+https://github.com/janhohenheim/bevy_trenchbroom?branch=avian-0.6#bc629173c27608e0d3f06225641510cca2cad949"
+source = "git+https://github.com/janhohenheim/bevy_trenchbroom?branch=avian-0.6#91136c292d25567a7ab7bed5a12a66f1c1675258"
 dependencies = [
  "anyhow",
  "atomicow",
@@ -2033,8 +2041,8 @@ dependencies = [
 
 [[package]]
 name = "bevy_trenchbroom_avian"
-version = "0.13.0-dev"
-source = "git+https://github.com/janhohenheim/bevy_trenchbroom?branch=avian-0.6#bc629173c27608e0d3f06225641510cca2cad949"
+version = "0.13.0-rc.1"
+source = "git+https://github.com/janhohenheim/bevy_trenchbroom?branch=avian-0.6#91136c292d25567a7ab7bed5a12a66f1c1675258"
 dependencies = [
  "avian3d",
  "bevy",
@@ -2044,7 +2052,7 @@ dependencies = [
 [[package]]
 name = "bevy_trenchbroom_macros"
 version = "0.12.0"
-source = "git+https://github.com/janhohenheim/bevy_trenchbroom?branch=avian-0.6#bc629173c27608e0d3f06225641510cca2cad949"
+source = "git+https://github.com/janhohenheim/bevy_trenchbroom?branch=avian-0.6#91136c292d25567a7ab7bed5a12a66f1c1675258"
 dependencies = [
  "deluxe",
  "heck 0.5.0",
@@ -6222,7 +6230,8 @@ checksum = "19b30a45b0cd0bcca8037f3d0dc3421eaf95327a17cad11964fb8179b4fc4832"
 [[package]]
 name = "rerecast"
 version = "0.3.0"
-source = "git+https://github.com/janhohenheim/rerecast#5290f1447b5129b9f923caee3e1e674296f0e39f"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "743dec299d7c17317a33978487718186c30db69a178a3caccdca74b9258d921c"
 dependencies = [
  "anyhow",
  "bevy_reflect",
