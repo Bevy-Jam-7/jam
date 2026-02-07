@@ -30,7 +30,3 @@ pub struct Health(pub f32);
 #[derive(Component, Debug, Deref, DerefMut, Clone, Reflect)]
 #[reflect(Clone, Debug, Component)]
 pub struct FeverTimer(pub Timer);
-
-
-
-
