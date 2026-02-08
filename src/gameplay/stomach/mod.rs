@@ -11,7 +11,12 @@ use bevy::{
 	render::{render_resource::TextureFormat, view::Hdr},
 };
 
-use crate::{CameraOrder, RenderLayer, screens::Screen, third_party::avian3d::CollisionLayer};
+use crate::{
+	CameraOrder, RenderLayer,
+	gameplay::player::{Player, camera::PlayerCamera},
+	screens::Screen,
+	third_party::avian3d::CollisionLayer,
+};
 
 pub(crate) mod eat;
 pub(crate) mod vomit;
@@ -19,6 +24,7 @@ pub(crate) mod vomit;
 pub(super) fn plugin(app: &mut App) {
 	app.add_plugins((eat::plugin, vomit::plugin));
 	app.add_systems(OnEnter(Screen::Gameplay), spawn_stomach);
+	app.add_systems(FixedUpdate, move_stomach);
 }
 
 #[derive(Component, Debug)]
@@ -31,7 +37,7 @@ impl Default for Stomach {
 	fn default() -> Self {
 		Self {
 			// We use a fairly large z-size, but movement is still locked in the z-axis.
-			target_size: Vec3::new(2.5, 5.0, 4.0),
+			target_size: Vec3::new(2.5, 5.0, 10.0),
 			contents: EntityHashSet::new(),
 		}
 	}
@@ -73,83 +79,85 @@ fn spawn_stomach(
 	});
 
 	// TODO: Make the walls springy
-	commands.spawn((
-		Name::new("Stomach"),
-		Stomach::default(),
-		Transform::from_translation(STOMACH_POSITION),
-		RigidBody::Kinematic,
-		DespawnOnExit(Screen::Gameplay),
-		Visibility::default(),
-		children![
-			(
-				Name::new("Stomach Left Wall"),
-				Collider::half_space(Vec3::X),
-				CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
-				Transform::from_translation(Vec3::new(-stomach.target_size.x / 2.0, 0.0, 0.0,)),
-				children![(
-					Mesh3d(vertical_mesh.clone()),
-					MeshMaterial3d(wall_material.clone()),
-					RenderLayers::from(RenderLayer::STOMACH),
-					Transform::from_translation(Vec3::new(-mesh_thickness / 2.0, 0.0, 0.0)),
-				)]
-			),
-			(
-				Name::new("Stomach Right Wall"),
-				Collider::half_space(-Vec3::X),
-				CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
-				Transform::from_translation(Vec3::new(stomach.target_size.x / 2.0, 0.0, 0.0,)),
-				children![(
-					Mesh3d(vertical_mesh),
-					MeshMaterial3d(wall_material.clone()),
-					RenderLayers::from(RenderLayer::STOMACH),
-					Transform::from_translation(Vec3::new(mesh_thickness / 2.0, 0.0, 0.0)),
-				)]
-			),
-			(
-				Name::new("Stomach Ceiling"),
-				Collider::half_space(-Vec3::Y),
-				CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
-				Transform::from_translation(Vec3::new(0.0, stomach.target_size.y / 2.0, 0.0)),
-				children![(
-					Mesh3d(horizontal_mesh.clone()),
-					MeshMaterial3d(wall_material.clone()),
-					RenderLayers::from(RenderLayer::STOMACH),
-					Transform::from_translation(Vec3::new(0.0, mesh_thickness / 2.0, 0.0)),
-				)]
-			),
-			(
-				Name::new("Stomach Floor"),
-				Collider::half_space(Vec3::Y),
-				CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
-				Transform::from_translation(Vec3::new(0.0, -stomach.target_size.y / 2.0, 0.0)),
-				children![(
-					Mesh3d(horizontal_mesh),
-					MeshMaterial3d(wall_material),
-					RenderLayers::from(RenderLayer::STOMACH),
-					Transform::from_translation(Vec3::new(0.0, -mesh_thickness / 2.0, 0.0)),
-				)]
-			),
-			(
-				Name::new("Stomach Back Wall"),
-				Collider::half_space(Vec3::Z),
-				CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
-				Transform::from_translation(Vec3::new(0.0, 0.0, -stomach.target_size.z / 2.0)),
-				children![(
-					Mesh3d(back_mesh),
-					MeshMaterial3d(back_material),
-					RenderLayers::from(RenderLayer::STOMACH),
-					Transform::from_translation(Vec3::new(0.0, 0.0, -mesh_thickness / 2.0)),
-				)]
-			),
-			(
-				Name::new("Stomach Front Wall (Invisible)"),
-				// No mesh for the front wall, so that we can see inside the stomach.
-				Collider::half_space(-Vec3::Z),
-				CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
-				Transform::from_translation(Vec3::new(0.0, 0.0, stomach.target_size.z / 2.0,)),
-			),
-		],
-	));
+	let stomach_entity = commands
+		.spawn((
+			Name::new("Stomach"),
+			Stomach::default(),
+			Transform::from_translation(STOMACH_POSITION),
+			RigidBody::Kinematic,
+			DespawnOnExit(Screen::Gameplay),
+			Visibility::default(),
+			children![
+				(
+					Name::new("Stomach Left Wall"),
+					Collider::half_space(Vec3::X),
+					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
+					Transform::from_translation(Vec3::new(-stomach.target_size.x / 2.0, 0.0, 0.0,)),
+					children![(
+						Mesh3d(vertical_mesh.clone()),
+						MeshMaterial3d(wall_material.clone()),
+						RenderLayers::from(RenderLayer::STOMACH),
+						Transform::from_translation(Vec3::new(-mesh_thickness / 2.0, 0.0, 0.0)),
+					)]
+				),
+				(
+					Name::new("Stomach Right Wall"),
+					Collider::half_space(-Vec3::X),
+					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
+					Transform::from_translation(Vec3::new(stomach.target_size.x / 2.0, 0.0, 0.0,)),
+					children![(
+						Mesh3d(vertical_mesh),
+						MeshMaterial3d(wall_material.clone()),
+						RenderLayers::from(RenderLayer::STOMACH),
+						Transform::from_translation(Vec3::new(mesh_thickness / 2.0, 0.0, 0.0)),
+					)]
+				),
+				(
+					Name::new("Stomach Ceiling"),
+					Collider::half_space(-Vec3::Y),
+					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
+					Transform::from_translation(Vec3::new(0.0, stomach.target_size.y / 2.0, 0.0)),
+					children![(
+						Mesh3d(horizontal_mesh.clone()),
+						MeshMaterial3d(wall_material.clone()),
+						RenderLayers::from(RenderLayer::STOMACH),
+						Transform::from_translation(Vec3::new(0.0, mesh_thickness / 2.0, 0.0)),
+					)]
+				),
+				(
+					Name::new("Stomach Floor"),
+					Collider::half_space(Vec3::Y),
+					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
+					Transform::from_translation(Vec3::new(0.0, -stomach.target_size.y / 2.0, 0.0)),
+					children![(
+						Mesh3d(horizontal_mesh),
+						MeshMaterial3d(wall_material),
+						RenderLayers::from(RenderLayer::STOMACH),
+						Transform::from_translation(Vec3::new(0.0, -mesh_thickness / 2.0, 0.0)),
+					)]
+				),
+				(
+					Name::new("Stomach Back Wall"),
+					Collider::half_space(Vec3::Z),
+					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
+					Transform::from_translation(Vec3::new(0.0, 0.0, -stomach.target_size.z / 2.0)),
+					children![(
+						Mesh3d(back_mesh),
+						MeshMaterial3d(back_material),
+						RenderLayers::from(RenderLayer::STOMACH),
+						Transform::from_translation(Vec3::new(0.0, 0.0, -mesh_thickness / 2.0)),
+					)]
+				),
+				(
+					Name::new("Stomach Front Wall (Invisible)"),
+					// No mesh for the front wall, so that we can see inside the stomach.
+					Collider::half_space(-Vec3::Z),
+					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
+					Transform::from_translation(Vec3::new(0.0, 0.0, stomach.target_size.z / 2.0,)),
+				),
+			],
+		))
+		.id();
 
 	// We'll render the stomach and its contents to a texture.
 	let aspect_ratio = stomach.target_size.x / stomach.target_size.y;
@@ -164,7 +172,8 @@ fn spawn_stomach(
 	// Spawn stomach camera.
 	commands.spawn((
 		Name::new("Stomach Camera"),
-		Transform::from_translation(STOMACH_POSITION + Vec3::new(0.0, 0.0, 20.0)),
+		ChildOf(stomach_entity),
+		Transform::from_xyz(0.0, 0.0, 20.0),
 		Camera3d::default(),
 		Camera {
 			// Bump the order to render on top of the world model.
@@ -214,4 +223,16 @@ fn spawn_stomach(
 		RenderLayers::from(RenderLayer::STOMACH),
 		Transform::default().looking_to(Dir3::NEG_Z, Vec3::Y),
 	));
+}
+
+fn move_stomach(
+	mut stomach_velocity: Single<&mut LinearVelocity, (With<Stomach>, Without<Player>)>,
+	player_camera_transform: Single<&GlobalTransform, With<PlayerCamera>>,
+	player_velocity: Single<&LinearVelocity, With<Player>>,
+) {
+	let target_velocity = player_camera_transform.rotation().inverse() * player_velocity.0 * 0.5;
+	let smoothing_factor = 0.1;
+	stomach_velocity.0 = stomach_velocity.lerp(target_velocity, smoothing_factor);
+	// Lock movement in the z-axis.
+	stomach_velocity.z = 0.0;
 }
