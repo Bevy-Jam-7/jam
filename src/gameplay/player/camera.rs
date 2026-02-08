@@ -225,21 +225,21 @@ fn configure_player_view_model(
 
 fn add_render_layers_to_point_light(add: On<Add, PointLight>, mut commands: Commands) {
     let entity = add.entity;
-    commands.entity(entity).insert(RenderLayers::from(
+    commands.entity(entity).insert_if_new(RenderLayers::from(
         RenderLayer::DEFAULT | RenderLayer::VIEW_MODEL,
     ));
 }
 
 fn add_render_layers_to_spot_light(add: On<Add, SpotLight>, mut commands: Commands) {
     let entity = add.entity;
-    commands.entity(entity).insert(RenderLayers::from(
+    commands.entity(entity).insert_if_new(RenderLayers::from(
         RenderLayer::DEFAULT | RenderLayer::VIEW_MODEL,
     ));
 }
 
 fn add_render_layers_to_directional_light(add: On<Add, DirectionalLight>, mut commands: Commands) {
     let entity = add.entity;
-    commands.entity(entity).insert(RenderLayers::from(
+    commands.entity(entity).insert_if_new(RenderLayers::from(
         RenderLayer::DEFAULT | RenderLayer::VIEW_MODEL,
     ));
 }
