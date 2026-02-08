@@ -205,7 +205,7 @@ fn spawn_stomach(
     ));
 
     // Spawn a light to illuminate the stomach.
-    /*commands.spawn((
+    commands.spawn((
         DirectionalLight {
             illuminance: 1e4,
             shadows_enabled: false,
@@ -213,5 +213,5 @@ fn spawn_stomach(
         },
         RenderLayers::from(RenderLayer::STOMACH),
         Transform::default().looking_to(Dir3::NEG_Z, Vec3::Y),
-    ));*/
+    ));
 }
