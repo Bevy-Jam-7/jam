@@ -93,6 +93,7 @@ fn spawn_stomach(
 					Collider::half_space(Vec3::X),
 					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
 					Transform::from_translation(Vec3::new(-stomach.target_size.x / 2.0, 0.0, 0.0,)),
+					Visibility::default(),
 					children![(
 						Mesh3d(vertical_mesh.clone()),
 						MeshMaterial3d(wall_material.clone()),
@@ -105,6 +106,7 @@ fn spawn_stomach(
 					Collider::half_space(-Vec3::X),
 					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
 					Transform::from_translation(Vec3::new(stomach.target_size.x / 2.0, 0.0, 0.0,)),
+					Visibility::default(),
 					children![(
 						Mesh3d(vertical_mesh),
 						MeshMaterial3d(wall_material.clone()),
@@ -117,6 +119,7 @@ fn spawn_stomach(
 					Collider::half_space(-Vec3::Y),
 					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
 					Transform::from_translation(Vec3::new(0.0, stomach.target_size.y / 2.0, 0.0)),
+					Visibility::default(),
 					children![(
 						Mesh3d(horizontal_mesh.clone()),
 						MeshMaterial3d(wall_material.clone()),
@@ -129,6 +132,7 @@ fn spawn_stomach(
 					Collider::half_space(Vec3::Y),
 					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
 					Transform::from_translation(Vec3::new(0.0, -stomach.target_size.y / 2.0, 0.0)),
+					Visibility::default(),
 					children![(
 						Mesh3d(horizontal_mesh),
 						MeshMaterial3d(wall_material),
@@ -141,6 +145,7 @@ fn spawn_stomach(
 					Collider::half_space(Vec3::Z),
 					CollisionLayers::new(CollisionLayer::Stomach, CollisionLayer::Stomach),
 					Transform::from_translation(Vec3::new(0.0, 0.0, -stomach.target_size.z / 2.0)),
+					Visibility::default(),
 					children![(
 						Mesh3d(back_mesh),
 						MeshMaterial3d(back_material),

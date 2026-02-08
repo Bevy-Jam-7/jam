@@ -10,6 +10,7 @@ pub(crate) mod core;
 pub(crate) mod crosshair;
 pub(crate) mod level;
 pub(crate) mod npc;
+pub(crate) mod objectives;
 pub(crate) mod player;
 pub(crate) mod stomach;
 
@@ -18,6 +19,7 @@ pub(super) fn plugin(app: &mut App) {
 		animation::plugin,
 		crosshair::plugin,
 		npc::plugin,
+		objectives::plugin,
 		player::plugin,
 		stomach::plugin,
 		// This plugin preloads the level,
