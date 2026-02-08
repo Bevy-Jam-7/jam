@@ -3,7 +3,11 @@ use bevy_seedling::firewheel::nodes::svf::SvfNode;
 use bevy_seedling::prelude::*;
 
 /// Sets up all the components required to start audio playback at a particular time.
-pub fn play_at(player: SamplePlayer, time: &Time<Audio>, delay: f64) -> impl Bundle {
+pub fn play_at(
+    player: SamplePlayer,
+    time: &Time<Audio>,
+    delay: f64,
+) -> (SamplePlayer, PlaybackSettings, AudioEvents) {
     let mut events = AudioEvents::new(time);
     let settings = PlaybackSettings {
         play: Notify::new(false),

@@ -1,18 +1,21 @@
-use bevy::prelude::*;
+use bevy::{input::keyboard::KeyboardInput, prelude::*};
 use bevy_seedling::firewheel::nodes::svf::SvfNode;
 use bevy_seedling::prelude::*;
 
 use crate::menus::Menu;
-use animation::{AnimateCutoff, play_at};
+use animation::AnimateCutoff;
 
 pub(crate) mod animation;
+pub(crate) mod layers;
 pub(crate) mod perceptual;
 
 pub(super) fn plugin(app: &mut App) {
-    app.add_systems(Startup, initialize_audio)
+    app.add_plugins(layers::plugin)
+        .add_systems(Startup, initialize_audio)
         .register_node::<SvfNode<2>>()
         .register_type::<SvfNode<2>>()
         .add_systems(Update, manage_filter_enabled)
+        .add_systems(Update, layer_testing)
         .add_systems(OnExit(Menu::None), enable_music_filter)
         .add_systems(OnEnter(Menu::None), disable_music_filter);
 }
@@ -39,7 +42,7 @@ pub(crate) struct MusicFilter;
 /// Set somewhere below 0 dB so that the user can turn the volume up if they want to.
 pub(crate) const DEFAULT_MAIN_VOLUME: Volume = Volume::Linear(0.5);
 
-fn initialize_audio(server: Res<AssetServer>, time: Res<Time<Audio>>, mut commands: Commands) {
+fn initialize_audio(server: Res<AssetServer>, mut commands: Commands) {
     // Tuned by ear
     const DEFAULT_POOL_VOLUME: Volume = Volume::Linear(1.6);
 
@@ -66,6 +69,7 @@ fn initialize_audio(server: Res<AssetServer>, time: Res<Time<Audio>>, mut comman
         .spawn((
             Name::new("Music audio sampler pool"),
             SamplerPool(MusicPool),
+            sample_effects![VolumeNode::default()],
             VolumeNode { ..default() },
         ))
         // we'll add a cute filter for menus
@@ -103,51 +107,67 @@ fn initialize_audio(server: Res<AssetServer>, time: Res<Time<Audio>>, mut comman
         ))
         .connect(SoundEffectsBus);
 
-    play_penis_music(&time, &server, commands.reborrow());
+    commands.spawn(silly_breakcore_layers(&server));
 }
 
-fn play_penis_music(time: &Time<Audio>, server: &AssetServer, mut commands: Commands) {
-    let start_time = 1.0 + 4.0 / 3.0;
-    commands.spawn((
-        play_at(
-            SamplePlayer::new(server.load("audio/music/penis-music/intro.wav"))
-                .with_volume(Volume::Decibels(9.0)),
-            time,
-            1.05, // looks like we need to investigate timing issues
-        ),
-        MusicPool,
-    ));
+fn silly_breakcore_layers(server: &AssetServer) -> impl Bundle {
+    use layers::*;
 
-    commands.spawn((
-        play_at(
-            SamplePlayer::new(server.load("audio/music/penis-music/dnb.wav"))
-                .looping()
-                .with_volume(Volume::Decibels(9.0)),
-            time,
-            start_time,
-        ),
-        MusicPool,
-    ));
-    commands.spawn((
-        play_at(
-            SamplePlayer::new(server.load("audio/music/penis-music/voices.wav"))
-                .looping()
-                .with_volume(Volume::Decibels(9.0)),
-            time,
-            start_time,
-        ),
-        MusicPool,
-    ));
-    commands.spawn((
-        play_at(
-            SamplePlayer::new(server.load("audio/music/penis-music/lead.wav"))
-                .looping()
-                .with_volume(Volume::Decibels(9.0)),
-            time,
-            start_time,
-        ),
-        MusicPool,
-    ));
+    (
+        Name::new("Silly Breakcore"),
+        LayeredMusic { amount: 0.0 },
+        // optional
+        Intro {
+            sample: server.load("audio/music/silly-breakcore/intro.wav"),
+            duration: DurationSeconds(4.0 / 3.0),
+        },
+        children![
+            Layer(server.load("audio/music/silly-breakcore/dnb.wav")),
+            Layer(server.load("audio/music/silly-breakcore/lead.wav")),
+            Layer(server.load("audio/music/silly-breakcore/voices.wav")),
+        ],
+    )
+}
+
+/// A basic demonstration of how layering cna be used.
+fn layer_testing(
+    mut events: MessageReader<KeyboardInput>,
+    lay: Single<(Entity, &mut layers::LayeredMusic, Has<layers::ActiveMusic>)>,
+    mut commands: Commands,
+    mut level: Local<usize>,
+) {
+    use layers::*;
+
+    let (layer_entity, mut amount, is_active) = lay.into_inner();
+
+    for input in events.read() {
+        if !input.state.is_pressed() {
+            continue;
+        }
+
+        match input.key_code {
+            KeyCode::ArrowRight => {
+                *level = (*level + 1).min(4);
+                if !is_active {
+                    commands.trigger(PlayLayeredMusic(layer_entity));
+                }
+                amount.amount = *level as f32 / 4.0;
+
+                info!("Set layer level to {}", amount.amount);
+            }
+            KeyCode::ArrowLeft => {
+                *level = level.saturating_sub(1);
+
+                if *level == 0 && is_active {
+                    commands.trigger(StopLayeredMusic(layer_entity));
+                }
+                amount.amount = *level as f32 / 4.0;
+
+                info!("Set layer level to {}", amount.amount);
+            }
+            _ => {}
+        }
+    }
 }
 
 // Sweep the filter down when entering a menu.
