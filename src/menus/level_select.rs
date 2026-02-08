@@ -1,9 +1,10 @@
 //! Cruelty Squad-inspired level selection screen.
 //!
-//! Each visual section is its own spawn function so other devs
+//! Each visual section is a bundle-returning function so other devs
 //! can pull individual pieces into different contexts.
 
 use bevy::{
+	ecs::spawn::{SpawnIter, SpawnWith},
 	input::common_conditions::input_just_pressed,
 	prelude::*,
 	ui::Val::*,
@@ -139,41 +140,18 @@ fn cleanup_selected_level(mut commands: Commands) {
 fn spawn_level_select(mut commands: Commands) {
 	commands.init_resource::<SelectedLevel>();
 	let level = &LEVELS[0];
-
-	commands
-		.spawn((
-			widget::ui_root("Level Select"),
-			BackgroundColor(SCREEN_BACKGROUND),
-			GlobalZIndex(2),
-			DespawnOnExit(Menu::LevelSelect),
-		))
-		.with_children(|root| {
-			spawn_header(root);
-
-			// Main 3-column layout
-			root.spawn((
-				Name::new("Main Layout"),
-				Node {
-					width: Percent(95.0),
-					height: Percent(75.0),
-					flex_direction: FlexDirection::Row,
-					column_gap: Px(15.0),
-					..default()
-				},
-			))
-			.with_children(|columns| {
-				spawn_level_grid(columns);
-				spawn_preview_panel(columns, level);
-				spawn_right_column(columns, level);
-			});
-
-			spawn_bottom_buttons(root);
-		});
+	commands.spawn((
+		widget::ui_root("Level Select"),
+		BackgroundColor(SCREEN_BACKGROUND),
+		GlobalZIndex(2),
+		DespawnOnExit(Menu::LevelSelect),
+		children![header(), main_layout(level), bottom_buttons(),],
+	));
 }
 
 /// `<<LEVEL SELECT>>` header text.
-fn spawn_header(parent: &mut ChildSpawnerCommands) {
-	parent.spawn((
+fn header() -> impl Bundle {
+	(
 		Name::new("Level Select Header"),
 		Text("<<LEVEL SELECT>>".into()),
 		TextFont::from_font_size(36.0),
@@ -186,36 +164,46 @@ fn spawn_header(parent: &mut ChildSpawnerCommands) {
 			},
 			..default()
 		},
-	));
+	)
+}
+
+/// Main 3-column layout.
+fn main_layout(level: &LevelInfo) -> impl Bundle {
+	(
+		Name::new("Main Layout"),
+		Node {
+			width: Percent(95.0),
+			height: Percent(75.0),
+			flex_direction: FlexDirection::Row,
+			column_gap: Px(15.0),
+			..default()
+		},
+		children![level_grid(), preview_panel(level), right_column(level),],
+	)
 }
 
 /// 2x3 CSS-Grid of level squares (left column).
-fn spawn_level_grid(parent: &mut ChildSpawnerCommands) {
-	parent
-		.spawn((
-			Name::new("Level Grid"),
-			Node {
-				display: Display::Grid,
-				width: Px(220.0),
-				padding: UiRect::all(Px(10.0)),
-				row_gap: Px(8.0),
-				column_gap: Px(8.0),
-				grid_template_columns: RepeatedGridTrack::px(2, 95.0),
-				grid_template_rows: RepeatedGridTrack::px(3, 70.0),
-				..default()
-			},
-			BackgroundColor(GRID_BG),
-			BorderColor::from(Color::srgb(0.3, 0.3, 0.0)),
-		))
-		.with_children(|grid| {
-			for idx in 0..LEVELS.len() {
-				spawn_level_square(grid, idx);
-			}
-		});
+fn level_grid() -> impl Bundle {
+	(
+		Name::new("Level Grid"),
+		Node {
+			display: Display::Grid,
+			width: Px(220.0),
+			padding: UiRect::all(Px(10.0)),
+			row_gap: Px(8.0),
+			column_gap: Px(8.0),
+			grid_template_columns: RepeatedGridTrack::px(2, 95.0),
+			grid_template_rows: RepeatedGridTrack::px(3, 70.0),
+			..default()
+		},
+		BackgroundColor(GRID_BG),
+		BorderColor::from(Color::srgb(0.3, 0.3, 0.0)),
+		Children::spawn(SpawnIter((0..LEVELS.len()).map(level_square))),
+	)
 }
 
 /// Single clickable level square inside the grid.
-fn spawn_level_square(parent: &mut ChildSpawnerCommands, idx: usize) {
+fn level_square(idx: usize) -> impl Bundle {
 	let level = &LEVELS[idx];
 	let is_selected = idx == 0;
 	let bg = if level.locked {
@@ -223,61 +211,55 @@ fn spawn_level_square(parent: &mut ChildSpawnerCommands, idx: usize) {
 	} else {
 		level.preview_color
 	};
+	let text = if level.locked {
+		"???".to_string()
+	} else {
+		format!("L{}", idx + 1)
+	};
+	let color = if level.locked {
+		LOCKED_TEXT
+	} else {
+		Color::WHITE
+	};
 
-	parent
-		.spawn((
-			Name::new(format!("Level Square {}", idx)),
-			Button,
-			LevelSquare(idx),
-			SelectedBorder(idx),
-			BackgroundColor(bg),
-			Node {
-				align_items: AlignItems::Center,
-				justify_content: JustifyContent::Center,
-				border: UiRect::all(Px(3.0)),
-				..default()
-			},
-			BorderColor::from(if is_selected {
-				NEON_GREEN
-			} else {
-				Color::srgb(0.2, 0.2, 0.2)
-			}),
-		))
-		.with_children(|sq| {
-			let text = if level.locked {
-				"???".to_string()
-			} else {
-				format!("L{}", idx + 1)
-			};
-			let color = if level.locked {
-				LOCKED_TEXT
-			} else {
-				Color::WHITE
-			};
-			sq.spawn((
-				Text(text),
-				TextFont::from_font_size(20.0),
-				TextColor(color),
-				Pickable::IGNORE,
-			));
-		});
+	(
+		Name::new(format!("Level Square {}", idx)),
+		Button,
+		LevelSquare(idx),
+		SelectedBorder(idx),
+		BackgroundColor(bg),
+		Node {
+			align_items: AlignItems::Center,
+			justify_content: JustifyContent::Center,
+			border: UiRect::all(Px(3.0)),
+			..default()
+		},
+		BorderColor::from(if is_selected {
+			NEON_GREEN
+		} else {
+			Color::srgb(0.2, 0.2, 0.2)
+		}),
+		children![(
+			Text(text),
+			TextFont::from_font_size(20.0),
+			TextColor(color),
+			Pickable::IGNORE,
+		)],
+	)
 }
 
 /// Center column: level name, preview rect, objective box.
-fn spawn_preview_panel(parent: &mut ChildSpawnerCommands, level: &LevelInfo) {
-	parent
-		.spawn((
-			Name::new("Center Column"),
-			Node {
-				flex_grow: 1.0,
-				flex_direction: FlexDirection::Column,
-				row_gap: Px(10.0),
-				..default()
-			},
-		))
-		.with_children(|center| {
-			// Level name header
-			center.spawn((
+fn preview_panel(level: &LevelInfo) -> impl Bundle {
+	(
+		Name::new("Center Column"),
+		Node {
+			flex_grow: 1.0,
+			flex_direction: FlexDirection::Column,
+			row_gap: Px(10.0),
+			..default()
+		},
+		children![
+			(
 				Name::new("Level Name"),
 				LevelNameText,
 				Text(level.name.into()),
@@ -287,10 +269,8 @@ fn spawn_preview_panel(parent: &mut ChildSpawnerCommands, level: &LevelInfo) {
 					margin: UiRect::left(Px(5.0)),
 					..default()
 				},
-			));
-
-			// Preview rectangle
-			center.spawn((
+			),
+			(
 				Name::new("Preview Panel"),
 				PreviewPanel,
 				BackgroundColor(level.preview_color),
@@ -301,59 +281,52 @@ fn spawn_preview_panel(parent: &mut ChildSpawnerCommands, level: &LevelInfo) {
 					..default()
 				},
 				BorderColor::from(PANEL_BORDER),
-			));
-
-			spawn_objective_box(center, level);
-		});
+			),
+			objective_box(level),
+		],
+	)
 }
 
 /// Green-bordered objective text box.
-fn spawn_objective_box(parent: &mut ChildSpawnerCommands, level: &LevelInfo) {
-	parent
-		.spawn((
-			Name::new("Objective Box"),
-			BackgroundColor(OBJECTIVE_BG),
-			Node {
-				width: Percent(100.0),
-				padding: UiRect::all(Px(12.0)),
-				border: UiRect::all(Px(2.0)),
-				margin: UiRect::top(Px(-3.0)),
-				..default()
-			},
-			BorderColor::from(NEON_GREEN),
-		))
-		.with_children(|obj| {
-			obj.spawn((
-				Name::new("Objective Label"),
-				Text(format!("OBJECTIVE: {}", level.objective)),
-				TextFont::from_font_size(16.0),
-				TextColor(NEON_GREEN),
-				ObjectiveText,
-			));
-		});
+fn objective_box(level: &LevelInfo) -> impl Bundle {
+	(
+		Name::new("Objective Box"),
+		BackgroundColor(OBJECTIVE_BG),
+		Node {
+			width: Percent(100.0),
+			padding: UiRect::all(Px(12.0)),
+			border: UiRect::all(Px(2.0)),
+			margin: UiRect::top(Px(-3.0)),
+			..default()
+		},
+		BorderColor::from(NEON_GREEN),
+		children![(
+			Name::new("Objective Label"),
+			Text(format!("OBJECTIVE: {}", level.objective)),
+			TextFont::from_font_size(16.0),
+			TextColor(NEON_GREEN),
+			ObjectiveText,
+		)],
+	)
 }
 
 /// Right column: portrait placeholder + description/lore panel.
-fn spawn_right_column(parent: &mut ChildSpawnerCommands, level: &LevelInfo) {
-	parent
-		.spawn((
-			Name::new("Right Column"),
-			Node {
-				width: Px(200.0),
-				flex_direction: FlexDirection::Column,
-				row_gap: Px(8.0),
-				..default()
-			},
-		))
-		.with_children(|right| {
-			spawn_portrait(right);
-			spawn_description_panel(right, level);
-		});
+fn right_column(level: &LevelInfo) -> impl Bundle {
+	(
+		Name::new("Right Column"),
+		Node {
+			width: Px(200.0),
+			flex_direction: FlexDirection::Column,
+			row_gap: Px(8.0),
+			..default()
+		},
+		children![portrait(), description_panel(level),],
+	)
 }
 
 /// Portrait box (placeholder — wire up eye material or an image here).
-fn spawn_portrait(parent: &mut ChildSpawnerCommands) {
-	parent.spawn((
+fn portrait() -> impl Bundle {
+	(
 		Name::new("Portrait"),
 		BackgroundColor(Color::srgb(0.1, 0.08, 0.12)),
 		Node {
@@ -368,125 +341,114 @@ fn spawn_portrait(parent: &mut ChildSpawnerCommands) {
 			..default()
 		},
 		BorderColor::from(PANEL_BORDER),
-	));
+	)
 }
 
 /// Description/lore text panel beneath the portrait.
-fn spawn_description_panel(parent: &mut ChildSpawnerCommands, level: &LevelInfo) {
-	parent
-		.spawn((
-			Name::new("Description Panel"),
-			BackgroundColor(LORE_BG),
-			Node {
-				width: Px(190.0),
-				min_height: Px(150.0),
-				padding: UiRect::all(Px(10.0)),
-				border: UiRect {
-					left: Px(2.0),
-					right: Px(2.0),
-					top: Px(0.0),
-					bottom: Px(2.0),
-				},
-				margin: UiRect::left(Px(5.0)),
-				..default()
+fn description_panel(level: &LevelInfo) -> impl Bundle {
+	(
+		Name::new("Description Panel"),
+		BackgroundColor(LORE_BG),
+		Node {
+			width: Px(190.0),
+			min_height: Px(150.0),
+			padding: UiRect::all(Px(10.0)),
+			border: UiRect {
+				left: Px(2.0),
+				right: Px(2.0),
+				top: Px(0.0),
+				bottom: Px(2.0),
 			},
-			BorderColor::from(Color::srgb(0.4, 0.2, 0.5)),
-		))
-		.with_children(|lore_panel| {
-			lore_panel.spawn((
-				Name::new("Description Text"),
-				DescriptionText,
-				Text(level.description.into()),
-				TextFont::from_font_size(13.0),
-				TextColor(Color::srgb(0.7, 0.6, 0.8)),
-			));
-		});
+			margin: UiRect::left(Px(5.0)),
+			..default()
+		},
+		BorderColor::from(Color::srgb(0.4, 0.2, 0.5)),
+		children![(
+			Name::new("Description Text"),
+			DescriptionText,
+			Text(level.description.into()),
+			TextFont::from_font_size(13.0),
+			TextColor(Color::srgb(0.7, 0.6, 0.8)),
+		)],
+	)
 }
 
 /// Bottom row: Enter Level + Back buttons.
-fn spawn_bottom_buttons(parent: &mut ChildSpawnerCommands) {
-	parent
-		.spawn((
-			Name::new("Bottom Buttons"),
-			Node {
-				width: Percent(95.0),
-				flex_direction: FlexDirection::Row,
-				justify_content: JustifyContent::SpaceBetween,
-				margin: UiRect::top(Px(10.0)),
-				..default()
-			},
-		))
-		.with_children(|bottom| {
-			spawn_enter_button(bottom);
-			spawn_back_button(bottom);
-		});
+fn bottom_buttons() -> impl Bundle {
+	(
+		Name::new("Bottom Buttons"),
+		Node {
+			width: Percent(95.0),
+			flex_direction: FlexDirection::Row,
+			justify_content: JustifyContent::SpaceBetween,
+			margin: UiRect::top(Px(10.0)),
+			..default()
+		},
+		Children::spawn(SpawnWith(|parent: &mut ChildSpawner| {
+			parent.spawn(enter_button());
+			parent.spawn(back_button()).observe(go_back_on_click);
+		})),
+	)
 }
 
 /// Green `<<ENTER LEVEL>>` button.
-fn spawn_enter_button(parent: &mut ChildSpawnerCommands) {
-	parent
-		.spawn((
-			Name::new("Enter Level Button"),
-			Button,
-			EnterLevelButton,
-			BackgroundColor(ENTER_BG),
-			InteractionPalette {
-				none: ENTER_BG,
-				hovered: ENTER_HOVER,
-				pressed: ENTER_PRESS,
-			},
-			Node {
-				width: Px(250.0),
-				height: Px(50.0),
-				align_items: AlignItems::Center,
-				justify_content: JustifyContent::Center,
-				border: UiRect::all(Px(2.0)),
-				..default()
-			},
-			BorderColor::from(NEON_GREEN),
-		))
-		.with_children(|btn| {
-			btn.spawn((
-				Text("<<ENTER LEVEL>>".into()),
-				TextFont::from_font_size(24.0),
-				TextColor(NEON_GREEN),
-				Pickable::IGNORE,
-			));
-		});
+fn enter_button() -> impl Bundle {
+	(
+		Name::new("Enter Level Button"),
+		Button,
+		EnterLevelButton,
+		BackgroundColor(ENTER_BG),
+		InteractionPalette {
+			none: ENTER_BG,
+			hovered: ENTER_HOVER,
+			pressed: ENTER_PRESS,
+		},
+		Node {
+			width: Px(250.0),
+			height: Px(50.0),
+			align_items: AlignItems::Center,
+			justify_content: JustifyContent::Center,
+			border: UiRect::all(Px(2.0)),
+			..default()
+		},
+		BorderColor::from(NEON_GREEN),
+		children![(
+			Text("<<ENTER LEVEL>>".into()),
+			TextFont::from_font_size(24.0),
+			TextColor(NEON_GREEN),
+			Pickable::IGNORE,
+		)],
+	)
 }
 
 /// Red `<<BACK>>` button.
-fn spawn_back_button(parent: &mut ChildSpawnerCommands) {
-	parent
-		.spawn((
-			Name::new("Back Button"),
-			Button,
-			BackgroundColor(Color::srgb(0.5, 0.1, 0.1)),
-			InteractionPalette {
-				none: Color::srgb(0.5, 0.1, 0.1),
-				hovered: Color::srgb(0.7, 0.15, 0.15),
-				pressed: Color::srgb(0.3, 0.05, 0.05),
-			},
-			Node {
-				width: Px(200.0),
-				height: Px(50.0),
-				align_items: AlignItems::Center,
-				justify_content: JustifyContent::Center,
-				border: UiRect::all(Px(2.0)),
-				margin: UiRect::right(Px(7.0)),
-				..default()
-			},
-			BorderColor::from(Color::srgb(0.8, 0.2, 0.2)),
-		))
-		.observe(go_back_on_click)
-		.with_children(|btn| {
-			btn.spawn((
-				Text("<<BACK>>".into()),
-				TextFont::from_font_size(24.0),
-				TextColor(Color::srgb(0.9, 0.9, 0.9)),
-				Pickable::IGNORE,
-			));
-		});
+fn back_button() -> impl Bundle {
+	(
+		Name::new("Back Button"),
+		Button,
+		BackgroundColor(Color::srgb(0.5, 0.1, 0.1)),
+		InteractionPalette {
+			none: Color::srgb(0.5, 0.1, 0.1),
+			hovered: Color::srgb(0.7, 0.15, 0.15),
+			pressed: Color::srgb(0.3, 0.05, 0.05),
+		},
+		Node {
+			width: Px(200.0),
+			height: Px(50.0),
+			align_items: AlignItems::Center,
+			justify_content: JustifyContent::Center,
+			border: UiRect::all(Px(2.0)),
+			margin: UiRect::right(Px(7.0)),
+			..default()
+		},
+		BorderColor::from(Color::srgb(0.8, 0.2, 0.2)),
+		children![(
+			Text("<<BACK>>".into()),
+			TextFont::from_font_size(24.0),
+			TextColor(Color::srgb(0.9, 0.9, 0.9)),
+			Pickable::IGNORE,
+		)],
+	)
 }
 
 // --- Systems ---
