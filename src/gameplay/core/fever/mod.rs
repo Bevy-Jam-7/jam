@@ -8,5 +8,5 @@ pub use components::*;
 pub use plugin::*;
 
 pub fn plugin(app: &mut App) {
-    app.add_plugins(FeverPlugin);
+	app.add_plugins(FeverPlugin);
 }

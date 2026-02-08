@@ -14,9 +14,9 @@ pub struct TemperatureSensor;
 pub struct Temperature(pub f32);
 
 impl Default for Temperature {
-    fn default() -> Self {
-        Self(37.0)
-    }
+	fn default() -> Self {
+		Self(37.0)
+	}
 }
 
 /// Base temperature of an entity for simulating Homeostasis,
@@ -26,9 +26,9 @@ impl Default for Temperature {
 pub struct BaseTemperature(pub f32);
 
 impl Default for BaseTemperature {
-    fn default() -> Self {
-        Self(37.0)
-    }
+	fn default() -> Self {
+		Self(37.0)
+	}
 }
 
 /// Temperature that a unit can handle before it takes damage.
@@ -37,9 +37,9 @@ impl Default for BaseTemperature {
 pub struct TemperatureThreshold(pub f32);
 
 impl Default for TemperatureThreshold {
-    fn default() -> Self {
-        Self(40.0)
-    }
+	fn default() -> Self {
+		Self(40.0)
+	}
 }
 
 /// Maximum temperature limit of a unit/entity.
@@ -48,9 +48,9 @@ impl Default for TemperatureThreshold {
 pub struct MaxTemperature(pub f32);
 
 impl Default for MaxTemperature {
-    fn default() -> Self {
-        Self(45.0)
-    }
+	fn default() -> Self {
+		Self(45.0)
+	}
 }
 
 /// Base damage of a unit/entity (could be modified by temperature/fever).
@@ -59,9 +59,9 @@ impl Default for MaxTemperature {
 pub struct BaseDamage(pub f32);
 
 impl Default for BaseDamage {
-    fn default() -> Self {
-        Self(10.)
-    }
+	fn default() -> Self {
+		Self(10.)
+	}
 }
 
 /// Temperature of objects/entities/space in the environment, affecting the temperature of units around them.
@@ -71,9 +71,9 @@ impl Default for BaseDamage {
 pub struct EnvironmentTemperature(pub f32);
 
 impl Default for EnvironmentTemperature {
-    fn default() -> Self {
-        Self(45.)
-    }
+	fn default() -> Self {
+		Self(45.)
+	}
 }
 
 #[derive(Component, Debug, Deref, DerefMut, Clone, Reflect)]
@@ -81,7 +81,7 @@ impl Default for EnvironmentTemperature {
 pub struct Conductivity(pub f32);
 
 impl Default for Conductivity {
-    fn default() -> Self {
-        Self(2.0)
-    }
+	fn default() -> Self {
+		Self(2.0)
+	}
 }

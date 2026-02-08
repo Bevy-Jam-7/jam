@@ -9,7 +9,7 @@ use bevy::prelude::*;
 pub struct Health(pub f32);
 
 impl Default for Health {
-    fn default() -> Self {
-        Self(100.)
-    }
+	fn default() -> Self {
+		Self(100.)
+	}
 }

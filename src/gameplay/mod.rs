@@ -13,14 +13,14 @@ pub(crate) mod npc;
 pub(crate) mod player;
 
 pub(super) fn plugin(app: &mut App) {
-    app.add_plugins((
-        animation::plugin,
-        crosshair::plugin,
-        npc::plugin,
-        player::plugin,
-        // This plugin preloads the level,
-        // so make sure to add it last.
-        level::plugin,
-        core::plugin,
-    ));
+	app.add_plugins((
+		animation::plugin,
+		crosshair::plugin,
+		npc::plugin,
+		player::plugin,
+		// This plugin preloads the level,
+		// so make sure to add it last.
+		level::plugin,
+		core::plugin,
+	));
 }

@@ -10,5 +10,5 @@ pub use plugin::*;
 pub use resources::*;
 
 pub fn plugin(app: &mut App) {
-    app.add_plugins(TemperaturePlugin);
+	app.add_plugins(TemperaturePlugin);
 }

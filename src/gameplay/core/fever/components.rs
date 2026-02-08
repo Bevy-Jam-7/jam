@@ -20,9 +20,9 @@ pub struct Feverish;
 pub struct FeverDamage(pub f32);
 
 impl Default for FeverDamage {
-    fn default() -> Self {
-        Self(1.)
-    }
+	fn default() -> Self {
+		Self(1.)
+	}
 }
 
 /// Timer used to manage the `fever over time` effect, i.e., the interval in which fever applies damage.
@@ -33,9 +33,9 @@ impl Default for FeverDamage {
 pub struct FeverTimer(pub Timer);
 
 impl Default for FeverTimer {
-    fn default() -> Self {
-        Self(Timer::new(Duration::from_secs(1), TimerMode::Repeating))
-    }
+	fn default() -> Self {
+		Self(Timer::new(Duration::from_secs(1), TimerMode::Repeating))
+	}
 }
 
 /// Timer used to manage the `fever source` effect, i.e., the rate of a debuff that increases fever.
@@ -46,9 +46,9 @@ impl Default for FeverTimer {
 pub struct FeverSourceTimer(pub Timer);
 
 impl Default for FeverSourceTimer {
-    fn default() -> Self {
-        Self(Timer::new(Duration::from_secs(1), TimerMode::Repeating))
-    }
+	fn default() -> Self {
+		Self(Timer::new(Duration::from_secs(1), TimerMode::Repeating))
+	}
 }
 
 /// A rate that represents an internal source of fever/heat that raises the entity's temperature over time.
@@ -60,7 +60,7 @@ impl Default for FeverSourceTimer {
 pub struct FeverSource(pub f32);
 
 impl Default for FeverSource {
-    fn default() -> Self {
-        Self(1.01)
-    }
+	fn default() -> Self {
+		Self(1.01)
+	}
 }

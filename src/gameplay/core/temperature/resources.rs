@@ -6,7 +6,7 @@ use bevy::prelude::*;
 pub struct GlobalTemperature(pub f32);
 
 impl Default for GlobalTemperature {
-    fn default() -> Self {
-        Self(20.)
-    }
+	fn default() -> Self {
+		Self(20.)
+	}
 }
