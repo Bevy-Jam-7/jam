@@ -13,6 +13,7 @@ pub fn temp(
 		&BaseTemperature,
 		&Children,
 		Option<&Conductivity>,
+		Option<&DepthSensitivity>,
 	)>,
 	global_temp: Res<GlobalTemperature>,
 	sensors: Query<&CollidingEntities, With<TemperatureSensor>>,
@@ -21,13 +22,12 @@ pub fn temp(
 	stomach: Single<&Stomach>,
 ) {
 	let delta_seconds = time.delta_secs();
-	// Might have to adjust depth sensitivity (10x) and play with higher env temps instead.
-	let depth_sens = 10.;
 
-	for (mut temp, temp_base, children, conductivity) in &mut units {
+	for (mut temp, temp_base, children, conductivity, depth_sens) in &mut units {
+		let depth_sens = depth_sens.cloned().unwrap_or_default();
 		let (temp_weighted, total_weight) = children
 			.iter()
-			.filter_map(|child| sensors.get(child).ok().map(|hits| (child, hits)))
+			.filter_map(|child| Some((child, sensors.get(child).ok()?)))
 			.flat_map(|(child, hits)| hits.iter().map(move |hit| (child, hit)))
 			.filter_map(|(child, hit)| {
 				let temp = env_temps.get(*hit).ok()?;
@@ -38,7 +38,7 @@ pub fn temp(
 					.map(|p| p.penetration)
 					.unwrap_or(0.0);
 
-				let weight = 1.0 + (penetration * depth_sens).max(0.0);
+				let weight = 1.0 + (penetration * *depth_sens).max(0.0);
 
 				Some((temp, weight))
 			})
@@ -46,7 +46,7 @@ pub fn temp(
 				stomach
 					.contents
 					.iter()
-					.filter_map(|e| env_temps.get(*e).ok().map(|t| (t, depth_sens))),
+					.filter_map(|e| env_temps.get(*e).ok().map(|t| (t, *depth_sens))),
 			)
 			.fold(
 				(**global_temp, 1.0),

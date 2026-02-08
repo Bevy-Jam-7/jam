@@ -13,3 +13,14 @@ impl Default for Health {
 		Self(100.)
 	}
 }
+
+/// Base damage of a unit/entity (could be modified by temperature/fever).
+#[derive(Component, Debug, Deref, DerefMut, Clone, Copy, Reflect)]
+#[reflect(Clone, Debug, Component)]
+pub struct BaseDamage(pub f32);
+
+impl Default for BaseDamage {
+	fn default() -> Self {
+		Self(10.)
+	}
+}
