@@ -153,19 +153,21 @@ fn on_complete_objective(
 	mut commands: Commands,
 ) {
 	// Update the objective UI to show the objective as completed.
-	if let Ok(objective_node) = objective_node_query.get(completed.entity) {
-		let Ok(children) = child_query.get(objective_node.node) else {
-			return;
-		};
-		let text_entity = children[0];
-		commands
-			.entity(text_entity)
-			.try_insert((Strikethrough, StrikethroughColor(Color::WHITE)));
+	let Ok(children) = objective_node_query
+		.get(completed.entity)
+		.and_then(|node| child_query.get(node.node))
+	else {
+		return;
+	};
 
-		// Remove the sub-objectives from the world.
-		if let Some(sub_objective_list) = children.get(1) {
-			commands.entity(*sub_objective_list).despawn();
-		}
+	let text_entity = children[0];
+	commands
+		.entity(text_entity)
+		.try_insert((Strikethrough, StrikethroughColor(Color::WHITE)));
+
+	// Remove the sub-objectives from the world.
+	if let Some(sub_objective_list) = children.get(1) {
+		commands.entity(*sub_objective_list).despawn();
 	}
 }
 
