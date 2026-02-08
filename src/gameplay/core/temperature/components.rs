@@ -10,6 +10,7 @@ pub struct TemperatureSensor;
 /// Current temperature of an entity
 #[derive(Component, Debug, Deref, DerefMut, Clone, Copy, Reflect)]
 #[reflect(Clone, Debug, Component)]
+#[require(MaxTemperature, BaseTemperature, TemperatureThreshold)]
 pub struct Temperature(pub f32);
 
 impl Default for Temperature {
