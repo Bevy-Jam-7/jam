@@ -21,13 +21,11 @@ pub fn temp(
 	stomach: Single<&Stomach>,
 ) {
 	let delta_seconds = time.delta_secs();
-	// Might have to adjust depth sensitivity (10x) and play with higher env temps instead.
-	let depth_sens = 10.;
 
 	for (mut temp, temp_base, children, conductivity) in &mut units {
 		let (temp_weighted, total_weight) = children
 			.iter()
-			.filter_map(|child| sensors.get(child).ok().map(|hits| (child, hits)))
+			.filter_map(|child| Some((child,sensors.get(child).ok()?)))
 			.flat_map(|(child, hits)| hits.iter().map(move |hit| (child, hit)))
 			.filter_map(|(child, hit)| {
 				let temp = env_temps.get(*hit).ok()?;
