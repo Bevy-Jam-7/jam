@@ -20,6 +20,7 @@ pub(super) fn plugin(app: &mut App) {
 		crosshair::plugin,
 		npc::plugin,
 		player::plugin,
+		stomach::plugin,
 		// This plugin preloads the level,
 		// so make sure to add it last.
 		level::plugin,
