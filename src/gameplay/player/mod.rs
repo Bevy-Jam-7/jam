@@ -77,7 +77,11 @@ fn setup_player(
 			RigidBody::Kinematic,
 			PlayerInputContext,
 			Collider::cylinder(PLAYER_RADIUS, PLAYER_HEIGHT),
-			CharacterController::default(),
+			CharacterController {
+				filter: SpatialQueryFilter::DEFAULT
+					.with_mask(LayerMask::ALL & !CollisionLayer::Stomach.to_bits()),
+				..default()
+			},
 			ColliderDensity(1_000.0),
 			CollisionLayers::new(CollisionLayer::Character, LayerMask::ALL),
 			AnimationState::<PlayerAnimationState>::default(),

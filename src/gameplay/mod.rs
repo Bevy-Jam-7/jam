@@ -11,7 +11,6 @@ pub(crate) mod crosshair;
 pub(crate) mod level;
 pub(crate) mod npc;
 pub(crate) mod player;
-
 pub(crate) mod stomach;
 
 pub(super) fn plugin(app: &mut App) {
