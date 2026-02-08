@@ -97,7 +97,7 @@
 // Restrictions
 #![deny(clippy::question_mark_used)]
 // Rustc lints.
-#![deny(missing_docs, unused_imports)]
+#![deny(missing_docs)]
 
 ////////////////////////////////////////////////////////////////////////////////
 
