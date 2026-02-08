@@ -11,7 +11,7 @@ pub fn source(
 		if !timer.is_finished() {
 			continue;
 		}
-		**temp += **rate;
+		**temp *= **rate;
 	}
 }
 
