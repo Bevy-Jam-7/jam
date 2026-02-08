@@ -4,7 +4,6 @@
 // All files in the project carrying such notice may not be copied, modified, or distributed
 // except according to those terms.
 #![cfg(windows)]
-#![deny(unused, unused_qualifications)]
 #![warn(unused_attributes)]
 #![allow(bad_style, overflowing_literals, unused_macros, deprecated, unused_crate_dependencies)]
 #![recursion_limit = "2563"]
