@@ -278,6 +278,8 @@ checksum = "175571dd1d178ced59193a6fc02dde1b972eb0bc56c892cde9beeceac5bf0f6b"
 [[package]]
 name = "ash"
 version = "0.38.0+1.3.281"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0bb44936d800fea8f016d7f2311c6a4f97aebd5dc86f09906139ec848cf3a46f"
 dependencies = [
  "libloading",
 ]
@@ -3290,8 +3292,6 @@ checksum = "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
 [[package]]
 name = "firewheel"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13200f66b692d5baac8b84d28fd4ea98787672a7096ccfc4b176290828a2cc37"
 dependencies = [
  "firewheel-core",
  "firewheel-cpal",
@@ -3306,8 +3306,6 @@ dependencies = [
 [[package]]
 name = "firewheel-core"
 version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "114eb9461df56bcffd808e8375919381e3e95d2ba6723b3ef09c33ebdc70d0fd"
 dependencies = [
  "arrayvec",
  "bevy_ecs",
@@ -3331,8 +3329,6 @@ dependencies = [
 [[package]]
 name = "firewheel-cpal"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "14b9dba0b996dd16da0282bf73db4123cf630c9f31ec42c8896361069ddb4c69"
 dependencies = [
  "bevy_platform",
  "cpal",
@@ -3348,8 +3344,6 @@ dependencies = [
 [[package]]
 name = "firewheel-graph"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2e3aaba6687f98720a7ff827737253eea5a8f84fb1a48a934a75d097df1d26ac"
 dependencies = [
  "arrayvec",
  "bevy_platform",
@@ -3367,8 +3361,6 @@ dependencies = [
 [[package]]
 name = "firewheel-ircam-hrtf"
 version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee18a7c3cf7ef68ee7618d0400b2c32745cde75cbab61676b98179edd4588044"
 dependencies = [
  "bevy_ecs",
  "bevy_reflect",
@@ -3380,8 +3372,6 @@ dependencies = [
 [[package]]
 name = "firewheel-macros"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b983faf1d4636812a2b39d77ffb922e06e1bc3b1f61b9a93a25120656ae85dd0"
 dependencies = [
  "bevy_macro_utils",
  "proc-macro2",
@@ -3393,8 +3383,6 @@ dependencies = [
 [[package]]
 name = "firewheel-nodes"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de13025a997cd839a2eb589fb21764b1918ea4992964e0e3beb48fec49ef14e2"
 dependencies = [
  "bevy_ecs",
  "bevy_platform",
@@ -3407,8 +3395,6 @@ dependencies = [
 [[package]]
 name = "firewheel-pool"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3012a67d43f3fbd837d52e56b5d82e1ad63970ec2005983e86b408f4659d1c0"
 dependencies = [
  "bevy_platform",
  "firewheel-core",
@@ -3422,8 +3408,6 @@ dependencies = [
 [[package]]
 name = "firewheel-rtaudio"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32644b6ded19a443dc85b6542a26212bbebef5dcc6b3fa7feb83e5aff2621a33"
 dependencies = [
  "bevy_platform",
  "firewheel-core",
@@ -3436,8 +3420,6 @@ dependencies = [
 [[package]]
 name = "firewheel-symphonium"
 version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4e69d91f25cc3f0997191c0af80f192a4d151806db235fbd1a80b58d01e61b6"
 dependencies = [
  "bevy_platform",
  "firewheel-core",
@@ -3448,8 +3430,6 @@ dependencies = [
 [[package]]
 name = "firewheel-web-audio"
 version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5ce3233a1a818a4f873fd0f9aae01691dc21945f2a0629669b35a0cf9067c86"
 dependencies = [
  "firewheel",
  "js-sys",

@@ -193,7 +193,6 @@ opt-level = 3
 debug-assertions = false
 
 [patch.crates-io]
-ash = { path = "vendor/ash" }
 avian_derive = { path = "vendor/avian_derive" }
 avian_pickup = { path = "vendor/avian_pickup" }
 avian_rerecast = { path = "vendor/avian_rerecast" }
@@ -283,6 +282,17 @@ bevy-inspector-egui = { path = "vendor/bevy-inspector-egui" }
 bevy-inspector-egui-derive = { path = "vendor/bevy-inspector-egui-derive" }
 cosmic-text = { path = "vendor/cosmic-text" }
 cpal = { path = "vendor/cpal" }
+firewheel = { path = "vendor/firewheel" }
+firewheel-core = { path = "vendor/firewheel-core" }
+firewheel-cpal = { path = "vendor/firewheel-cpal" }
+firewheel-graph = { path = "vendor/firewheel-graph" }
+firewheel-ircam-hrtf = { path = "vendor/firewheel-ircam-hrtf" }
+firewheel-macros = { path = "vendor/firewheel-macros" }
+firewheel-nodes = { path = "vendor/firewheel-nodes" }
+firewheel-pool = { path = "vendor/firewheel-pool" }
+firewheel-rtaudio = { path = "vendor/firewheel-rtaudio" }
+firewheel-symphonium = { path = "vendor/firewheel-symphonium" }
+firewheel-web-audio = { path = "vendor/firewheel-web-audio" }
 glam = { path = "vendor/glam" }
 glam_matrix_extras = { path = "vendor/glam_matrix_extras" }
 glamx = { path = "vendor/glamx" }
