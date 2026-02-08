@@ -109,9 +109,15 @@ fn main() -> AppExit {
                 ..default()
             }),
         #[cfg(feature = "native")]
-        SeedlingPlugin::default(),
+        SeedlingPlugin {
+            graph_config: bevy_seedling::prelude::GraphConfiguration::Empty,
+            ..Default::default()
+        },
         #[cfg(feature = "web")]
-        SeedlingPlugin::new_web_audio(),
+        SeedlingPlugin {
+            graph_config: bevy_seedling::prelude::GraphConfiguration::Empty,
+            ..SeedlingPlugin::new_web_audio()
+        },
     ));
 
     app.insert_resource(GlobalAmbientLight::NONE);
