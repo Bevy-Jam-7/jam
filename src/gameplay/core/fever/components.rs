@@ -4,16 +4,7 @@ use std::time::Duration;
 /// Makes a unit affected by fever.
 #[derive(Component, Debug, Clone, Copy, Reflect)]
 #[reflect(Clone, Debug, Component)]
-#[require(
-    Temperature,
-    MaxTemperature,
-    BaseTemperature,
-    TemperatureThreshold,
-    Health,
-    FeverTimer,
-    FeverDamage,
-    FeverSource
-)]
+#[require(Temperature, Health, FeverTimer, FeverDamage, FeverSource)]
 pub struct Fever;
 
 /// Marker component for units that are currently feverish (temp higher than base temp).
@@ -41,6 +32,12 @@ impl Default for FeverDamage {
 #[reflect(Clone, Debug, Component)]
 pub struct FeverTimer(pub Timer);
 
+impl Default for FeverTimer {
+    fn default() -> Self {
+        Self(Timer::new(Duration::from_secs(1), TimerMode::Repeating))
+    }
+}
+
 /// Timer used to manage the `fever source` effect, i.e., the rate of a debuff that increases fever.
 ///
 /// Allows for slowing down or speeding up the effect.
@@ -48,7 +45,7 @@ pub struct FeverTimer(pub Timer);
 #[reflect(Clone, Debug, Component)]
 pub struct FeverSourceTimer(pub Timer);
 
-impl Default for FeverTimer {
+impl Default for FeverSourceTimer {
     fn default() -> Self {
         Self(Timer::new(Duration::from_secs(1), TimerMode::Repeating))
     }
@@ -59,6 +56,7 @@ impl Default for FeverTimer {
 /// Defaults to 1% per tick.
 #[derive(Component, Debug, Clone, Copy, Deref, DerefMut, Reflect)]
 #[reflect(Clone, Debug, Component)]
+#[require(Temperature, FeverSourceTimer)]
 pub struct FeverSource(pub f32);
 
 impl Default for FeverSource {
