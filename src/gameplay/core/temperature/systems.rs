@@ -42,12 +42,12 @@ pub fn temp(
 
 				Some((temp, weight))
 			})
-			.chain(stomach.contents.iter().filter_map(|e| {
-				env_temps
-					.get(*e)
-					.ok()
-					.map(|t| (t, *depth_sens))
-			}))
+			.chain(
+				stomach
+					.contents
+					.iter()
+					.filter_map(|e| env_temps.get(*e).ok().map(|t| (t, *depth_sens))),
+			)
 			.fold(
 				(**global_temp, 1.0),
 				|(acc_temp, acc_weight), (env_temp, weight)| {
