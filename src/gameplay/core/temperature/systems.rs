@@ -24,13 +24,13 @@ pub fn temp(
 	let delta_seconds = time.delta_secs();
 
 	for (mut temp, temp_base, children, conductivity, depth_sens) in &mut units {
+		let depth_sens = depth_sens.cloned().unwrap_or_default();
 		let (temp_weighted, total_weight) = children
 			.iter()
 			.filter_map(|child| Some((child, sensors.get(child).ok()?)))
 			.flat_map(|(child, hits)| hits.iter().map(move |hit| (child, hit)))
 			.filter_map(|(child, hit)| {
 				let temp = env_temps.get(*hit).ok()?;
-				let depth_sens = depth_sens.cloned().unwrap_or_default();
 
 				let penetration = collisions
 					.get(child, *hit)
@@ -46,7 +46,7 @@ pub fn temp(
 				env_temps
 					.get(*e)
 					.ok()
-					.map(|t| (t, *DepthSensitivity::default()))
+					.map(|t| (t, *depth_sens))
 			}))
 			.fold(
 				(**global_temp, 1.0),
