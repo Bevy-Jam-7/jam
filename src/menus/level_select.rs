@@ -12,7 +12,6 @@ use bevy::{
 };
 
 use crate::{
-	gameplay::level::CurrentLevel,
 	menus::Menu,
 	screens::Screen,
 	theme::{interaction::InteractionPalette, palette::SCREEN_BACKGROUND, widget},
@@ -34,8 +33,6 @@ const ENTER_PRESS: Color = Color::srgb(0.0, 0.3, 0.0);
 
 struct LevelInfo {
 	name: &'static str,
-	map_path: &'static str,
-	nav_path: &'static str,
 	objective: &'static str,
 	description: &'static str,
 	preview_color: Color,
@@ -45,8 +42,6 @@ struct LevelInfo {
 const LEVELS: &[LevelInfo] = &[
 	LevelInfo {
 		name: "LEVEL 1",
-		map_path: "maps/main/one/one.map#Scene",
-		nav_path: "maps/main/one/one.nav",
 		objective: "Placeholder objective for level 1",
 		description: "Placeholder description for level 1. This text will be replaced with actual level details.",
 		preview_color: Color::srgb(0.6, 0.2, 0.2),
@@ -54,8 +49,6 @@ const LEVELS: &[LevelInfo] = &[
 	},
 	LevelInfo {
 		name: "LEVEL 2",
-		map_path: "",
-		nav_path: "",
 		objective: "Placeholder objective for level 2",
 		description: "Placeholder description for level 2. This text will be replaced with actual level details.",
 		preview_color: Color::srgb(0.7, 0.3, 0.1),
@@ -63,8 +56,6 @@ const LEVELS: &[LevelInfo] = &[
 	},
 	LevelInfo {
 		name: "LEVEL 3",
-		map_path: "",
-		nav_path: "",
 		objective: "Placeholder objective for level 3",
 		description: "Placeholder description for level 3. This text will be replaced with actual level details.",
 		preview_color: Color::srgb(0.2, 0.4, 0.7),
@@ -72,8 +63,6 @@ const LEVELS: &[LevelInfo] = &[
 	},
 	LevelInfo {
 		name: "LEVEL 4",
-		map_path: "",
-		nav_path: "",
 		objective: "Placeholder objective for level 4",
 		description: "Placeholder description for level 4. This text will be replaced with actual level details.",
 		preview_color: Color::srgb(0.3, 0.5, 0.2),
@@ -81,8 +70,6 @@ const LEVELS: &[LevelInfo] = &[
 	},
 	LevelInfo {
 		name: "LEVEL 5",
-		map_path: "",
-		nav_path: "",
 		objective: "Placeholder objective for level 5",
 		description: "Placeholder description for level 5. This text will be replaced with actual level details.",
 		preview_color: Color::srgb(0.8, 0.7, 0.2),
@@ -90,8 +77,6 @@ const LEVELS: &[LevelInfo] = &[
 	},
 	LevelInfo {
 		name: "LEVEL 6",
-		map_path: "",
-		nav_path: "",
 		objective: "Placeholder objective for level 6",
 		description: "Placeholder description for level 6. This text will be replaced with actual level details.",
 		preview_color: Color::srgb(0.1, 0.6, 0.6),
@@ -568,7 +553,6 @@ fn update_selection_visuals(
 fn handle_enter_level(
 	interaction_query: Query<&Interaction, (Changed<Interaction>, With<EnterLevelButton>)>,
 	selected: Res<SelectedLevel>,
-	mut commands: Commands,
 	mut next_screen: ResMut<NextState<Screen>>,
 	mut next_menu: ResMut<NextState<Menu>>,
 	mut cursor_options: Single<&mut CursorOptions>,
@@ -577,10 +561,6 @@ fn handle_enter_level(
 		if *interaction == Interaction::Pressed {
 			let level = &LEVELS[selected.0];
 			if !level.locked {
-				commands.insert_resource(CurrentLevel {
-					map_path: level.map_path,
-					nav_path: level.nav_path,
-				});
 				next_screen.set(Screen::Loading);
 				next_menu.set(Menu::None);
 				cursor_options.grab_mode = CursorGrabMode::Locked;
