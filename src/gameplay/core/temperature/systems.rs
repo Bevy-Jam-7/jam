@@ -16,9 +16,9 @@ pub fn temp(
 		Option<&DepthSensitivity>,
 	)>,
 	global_temp: Res<GlobalTemperature>,
-	q_sensors: Query<&CollidingEntities, With<TemperatureSensor>>,
+	q_sensor: Query<&CollidingEntities, With<TemperatureSensor>>,
 	q_collider: Query<&ColliderOf>,
-	env_temps: Query<&EnvironmentTemperature>,
+	q_env_temp: Query<&EnvironmentTemperature>,
 	collisions: Collisions,
 	stomach: Single<&Stomach>,
 ) {
@@ -28,10 +28,10 @@ pub fn temp(
 		let depth_sens = depth_sens.cloned().unwrap_or_default();
 		let (temp_weighted, total_weight) = sensors
 			.iter()
-			.filter_map(|sensor| Some((sensor, q_sensors.get(sensor).ok()?)))
+			.filter_map(|sensor| Some((sensor, q_sensor.get(sensor).ok()?)))
 			.flat_map(|(sensor, hits)| hits.iter().map(move |hit| (sensor, hit)))
 			.filter_map(|(sensor, hit)| Some((sensor, hit, q_collider.get(*hit).ok()?.body)))
-			.filter_map(|(sensor, hit, body)| Some((sensor, hit, env_temps.get(body).ok()?)))
+			.filter_map(|(sensor, hit, body)| Some((sensor, hit, q_env_temp.get(body).ok()?)))
 			.map(|(sensor, hit, temp)| {
 				(
 					temp,
@@ -50,7 +50,7 @@ pub fn temp(
 				stomach
 					.contents
 					.iter()
-					.filter_map(|e| env_temps.get(*e).ok())
+					.filter_map(|e| q_env_temp.get(*e).ok())
 					.map(|t| (t, *depth_sens)),
 			)
 			.fold(
