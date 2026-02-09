@@ -22,7 +22,7 @@ pub fn temp(
 	collisions: Collisions,
 	stomach: Single<&Stomach>,
 ) {
-	let delta_seconds = time.delta_secs();
+	let delta_secs = time.delta_secs();
 
 	for (mut temp, temp_base, sensors, conductivity, depth_sens) in &mut q_temp {
 		let depth_sens = depth_sens.cloned().unwrap_or_default();
@@ -66,7 +66,7 @@ pub fn temp(
 		let k = conductivity.cloned().unwrap_or_default();
 
 		// rate = k * dt
-		let rate = (*k * delta_seconds).min(1.);
+		let rate = (*k * delta_secs).min(1.);
 
 		// temp += (Target - Current) * (k * dt)
 		let temp_final = **temp + (temp_env - **temp) * rate;
