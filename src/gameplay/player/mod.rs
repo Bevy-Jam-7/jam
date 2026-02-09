@@ -78,7 +78,9 @@ fn setup_player(
 			CollisionLayers::new(CollisionLayer::Character, LayerMask::ALL),
 			AnimationState::<PlayerAnimationState>::default(),
 			Fever,
+			related!(FeverSources[FeverSource::default()]),
 			children![
+				TemperatureSensor,
 				(
 					Name::new("Player Landmass Character"),
 					Transform::from_xyz(0.0, -PLAYER_HALF_HEIGHT, 0.0),
@@ -90,8 +92,7 @@ fn setup_player(
 						archipelago_ref: ArchipelagoRef3d::new(*archipelago),
 					},
 					LastValidPlayerNavmeshPosition::default(),
-				),
-				TemperatureSensor,
+				)
 			],
 		))
 		.observe(setup_player_animations);
