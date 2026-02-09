@@ -8,7 +8,7 @@ use crate::gameplay::stomach::Stomach;
 /// collision-based and eaten temperature sources.
 pub fn temp(
 	time: Res<Time>,
-	mut units: Query<(
+	mut q_temp: Query<(
 		&mut Temperature,
 		&BaseTemperature,
 		&Children,
@@ -24,7 +24,7 @@ pub fn temp(
 ) {
 	let delta_seconds = time.delta_secs();
 
-	for (mut temp, temp_base, sensors, conductivity, depth_sens) in &mut units {
+	for (mut temp, temp_base, sensors, conductivity, depth_sens) in &mut q_temp {
 		let depth_sens = depth_sens.cloned().unwrap_or_default();
 		let (temp_weighted, total_weight) = sensors
 			.iter()
