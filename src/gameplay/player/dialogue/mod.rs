@@ -20,12 +20,7 @@ use crate::{
 
 mod ui;
 
-use super::{
-	Player,
-	camera::PlayerCamera,
-	input::{BlocksInput, Interact},
-	pickup::is_holding_prop,
-};
+use super::{Player, camera::PlayerCamera, input::Interact, pickup::is_holding_prop};
 
 pub(super) fn plugin(app: &mut App) {
 	app.configure_sets(
@@ -48,7 +43,6 @@ pub(super) fn plugin(app: &mut App) {
 					.and(not(is_holding_prop)),
 			),
 	);
-	app.add_observer(restore_input_context);
 	app.add_observer(interact_with_dialogue);
 
 	app.add_plugins(ui::plugin);
@@ -93,26 +87,9 @@ fn interact_with_dialogue(
 	_on: On<Start<Interact>>,
 	mut interaction_prompt: Single<&mut InteractionPrompt>,
 	mut dialogue_runner: Single<&mut DialogueRunner>,
-	mut crosshair: Single<&mut CrosshairState>,
-	mut blocks_input: ResMut<BlocksInput>,
 ) {
 	let Some(node) = interaction_prompt.0.take() else {
 		return;
 	};
 	dialogue_runner.start_node(&node.yarn_node);
-	blocks_input.insert(interact_with_dialogue.type_id());
-	crosshair
-		.wants_free_cursor
-		.insert(interact_with_dialogue.type_id());
-}
-
-fn restore_input_context(
-	_complete: On<DialogueCompleted>,
-	mut crosshair: Single<&mut CrosshairState>,
-	mut blocks_input: ResMut<BlocksInput>,
-) {
-	blocks_input.remove(&interact_with_dialogue.type_id());
-	crosshair
-		.wants_free_cursor
-		.remove(&interact_with_dialogue.type_id());
 }

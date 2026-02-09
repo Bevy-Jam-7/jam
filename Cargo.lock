@@ -2042,15 +2042,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevy_yarnspinner_example_dialogue_view"
-version = "0.7.0"
-dependencies = [
- "bevy",
- "bevy_yarnspinner",
- "unicode-segmentation",
-]
-
-[[package]]
 name = "bincode"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4404,7 +4395,6 @@ dependencies = [
  "bevy_trenchbroom",
  "bevy_trenchbroom_avian",
  "bevy_yarnspinner",
- "bevy_yarnspinner_example_dialogue_view",
  "bincode",
  "bitflags 2.10.0",
  "firewheel",
@@ -4413,6 +4403,7 @@ dependencies = [
  "rand",
  "regex",
  "tracing",
+ "unicode-segmentation",
  "wasm-bindgen",
 ]
 
