@@ -6,9 +6,12 @@ use bevy::prelude::*;
 use bevy_yarnspinner::{events::*, prelude::*};
 
 pub(super) fn ui_updating_plugin(app: &mut App) {
+	app.init_resource::<AutoContinueTimer>();
+
 	app.add_systems(
 		Update,
-		continue_dialogue
+		(continue_dialogue, auto_continue_dialogue)
+			.chain()
 			.run_if(resource_exists::<Typewriter>)
 			.after(YarnSpinnerSystemSet)
 			.in_set(DialogueViewSystemSet),
@@ -20,6 +23,20 @@ pub(super) fn ui_updating_plugin(app: &mut App) {
 	app.add_observer(hide_dialog);
 	app.add_observer(present_line);
 	app.add_observer(present_options);
+}
+
+const AUTO_CONTINUE_DELAY_SECS: f32 = 2.0;
+
+#[derive(Resource, Deref, DerefMut)]
+struct AutoContinueTimer(Timer);
+
+impl Default for AutoContinueTimer {
+	fn default() -> Self {
+		Self(Timer::from_seconds(
+			AUTO_CONTINUE_DELAY_SECS,
+			TimerMode::Once,
+		))
+	}
 }
 
 /// Signals that a speaker has changed.
@@ -100,5 +117,28 @@ fn continue_dialogue(
 				**continue_visibility = Visibility::Hidden;
 			}
 		}
+	}
+}
+
+fn auto_continue_dialogue(
+	mut dialogue_runners: Query<&mut DialogueRunner>,
+	typewriter: Res<Typewriter>,
+	time: Res<Time>,
+	mut timer: ResMut<AutoContinueTimer>,
+) {
+	if typewriter.is_finished() && !typewriter.last_before_options {
+		timer.tick(time.delta());
+		if timer.just_finished() {
+			for mut dialogue_runner in dialogue_runners.iter_mut() {
+				if !dialogue_runner.is_waiting_for_option_selection()
+					&& dialogue_runner.is_running()
+				{
+					dialogue_runner.continue_in_next_update();
+				}
+			}
+			timer.reset();
+		}
+	} else {
+		timer.reset();
 	}
 }
