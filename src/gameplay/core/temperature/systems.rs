@@ -31,15 +31,16 @@ pub fn temp(
 			.filter_map(|sensor| Some((sensor, q_sensors.get(sensor).ok()?)))
 			.flat_map(|(sensor, hits)| hits.iter().map(move |hit| (sensor, hit)))
 			.filter_map(|(sensor, hit)| Some((sensor, hit, q_collider.get(*hit).ok()?.body)))
-			.filter_map(|(sensor, hit, body)| {
-				let temp = env_temps.get(body).ok()?;
-				let penetration = collisions
-					.get(sensor, *hit)
-					.and_then(|pair| pair.find_deepest_contact())
-					.map(|p| p.penetration)
-					.unwrap_or(0.0);
-
-				Some((temp, penetration))
+			.filter_map(|(sensor, hit, body)| Some((sensor, hit, env_temps.get(body).ok()?)))
+			.map(|(sensor, hit, temp)| {
+				(
+					temp,
+					collisions
+						.get(sensor, *hit)
+						.and_then(|pair| pair.find_deepest_contact())
+						.map(|p| p.penetration)
+						.unwrap_or(0.0),
+				)
 			})
 			.map(|(temp, penetration)| {
 				let weight = 1.0 + (penetration * *depth_sens).max(0.0);
