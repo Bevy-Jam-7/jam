@@ -4,7 +4,7 @@ use bevy::{prelude::*, scene::SceneInstance};
 use bevy_landmass::{NavMesh, coords::ThreeD};
 
 use crate::{
-	gameplay::level::{load_level_assets, spawn_level},
+	gameplay::level::spawn_level,
 	screens::Screen,
 	theme::{palette::SCREEN_BACKGROUND, prelude::*},
 };
@@ -14,13 +14,11 @@ use super::LoadingScreen;
 pub(super) fn plugin(app: &mut App) {
 	app.add_systems(
 		OnEnter(LoadingScreen::Level),
-		(load_level_assets, spawn_level_loading_screen),
+		(spawn_level, spawn_level_loading_screen),
 	);
 	app.add_systems(
 		Update,
-		(spawn_level, advance_to_gameplay_screen)
-			.chain()
-			.run_if(in_state(LoadingScreen::Level)),
+		advance_to_gameplay_screen.run_if(in_state(LoadingScreen::Level)),
 	);
 }
 
