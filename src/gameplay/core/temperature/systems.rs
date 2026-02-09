@@ -32,9 +32,9 @@ pub fn temp(
 			.flat_map(|(sensor, hits)| hits.iter().map(move |hit| (sensor, hit)))
 			.filter_map(|(sensor, hit)| Some((sensor, hit, q_collider.get(*hit).ok()?.body)))
 			.filter_map(|(sensor, hit, body)| Some((sensor, hit, q_env_temp.get(body).ok()?)))
-			.map(|(sensor, hit, temp)| {
+			.map(|(sensor, hit, env_temp)| {
 				(
-					temp,
+					env_temp,
 					collisions
 						.get(sensor, *hit)
 						.and_then(|pair| pair.find_deepest_contact())
