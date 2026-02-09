@@ -1,6 +1,8 @@
 use avian3d::prelude::*;
 use bevy::prelude::*;
 
+use crate::theme::widget::Stat;
+
 /// Marker component for a temperature sensor, e.g., inserted as a child on the player character controller.
 #[derive(Component, Debug, Clone, Copy, Reflect)]
 #[reflect(Clone, Debug, Component)]
@@ -12,6 +14,18 @@ pub struct TemperatureSensor;
 #[reflect(Clone, Debug, Component)]
 #[require(MaxTemperature, BaseTemperature, TemperatureThreshold)]
 pub struct Temperature(pub f32);
+
+impl Stat for Temperature {
+	fn current(&self) -> f32 {
+		self.0
+	}
+	fn max(&self) -> f32 {
+		100_f32
+	}
+	fn min(&self) -> f32 {
+		0_f32
+	}
+}
 
 impl Default for Temperature {
 	fn default() -> Self {

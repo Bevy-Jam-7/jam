@@ -6,7 +6,9 @@ use bevy::{
 	ecs::{spawn::SpawnWith, system::IntoObserverSystem},
 	prelude::*,
 	ui::Val::*,
+	ui_widgets::observe,
 };
+use bevy_notify::prelude::*;
 
 use crate::theme::{interaction::InteractionPalette, palette::*};
 
@@ -169,5 +171,57 @@ where
 				children![(label(""), label_marker)],
 			),
 		],
+	)
+}
+
+pub trait Stat {
+	fn current(&self) -> f32;
+	fn max(&self) -> f32;
+	fn min(&self) -> f32;
+}
+
+#[derive(Component)]
+pub enum StatBarDirection {
+	Vertical,
+	Horizontal,
+}
+
+pub(crate) fn stat_bar<S: Component + Stat>(
+	stat: Entity,
+	direction: StatBarDirection,
+) -> impl Bundle {
+	(
+		direction,
+		Node {
+			min_width: px(25),
+			min_height: px(25),
+			..Default::default()
+		},
+		NotifyChanged::<S>::default(),
+		Monitor(stat),
+		observe(
+			move |mutation: On<Mutation<S>>,
+			      mut bar: Query<(&mut Node, &StatBarDirection)>,
+			      stat: Query<&S>|
+			      -> Result<(), BevyError> {
+				let (mut node, direction) = bar.get_mut(mutation.entity)?;
+				let stat = stat.get(mutation.mutated)?;
+
+				let scaled_percentage = (stat.current() - stat.min()) / (stat.max() - stat.min());
+
+				match direction {
+					StatBarDirection::Vertical => {
+						node.height = percent(scaled_percentage * 100.);
+						node.width = percent(0);
+					}
+					StatBarDirection::Horizontal => {
+						node.width = percent(scaled_percentage * 100.);
+						node.height = percent(0);
+					}
+				}
+
+				Ok(())
+			},
+		),
 	)
 }
