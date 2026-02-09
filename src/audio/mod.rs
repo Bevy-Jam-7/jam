@@ -35,10 +35,6 @@ pub(crate) struct MusicPool;
 #[derive(Component)]
 pub(crate) struct MusicFilter;
 
-// fn disable_music_filter(mut filter: Single<&mut SvfNode, With<MusicFilter>>) {
-//     filter.enabled = false;
-// }
-
 /// Set somewhere below 0 dB so that the user can turn the volume up if they want to.
 pub(crate) const DEFAULT_MAIN_VOLUME: Volume = Volume::Linear(0.5);
 
@@ -61,7 +57,7 @@ fn initialize_audio(server: Res<AssetServer>, mut commands: Commands) {
 
 	commands.spawn((
 		SoundEffectsBus,
-		VolumeNode::default(),
+		VolumeNode::from_decibels(-3.0),
 		Name::new("Sound Effects Bus"),
 	));
 

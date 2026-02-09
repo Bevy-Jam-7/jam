@@ -1,9 +1,12 @@
 use avian3d::prelude::*;
 use bevy::{camera::visibility::RenderLayers, prelude::*};
 use bevy_enhanced_input::prelude::Start;
+use bevy_seedling::sample::{AudioSample, RandomPitch, SamplePlayer};
+use bevy_shuffle_bag::ShuffleBag;
 
 use crate::{
 	RenderLayer,
+	audio::SfxPool,
 	gameplay::{
 		player::{camera::PlayerCamera, input::EatObject},
 		stomach::Stomach,
@@ -14,6 +17,11 @@ use crate::{
 pub(super) fn plugin(app: &mut App) {
 	app.add_observer(on_eat);
 	app.add_observer(try_eat);
+
+	app.init_resource::<EatSounds>()
+		.init_resource::<GulpTimer>()
+		.add_systems(Update, gulp)
+		.add_observer(play_eat_sound);
 }
 
 /// Event for eating an entity and putting it into the stomach.
@@ -95,5 +103,77 @@ fn try_eat(
 		commands.trigger(Eat {
 			body: collider_of.body,
 		});
+	}
+}
+
+#[derive(Resource)]
+struct EatSounds(ShuffleBag<Handle<AudioSample>>);
+
+impl FromWorld for EatSounds {
+	fn from_world(world: &mut World) -> Self {
+		let assets = world.resource::<AssetServer>();
+		let mut rng = rand::rng();
+
+		Self(
+			ShuffleBag::try_new(
+				vec![
+					assets.load("audio/sound_effects/mouth/eat1.ogg"),
+					assets.load("audio/sound_effects/mouth/eat2.ogg"),
+					assets.load("audio/sound_effects/mouth/eat3.ogg"),
+				],
+				&mut rng,
+			)
+			.unwrap(),
+		)
+	}
+}
+
+fn play_eat_sound(
+	_: On<Eat>,
+	mut gulp: ResMut<GulpTimer>,
+	mut sounds: ResMut<EatSounds>,
+	mut commands: Commands,
+) {
+	let rng = &mut rand::rng();
+	let sound = sounds.0.pick(rng);
+
+	gulp.timer = Some(Timer::from_seconds(0.5, TimerMode::Once));
+
+	commands.spawn((
+		SamplePlayer::new(sound.clone()),
+		RandomPitch(1.05..1.25),
+		SfxPool,
+	));
+}
+
+#[derive(Resource)]
+struct GulpTimer {
+	timer: Option<Timer>,
+	gulp: Handle<AudioSample>,
+}
+
+impl FromWorld for GulpTimer {
+	fn from_world(world: &mut World) -> Self {
+		let assets = world.resource::<AssetServer>();
+
+		Self {
+			timer: None,
+			gulp: assets.load("audio/sound_effects/mouth/gulp.ogg"),
+		}
+	}
+}
+
+fn gulp(mut gulp: ResMut<GulpTimer>, time: Res<Time>, mut commands: Commands) {
+	let Some(timer) = &mut gulp.timer else {
+		return;
+	};
+
+	if timer.tick(time.delta()).is_finished() {
+		gulp.timer = None;
+		commands.spawn((
+			SamplePlayer::new(gulp.gulp.clone()),
+			RandomPitch::new(0.15),
+			SfxPool,
+		));
 	}
 }
