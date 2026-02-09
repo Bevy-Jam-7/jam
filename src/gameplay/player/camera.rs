@@ -15,12 +15,10 @@ use bevy::{
 	core_pipeline::{
 		Skybox,
 		prepass::{DeferredPrepass, DepthPrepass},
-		tonemapping::Tonemapping,
 	},
 	light::{NotShadowCaster, ShadowFilteringMethod},
 	post_process::bloom::Bloom,
 	prelude::*,
-	render::view::Hdr,
 	scene::SceneInstanceReady,
 };
 use bevy_ahoy::camera::CharacterControllerCameraOf;

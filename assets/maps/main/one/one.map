@@ -99,58 +99,53 @@
 }
 // entity 3
 {
-"classname" "jan"
-"origin" "-24 -56 40"
-}
-// entity 4
-{
 "classname" "chair"
 "origin" "280 88 24"
 }
-// entity 5
+// entity 4
 {
 "classname" "light_directional"
 "origin" "88 -152 88"
 "angles" "45 75 1"
 "shadows_enabled" "true"
 }
-// entity 6
+// entity 5
 {
 "classname" "burning_logs"
 "origin" "376 -216 16"
 }
-// entity 7
+// entity 6
 {
 "classname" "crate_small"
 "origin" "344 -104 24"
 }
-// entity 8
+// entity 7
 {
 "classname" "crate_small"
 "origin" "344 -56 24"
 }
-// entity 9
+// entity 8
 {
 "classname" "crate_small"
 "origin" "280 -152 24"
 }
-// entity 10
+// entity 9
 {
 "classname" "lamp_sitting"
 "origin" "216 -104 24"
 }
-// entity 11
+// entity 10
 {
 "classname" "light_lamp_plain"
 "origin" "-248 8 104"
 }
-// entity 12
+// entity 11
 {
 "classname" "light_lamp_shaded03"
 "origin" "72 200 40"
 "angles" "1 -90 0"
 }
-// entity 13
+// entity 12
 {
 "classname" "light_lamp_wall_electric"
 "origin" "408 120 120"
