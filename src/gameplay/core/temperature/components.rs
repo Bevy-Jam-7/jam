@@ -53,17 +53,6 @@ impl Default for MaxTemperature {
 	}
 }
 
-/// Base damage of a unit/entity (could be modified by temperature/fever).
-#[derive(Component, Debug, Deref, DerefMut, Clone, Copy, Reflect)]
-#[reflect(Clone, Debug, Component)]
-pub struct BaseDamage(pub f32);
-
-impl Default for BaseDamage {
-	fn default() -> Self {
-		Self(10.)
-	}
-}
-
 /// Temperature of objects/entities/space in the environment, affecting the temperature of units around them.
 #[derive(Component, Debug, Deref, DerefMut, Clone, Copy, Reflect)]
 #[reflect(Clone, Debug, Component)]
@@ -75,6 +64,7 @@ impl Default for EnvironmentTemperature {
 	}
 }
 
+/// Controls how conductive an object is to temperature transfer.
 #[derive(Component, Debug, Deref, DerefMut, Clone, Reflect)]
 #[reflect(Clone, Debug, Component)]
 pub struct Conductivity(pub f32);
@@ -82,5 +72,21 @@ pub struct Conductivity(pub f32);
 impl Default for Conductivity {
 	fn default() -> Self {
 		Self(2.0)
+	}
+}
+
+/// Controls how sensitive to penetration depth the temperature transfer system is.
+///
+/// Affects collisions with the heat sensor (multiplied by penetration depth),
+/// as well as eaten entities (flat value, defaults to `10.`).
+///
+/// Might have to tweak this to use higher env temperatures, other temperature scales or a larger sensor.
+#[derive(Component, Debug, Deref, DerefMut, Clone, Reflect)]
+#[reflect(Clone, Debug, Component)]
+pub struct DepthSensitivity(pub f32);
+
+impl Default for DepthSensitivity {
+	fn default() -> Self {
+		Self(10.)
 	}
 }
