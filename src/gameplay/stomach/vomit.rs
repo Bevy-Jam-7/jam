@@ -1,8 +1,14 @@
 use avian3d::prelude::*;
 use bevy::{camera::visibility::RenderLayers, prelude::*};
 use bevy_enhanced_input::prelude::Start;
+use bevy_seedling::{
+	prelude::Volume,
+	sample::{AudioSample, RandomPitch, SamplePlayer},
+};
+use bevy_shuffle_bag::ShuffleBag;
 
 use crate::{
+	audio::SfxPool,
 	gameplay::{
 		player::{Player, camera::PlayerCamera, input::VomitObject},
 		stomach::Stomach,
@@ -13,6 +19,9 @@ use crate::{
 pub(super) fn plugin(app: &mut App) {
 	app.add_observer(on_vomit);
 	app.add_observer(try_vomit);
+
+	app.init_resource::<VomitSounds>()
+		.add_observer(play_vom_sound);
 }
 
 /// Event for vomiting an entity out of the stomach.
@@ -97,4 +106,38 @@ fn try_vomit(
 			linear_velocity,
 		});
 	}
+}
+
+#[derive(Resource)]
+struct VomitSounds(ShuffleBag<Handle<AudioSample>>);
+
+impl FromWorld for VomitSounds {
+	fn from_world(world: &mut World) -> Self {
+		let assets = world.resource::<AssetServer>();
+		let mut rng = rand::rng();
+
+		Self(
+			ShuffleBag::try_new(
+				vec![
+					assets.load("audio/sound_effects/mouth/puke1.ogg"),
+					assets.load("audio/sound_effects/mouth/puke2.ogg"),
+					assets.load("audio/sound_effects/mouth/puke3.ogg"),
+					assets.load("audio/sound_effects/mouth/puke4.ogg"),
+				],
+				&mut rng,
+			)
+			.unwrap(),
+		)
+	}
+}
+
+fn play_vom_sound(_: On<Vomit>, mut sounds: ResMut<VomitSounds>, mut commands: Commands) {
+	let rng = &mut rand::rng();
+	let sound = sounds.0.pick(rng);
+
+	commands.spawn((
+		SamplePlayer::new(sound.clone()).with_volume(Volume::Decibels(-3.0)),
+		RandomPitch(1.05..1.25),
+		SfxPool,
+	));
 }
