@@ -46,12 +46,16 @@ pub(crate) fn spawn_level(
 	if !existing_level.is_empty() {
 		return;
 	}
-	if !asset_server.is_loaded_with_dependencies(&**handle) {
-		return;
-	}
 	let Some(assets) = level_assets.get(&**handle) else {
 		return;
 	};
+	// Check individual sub-assets since `asset_server.add()` doesn't track #[dependency] fields.
+	if !asset_server.is_loaded_with_dependencies(&assets.level)
+		|| !asset_server.is_loaded_with_dependencies(&assets.navmesh)
+		|| !asset_server.is_loaded_with_dependencies(&assets.music)
+	{
+		return;
+	}
 
 	// Insert as a resource so other systems (e.g. debug_ui) can access via Res<LevelAssets>.
 	commands.insert_resource(assets.clone());
