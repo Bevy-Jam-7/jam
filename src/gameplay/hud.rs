@@ -26,5 +26,8 @@ fn update_interaction_text(
 	mut interaction_text: Single<&mut Text, With<InteractionHintText>>,
 	interaction_data: Res<AvailableInteraction>,
 ) {
-	***interaction_text = interaction_data.description.as_ref().map_or("".to_string(), |description| format!("I:{description}"));
+	***interaction_text = interaction_data
+		.description
+		.as_ref()
+		.map_or("".to_string(), |description| format!("I:{description}"));
 }

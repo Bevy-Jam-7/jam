@@ -1,5 +1,6 @@
 use crate::{
-	asset_tracking::LoadResource, gameplay::interaction::InteractableObject, third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _
+	asset_tracking::LoadResource, gameplay::interaction::InteractableObject,
+	third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _,
 };
 
 use super::setup::*;

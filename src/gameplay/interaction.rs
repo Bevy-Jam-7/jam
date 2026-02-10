@@ -1,8 +1,8 @@
+use crate::gameplay::player::input::Interact;
 use avian3d::prelude::PhysicsPickable;
 use bevy::prelude::*;
 use bevy::{ecs::component::Component, picking::Pickable};
 use bevy_enhanced_input::prelude::Start;
-use crate::gameplay::player::input::Interact;
 
 /// Marker component for an entity being interactable by clicking on it.
 #[derive(Component, Default, Reflect)]

@@ -9,13 +9,13 @@ mod animation;
 pub(crate) mod core;
 pub(crate) mod crosshair;
 pub(crate) mod dialogue_view;
+pub(crate) mod hud;
+pub(crate) mod interaction;
 pub(crate) mod level;
 pub(crate) mod npc;
 pub(crate) mod objectives;
 pub(crate) mod player;
 pub(crate) mod stomach;
-pub(crate) mod interaction;
-pub(crate) mod hud;
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_plugins((

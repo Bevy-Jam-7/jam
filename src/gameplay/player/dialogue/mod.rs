@@ -5,9 +5,7 @@ use bevy::prelude::*;
 use bevy_yarnspinner::prelude::*;
 
 use crate::{
-	PostPhysicsAppSystems,
-	gameplay::interaction::InteractEvent,
-	screens::Screen,
+	PostPhysicsAppSystems, gameplay::interaction::InteractEvent, screens::Screen,
 	third_party::bevy_yarnspinner::YarnNode,
 };
 

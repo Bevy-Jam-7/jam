@@ -7,7 +7,11 @@ mod input;
 pub(crate) mod log_components;
 mod validate_preloading;
 
-use crate::{gameplay::interaction::{InteractEvent, InteractableObject}, menus::Menu, screens::loading::LoadingScreen};
+use crate::{
+	gameplay::interaction::{InteractEvent, InteractableObject},
+	menus::Menu,
+	screens::loading::LoadingScreen,
+};
 
 pub(super) fn plugin(app: &mut App) {
 	// Log `Screen` state transitions.
@@ -35,11 +39,18 @@ fn clicked_entity(event: On<Pointer<Click>>, names: Query<&Name>) {
 	)
 }
 
-fn interacted_entity(event: On<InteractEvent>, names: Query<&Name>, interactions: Query<&InteractableObject>) {
+fn interacted_entity(
+	event: On<InteractEvent>,
+	names: Query<&Name>,
+	interactions: Query<&InteractableObject>,
+) {
 	info!(
 		"Interacted with: {}, with name: {:?} and interaction text: {:?}",
 		event.0,
 		names.get(event.0).ok(),
-		interactions.get(event.0).ok().map(|interaction| (&interaction.0).as_ref()),
+		interactions
+			.get(event.0)
+			.ok()
+			.map(|interaction| (&interaction.0).as_ref()),
 	)
 }
