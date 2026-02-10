@@ -50,11 +50,12 @@ pub(super) fn plugin(app: &mut App) {
 #[derive(Component, Debug, Reflect)]
 #[reflect(Component)]
 #[require(Transform, Visibility)]
-pub(crate) struct PlayerCamera;
+pub(crate) struct PlayerCameraParent;
 
+/// Marker component for the camera that ACTUALLY renders the world.
 #[derive(Component, Debug, Reflect)]
 #[reflect(Component)]
-#[require(Transform, Visibility)]
+#[require(Transform, Visibility, PhysicsPickable)]
 struct WorldModelCamera;
 
 fn spawn_view_model(
@@ -76,7 +77,7 @@ fn spawn_view_model(
 			// Enable the optional builtin camera controller
 			CharacterControllerCameraOf::new(add.entity),
 			Name::new("Player Camera Parent"),
-			PlayerCamera,
+			PlayerCameraParent,
 			DespawnOnExit(Screen::Gameplay),
 			DespawnOnExit(LoadingScreen::Shaders),
 			AvianPickupActor {

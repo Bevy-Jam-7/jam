@@ -9,7 +9,7 @@ use bevy::prelude::*;
 
 use crate::{
 	PostPhysicsAppSystems,
-	gameplay::{crosshair::CrosshairState, player::camera::PlayerCamera},
+	gameplay::{crosshair::CrosshairState, player::camera::PlayerCameraParent},
 	screens::Screen,
 	third_party::avian3d::CollisionLayer,
 };
@@ -26,7 +26,7 @@ pub(super) fn plugin(app: &mut App) {
 }
 
 fn check_for_pickup_opportunity(
-	player: Single<(&GlobalTransform, &AvianPickupActor), With<PlayerCamera>>,
+	player: Single<(&GlobalTransform, &AvianPickupActor), With<PlayerCameraParent>>,
 	spatial_query: SpatialQuery,
 	mut crosshair: Single<&mut CrosshairState>,
 ) {

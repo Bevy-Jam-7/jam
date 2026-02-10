@@ -1,5 +1,5 @@
 use crate::{
-	asset_tracking::LoadResource, third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _,
+	asset_tracking::LoadResource, gameplay::interaction::InteractableObject, third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _
 };
 
 use super::setup::*;
@@ -44,12 +44,14 @@ pub(super) fn plugin(app: &mut App) {
 	base(Transform, Visibility),
 	model("models/darkmod/containers/package_medium.gltf")
 )]
+#[require(InteractableObject(Some("Open Medium! package".to_string())))]
 pub(crate) struct PackageMedium;
 
 #[point_class(
 	base(Transform, Visibility),
 	model("models/darkmod/containers/package_small.gltf")
 )]
+#[require(InteractableObject(Some("Open package".to_string())))]
 pub(crate) struct PackageSmall;
 
 // generic static props
@@ -63,12 +65,14 @@ pub(crate) struct Grate;
 	base(Transform, Visibility),
 	model("models/darkmod/furniture/tables/rtable1.gltf")
 )]
+#[require(InteractableObject(Some("Lick table".to_string())))]
 pub(crate) struct Table;
 
 #[point_class(
 	base(Transform, Visibility),
 	model("models/darkmod/furniture/shelves/bookshelf02.gltf")
 )]
+#[require(InteractableObject)]
 pub(crate) struct Bookshelf;
 
 #[point_class(

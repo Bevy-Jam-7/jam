@@ -17,7 +17,7 @@ use crate::{
 
 mod ui;
 
-use super::{Player, camera::PlayerCamera, input::Interact, pickup::is_holding_prop};
+use super::{Player, camera::PlayerCameraParent, input::Interact, pickup::is_holding_prop};
 
 pub(super) fn plugin(app: &mut App) {
 	app.init_resource::<DialogueSpeaker>();
@@ -55,7 +55,7 @@ pub(super) enum DialogueSystems {
 }
 
 fn check_for_dialogue_opportunity(
-	player: Single<&GlobalTransform, With<PlayerCamera>>,
+	player: Single<&GlobalTransform, With<PlayerCameraParent>>,
 	player_collider: Single<Entity, With<Player>>,
 	mut interaction_prompt: Single<&mut InteractionPrompt>,
 	q_yarn_node: Query<&YarnNode>,
@@ -109,7 +109,7 @@ fn interact_with_dialogue(
 
 /// Stops dialogue if the player is too far from the speaker.
 fn stop_dialogue_far_from_speaker(
-	player: Single<&GlobalTransform, With<PlayerCamera>>,
+	player: Single<&GlobalTransform, With<PlayerCameraParent>>,
 	transforms: Query<&GlobalTransform>,
 	mut dialogue_runner: Single<&mut DialogueRunner>,
 	speaker: Res<DialogueSpeaker>,

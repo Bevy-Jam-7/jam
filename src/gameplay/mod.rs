@@ -14,6 +14,8 @@ pub(crate) mod npc;
 pub(crate) mod objectives;
 pub(crate) mod player;
 pub(crate) mod stomach;
+pub(crate) mod interaction;
+pub(crate) mod hud;
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_plugins((
@@ -28,5 +30,7 @@ pub(super) fn plugin(app: &mut App) {
 		// so make sure to add it last.
 		level::plugin,
 		core::plugin,
+		interaction::plugin,
+		hud::plugin,
 	));
 }

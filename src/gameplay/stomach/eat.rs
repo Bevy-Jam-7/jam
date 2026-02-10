@@ -8,7 +8,7 @@ use crate::{
 	RenderLayer,
 	audio::SfxPool,
 	gameplay::{
-		player::{camera::PlayerCamera, input::EatObject},
+		player::{camera::PlayerCameraParent, input::EatObject},
 		stomach::Stomach,
 	},
 	third_party::avian3d::CollisionLayer,
@@ -80,7 +80,7 @@ fn on_eat(
 
 fn try_eat(
 	_eat: On<Start<EatObject>>,
-	player: Single<&GlobalTransform, With<PlayerCamera>>,
+	player: Single<&GlobalTransform, With<PlayerCameraParent>>,
 	collider_of_query: Query<&ColliderOf>,
 	spatial_query: SpatialQuery,
 	mut commands: Commands,

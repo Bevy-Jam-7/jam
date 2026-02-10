@@ -145,6 +145,7 @@ pub fn update_hits(
     )>,
     ray_map: Res<RayMap>,
     pickables: Query<&Pickable>,
+    collider_of: Query<&ColliderOf>,
     marked_targets: Query<&PhysicsPickable>,
     backend_settings: Res<PhysicsPickingSettings>,
     spatial_query: SpatialQuery,
@@ -204,7 +205,9 @@ pub fn update_hits(
                     &filter.0,
                     &|entity| {
                         let marker_requirement =
-                            !backend_settings.require_markers || marked_targets.get(entity).is_ok();
+                            !backend_settings.require_markers || 
+                            marked_targets.contains(entity) ||
+                            collider_of.get(entity).ok().map_or(false, |parent_body| marked_targets.contains(parent_body.body));
 
                         let is_pickable = pickables
                             .get(entity)
@@ -226,9 +229,15 @@ pub fn update_hits(
                     (ray_hit_data.entity, hit_data)
                 })
             {
+                let mut picks = vec![(entity, hit_data.clone())];
+                if let Ok(ColliderOf {
+                    body
+                }) = collider_of.get(entity) {
+                    picks.push((*body, hit_data))
+                }
                 output_events.write(PointerHits::new(
                     ray_id.pointer,
-                    vec![(entity, hit_data)],
+                    picks,
                     camera.order as f32,
                 ));
             }
