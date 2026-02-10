@@ -1,25 +1,37 @@
 use std::f32::consts::PI;
 
-use avian3d::prelude::*;
+use avian3d::{dynamics::solver::joint_graph::JointGraph, prelude::*};
 use bevy::{prelude::*, scene::SceneInstanceReady};
 
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
 	asset_tracking::LoadResource as _,
-	third_party::{
-		avian3d::CollisionLayer,
-		bevy_trenchbroom::{GetTrenchbroomModelPath as _, LoadTrenchbroomModel as _},
-	},
+	third_party::bevy_trenchbroom::{GetTrenchbroomModelPath as _, LoadTrenchbroomModel as _},
 };
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_observer(setup_door);
+	app.add_systems(Update, update_door_locks);
 	app.load_asset::<Gltf>(Door::model_path());
 }
 
 #[point_class(base(Transform, Visibility), model("models/general/door.gltf"))]
-pub(crate) struct Door;
+pub(crate) struct Door {
+	pub locked: bool,
+	pub min_angle: f32,
+	pub max_angle: f32,
+}
+
+impl Default for Door {
+	fn default() -> Self {
+		Self {
+			locked: true,
+			min_angle: -120f32.to_radians(),
+			max_angle: 120f32.to_radians(),
+		}
+	}
+}
 
 fn setup_door(add: On<Add, Door>, asset_server: Res<AssetServer>, mut commands: Commands) {
 	let model = asset_server.load_trenchbroom_model::<Door>();
@@ -29,10 +41,13 @@ fn setup_door(add: On<Add, Door>, asset_server: Res<AssetServer>, mut commands: 
 		.insert(SceneRoot(model))
 		.observe(
 			|ready: On<SceneInstanceReady>,
+			 door_query: Query<&Door>,
 			 child_query: Query<&Children>,
 			 name_query: Query<(Entity, &Name)>,
 			 transform_helper: TransformHelper,
 			 mut commands: Commands| {
+				let door = door_query.get(ready.entity).unwrap();
+
 				let descendants = child_query
 					.iter_descendants(ready.entity)
 					.collect::<Vec<_>>();
@@ -58,11 +73,7 @@ fn setup_door(add: On<Add, Door>, asset_server: Res<AssetServer>, mut commands: 
 						ColliderConstructorHierarchy::new(
 							ColliderConstructor::ConvexDecompositionFromMesh,
 						)
-						.with_default_layers(CollisionLayers::new(
-							CollisionLayer::Prop,
-							LayerMask::ALL,
-						))
-						.with_default_density(10000.0),
+						.with_default_density(10_000.0),
 					));
 
 				// Make the doorknobs children of the door panel, so they move together with the door.
@@ -88,7 +99,10 @@ fn setup_door(add: On<Add, Door>, asset_server: Res<AssetServer>, mut commands: 
 					RevoluteJoint::new(ready.entity, door_panel_entity)
 						.with_hinge_axis(Vec3::Y)
 						.with_local_basis2(Quat::from_rotation_y(PI))
-						.with_angle_limits(-120f32.to_radians(), 120f32.to_radians())
+						.with_angle_limits(
+							if door.locked { 0.0 } else { door.min_angle },
+							if door.locked { 0.0 } else { door.max_angle },
+						)
 						.with_anchor(
 							global_transform.translation() - 0.425 * global_transform.right(),
 						)
@@ -101,4 +115,29 @@ fn setup_door(add: On<Add, Door>, asset_server: Res<AssetServer>, mut commands: 
 				));
 			},
 		);
+}
+
+fn update_door_locks(
+	query: Query<(Entity, &Door), Changed<Door>>,
+	mut joints: Query<&mut RevoluteJoint>,
+	joint_graph: Res<JointGraph>,
+) {
+	for (entity, door) in query.iter() {
+		for edge in joint_graph.joints_of(entity) {
+			let Ok(mut joint) = joints.get_mut(edge.entity) else {
+				continue;
+			};
+			let Some(limit) = &mut joint.angle_limit else {
+				continue;
+			};
+
+			if door.locked {
+				limit.min = 0.0;
+				limit.max = 0.0;
+			} else {
+				limit.min = door.min_angle;
+				limit.max = door.max_angle;
+			}
+		}
+	}
 }
