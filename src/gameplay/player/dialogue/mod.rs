@@ -50,8 +50,9 @@ fn interact_with_dialogue(
 	mut speaker: ResMut<DialogueSpeaker>,
 ) {
 	if let Ok(node) = q_yarn_node.get(trigger.0) {
-		speaker.0 = Some(trigger.0);
-		dialogue_runner.start_node(&node.yarn_node);
+		if let Ok(_) = dialogue_runner.try_start_node(&node.yarn_node) {
+			speaker.0 = Some(trigger.0);
+		}
 	}
 }
 
