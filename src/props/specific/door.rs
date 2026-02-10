@@ -26,7 +26,7 @@ pub(crate) struct Door {
 impl Default for Door {
 	fn default() -> Self {
 		Self {
-			locked: true,
+			locked: false,
 			min_angle: -120f32.to_radians(),
 			max_angle: 120f32.to_radians(),
 		}
