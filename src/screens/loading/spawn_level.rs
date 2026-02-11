@@ -4,8 +4,8 @@ use bevy::{prelude::*, scene::SceneInstance};
 use bevy_landmass::{NavMesh, coords::ThreeD};
 
 use crate::{
-	gameplay::level::spawn_level,
-	screens::Screen,
+	gameplay::level::{Level, load_level_assets, spawn_level},
+	screens::{Screen, loading::LoadingScreenUiNode},
 	theme::{palette::SCREEN_BACKGROUND, prelude::*},
 };
 
@@ -14,19 +14,25 @@ use super::LoadingScreen;
 pub(super) fn plugin(app: &mut App) {
 	app.add_systems(
 		OnEnter(LoadingScreen::Level),
-		(spawn_level, spawn_level_loading_screen),
+		(
+			load_level_assets,
+			// cursed
+			spawn_level_loading_screen.run_if(|| false),
+		),
 	);
 	app.add_systems(
 		Update,
-		advance_to_gameplay_screen.run_if(in_state(LoadingScreen::Level)),
+		(spawn_level, advance_to_gameplay_screen)
+			.chain()
+			.run_if(in_state(LoadingScreen::Level)),
 	);
 }
 
 fn spawn_level_loading_screen(mut commands: Commands) {
 	commands.spawn((
+		LoadingScreenUiNode,
 		widget::ui_root("Loading Screen"),
 		BackgroundColor(SCREEN_BACKGROUND),
-		DespawnOnExit(LoadingScreen::Level),
 		children![widget::label("Spawning Level...")],
 	));
 }
@@ -38,7 +44,12 @@ fn advance_to_gameplay_screen(
 	just_added_scenes: Query<(), (With<SceneRoot>, Without<SceneInstance>)>,
 	just_added_meshes: Query<(), Added<Mesh3d>>,
 	nav_mesh_events: MessageReader<AssetEvent<NavMesh<ThreeD>>>,
+	level: Query<(), With<Level>>,
 ) {
+	// Don't advance until spawn_level has actually spawned the level.
+	if level.is_empty() {
+		return;
+	}
 	if !(just_added_meshes.is_empty() && just_added_scenes.is_empty()) {
 		return;
 	}
