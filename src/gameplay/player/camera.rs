@@ -83,7 +83,9 @@ fn spawn_view_model(
 			AvianPickupActor {
 				prop_filter: SpatialQueryFilter::from_mask(CollisionLayer::Prop),
 				obstacle_filter: SpatialQueryFilter::from_mask(CollisionLayer::Default),
-				actor_filter: SpatialQueryFilter::from_mask(CollisionLayer::Character.to_bits() | CollisionLayer::PlayerCharacter.to_bits()),
+				actor_filter: SpatialQueryFilter::from_mask(
+					CollisionLayer::Character.to_bits() | CollisionLayer::PlayerCharacter.to_bits(),
+				),
 				interaction_distance: 2.0,
 				pull: AvianPickupActorPullConfig {
 					impulse: 20.0,

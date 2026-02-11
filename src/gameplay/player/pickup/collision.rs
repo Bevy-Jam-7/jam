@@ -28,7 +28,9 @@ fn disable_collision_with_held_prop(
 		let Ok(mut collision_layers) = q_collision_layers.get(child).copied() else {
 			continue;
 		};
-		collision_layers.filters.remove(CollisionLayer::PlayerCharacter);
+		collision_layers
+			.filters
+			.remove(CollisionLayer::PlayerCharacter);
 		commands.entity(child).insert(collision_layers);
 	}
 }
@@ -44,7 +46,9 @@ fn enable_collision_with_no_longer_held_prop(
 		let Ok(mut collision_layers) = q_collision_layers.get(child).copied() else {
 			continue;
 		};
-		collision_layers.filters.add(CollisionLayer::PlayerCharacter);
+		collision_layers
+			.filters
+			.add(CollisionLayer::PlayerCharacter);
 		commands.entity(child).insert(collision_layers);
 	}
 }
