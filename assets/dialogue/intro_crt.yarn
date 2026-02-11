@@ -1,7 +1,9 @@
 title: IntroCRT
 ---
 LLManager: Good morning, valued employee. You have been working with us for 450 days.
-LLManager: Thank you for your continued productivity.
+LLManager: Thank you for your continued productivity, if you keep this up you might get a promotion.
+LLManager: Which means **two** pizza parties per month.
+LLManager: Before you get to work, it is important to celebrate milestones to ensure worker productivity.
 LLManager: It is employee No.6's birthday. Please go and congratulate them.
 // # TODO: Add bit that sets birthday objective here
 ===
