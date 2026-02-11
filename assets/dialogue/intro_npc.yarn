@@ -21,7 +21,7 @@ title: IntroNpc3
 Janbal: My friend tried to tell me about how burgers control the world.
 Janbal: But then LLManager made him go on holiday.
 Janbal: Said he had the "Proliterian Fever".
-Janbal: Lot of that going around.
+Janbal: I miss him.
 ===
 
 title: IntroNpc4
@@ -43,6 +43,7 @@ title: IntroNpc6
 Jannick: I would go to a therapist but the last one I went to didn't understand exposure therapy.
 Jannick: I think he might have been hitting on me.
 -> Happy birthday
+  <<set $birthday_celebrated = true>>
   Jannick: He tried to take me out for dinner on my birthday.
   Jannick: Said I was very special.
   Jannick: Are you going to do that to.
@@ -56,6 +57,7 @@ title: IntroNpc7
 ---
 Janderstülz: Last time I tried to say no to LLManager they sent me to Scunthorpe.
 Janderstülz: And like I don't have anything against the British, I just don't think they should be around kids.
+Janderstülz: Especially when they're drunk.
 ===
 
 title: IntroNpc8
