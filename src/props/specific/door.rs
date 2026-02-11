@@ -4,7 +4,6 @@ use avian_rerecast::ExcludeColliderFromNavmesh;
 use avian3d::{dynamics::solver::joint_graph::JointGraph, prelude::*};
 use bevy::{prelude::*, scene::SceneInstanceReady};
 
-use bevy_rerecast::editor_integration::EditorExluded;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{

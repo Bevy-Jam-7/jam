@@ -10,6 +10,7 @@ use bevy_trenchbroom::prelude::*;
 use crate::{
 	animation::AnimationState,
 	asset_tracking::LoadResource,
+	gameplay::npc::enemy::enemy_htn,
 	third_party::{
 		avian3d::CollisionLayer,
 		bevy_trenchbroom::{GetTrenchbroomModelPath, LoadTrenchbroomModel as _},
@@ -71,6 +72,7 @@ fn on_add(add: On<Add, Npc>, mut commands: Commands, assets: Res<AssetServer>) {
 				[CollisionLayer::Character, CollisionLayer::Dialog],
 				LayerMask::ALL,
 			),
+			enemy_htn(),
 		))
 		.with_child((
 			Name::new("Npc Model"),

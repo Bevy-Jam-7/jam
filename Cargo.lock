@@ -4461,6 +4461,7 @@ dependencies = [
  "bevy_framepace",
  "bevy_hanabi",
  "bevy_landmass",
+ "bevy_mod_props",
  "bevy_mod_skinned_aabb",
  "bevy_rerecast",
  "bevy_seedling",
