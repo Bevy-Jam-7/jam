@@ -20,7 +20,6 @@ mod ui_camera;
 mod ui_layout;
 
 use asset_processing::default_image_sampler_descriptor;
-use avian3d::prelude::PhysicsPickingPlugin;
 use bevy::gltf::GltfPlugin;
 use bevy::gltf::convert_coordinates::GltfConvertCoordinates;
 use bevy::log::LogPlugin;
