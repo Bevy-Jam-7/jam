@@ -1,31 +1,44 @@
 use bevy::prelude::*;
+use bevy_trenchbroom::prelude::*;
 
-use crate::{gameplay::objectives::ui::spawn_objective_ui, screens::Screen};
+use crate::{
+	gameplay::interaction::{InteractEvent, InteractableObject},
+	props::logic_entity::ObjectiveEntity,
+};
 
 pub(crate) mod ui;
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_plugins(ui::plugin);
 
-	app.add_systems(
-		OnEnter(Screen::Gameplay),
-		spawn_test_objectives.after(spawn_objective_ui),
-	);
 	app.add_observer(update_current_objective);
+//	app.add_systems(Update, find_current_objective);
+	app.add_observer(watch_for_completors);
 	app.add_systems(PostUpdate, complete_parent_objectives);
+}
+
+/// Marker for entities that complete subobjectives on interact
+#[derive(Component, Reflect, Debug)]
+#[reflect(Component)]
+#[require(InteractableObject(Some("Complete Objective".to_string())))]
+pub struct ObjectiveCompletor {
+	/// `ObjectiveEntity::targetname` of the objective completed by this completor
+	pub target: String,
 }
 
 #[derive(Component)]
 pub struct CurrentObjective;
 
 /// A game objective.
-#[derive(Component, Debug, Default)]
+#[derive(Default)]
+#[base_class]
 pub struct Objective {
 	/// The description of the objective.
 	pub description: String,
 }
 
 impl Objective {
+	#[expect(dead_code)]
 	/// Creates a new [`Objective`] with the given description.
 	pub fn new(description: impl Into<String>) -> Self {
 		Self {
@@ -60,35 +73,19 @@ pub struct NextObjective(Entity);
 #[relationship(relationship_target = NextObjective)]
 pub struct PreviousObjective(pub Entity);
 
-fn spawn_test_objectives(mut commands: Commands) {
-	// Spawn a top-level objective.
-	commands
-		.spawn((
-			Objective::new("Task 1"),
-			related!(SubObjectives[
-				Objective::new("Task 1.1"),
-				Objective::new("Task 1.2"),
-				(Objective::new("Task 1.3"), ObjectiveCompleted)
-			]),
-			related!(
-				NextObjective[(
-					Objective::new("Task 2"),
-					related!(SubObjectives[
-						(Objective::new("Task 2.1"), ObjectiveCompleted),
-						(
-							Objective::new("Task 2.2"),
-							related!(SubObjectives[
-								Objective::new("Task 2.2.1"),
-								Objective::new("Task 2.2.2"),
-							]),
-						),
-						Objective::new("Task 2.3")
-					])
-				)]
-			),
-		))
-		// If you want to hate ui remove this.
-		.insert(CurrentObjective);
+fn watch_for_completors(
+	trigger: On<InteractEvent>,
+	objective_query: Query<(Entity, &ObjectiveEntity)>,
+	completor_query: Query<&ObjectiveCompletor>,
+	mut commands: Commands,
+) {
+	if let Ok(completor) = completor_query.get(trigger.0) {
+		for (entity, objective) in objective_query.iter() {
+			if objective.targetname == completor.target {
+				commands.entity(entity).insert(ObjectiveCompleted);
+			}
+		}
+	}
 }
 
 fn update_current_objective(
