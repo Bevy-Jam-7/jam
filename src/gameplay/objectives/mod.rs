@@ -71,20 +71,22 @@ fn spawn_test_objectives(mut commands: Commands) {
 				Objective::new("Task 1.2"),
 				(Objective::new("Task 1.3"), ObjectiveCompleted)
 			]),
-			related!(NextObjective[
-				Objective::new("Task 2"),
-				related!(SubObjectives[
-					(Objective::new("Task 2.1"), ObjectiveCompleted),
-					(
-						Objective::new("Task 2.2"),
-						related!(SubObjectives[
-							Objective::new("Task 2.2.1"),
-							Objective::new("Task 2.2.2"),
-						]),
-					),
-					Objective::new("Task 2.3")
-				])
-			]),
+			related!(
+				NextObjective[(
+					Objective::new("Task 2"),
+					related!(SubObjectives[
+						(Objective::new("Task 2.1"), ObjectiveCompleted),
+						(
+							Objective::new("Task 2.2"),
+							related!(SubObjectives[
+								Objective::new("Task 2.2.1"),
+								Objective::new("Task 2.2.2"),
+							]),
+						),
+						Objective::new("Task 2.3")
+					])
+				)]
+			),
 		))
 		// If you want to hate ui remove this.
 		.insert(CurrentObjective);
@@ -96,8 +98,8 @@ fn update_current_objective(
 	objectives: Query<&NextObjective, With<CurrentObjective>>,
 ) {
 	if let Ok(&NextObjective(next_objective)) = objectives.get(add.entity) {
-		commands.entity(add.entity).remove::<CurrentObjective>();
-		commands.entity(next_objective).insert(CurrentObjective);
+		commands.entity(add.entity).try_remove::<CurrentObjective>();
+		commands.entity(next_objective).try_insert(CurrentObjective);
 	}
 }
 
@@ -119,7 +121,7 @@ fn complete_parent_objectives(
 			// Mark the parent objective as completed.
 			commands
 				.entity(sub_objective_of.objective)
-				.insert(ObjectiveCompleted);
+				.try_insert(ObjectiveCompleted);
 		}
 	}
 }
