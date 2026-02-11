@@ -14,7 +14,10 @@ use bevy::{
 
 use crate::{
 	CameraOrder, RenderLayer,
-	gameplay::player::{Player, camera::PlayerCameraParent},
+	gameplay::{
+		interaction::InteractableObject,
+		player::{Player, camera::PlayerCameraParent},
+	},
 	screens::Screen,
 	third_party::avian3d::CollisionLayer,
 };
@@ -30,6 +33,11 @@ pub(super) fn plugin(app: &mut App) {
 	);
 	app.add_systems(FixedUpdate, move_stomach);
 }
+
+#[derive(Component, Reflect, Debug, Default)]
+#[reflect(Component)]
+#[require(InteractableObject(Some("Eat".to_string())))]
+pub struct EdibleProp;
 
 #[derive(Component, Debug)]
 pub struct Stomach {
