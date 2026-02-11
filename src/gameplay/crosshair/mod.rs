@@ -2,7 +2,7 @@
 //! The crosshair is a UI element that is used to indicate the player's aim. We change the crosshair when the player is looking at a prop or an NPC.
 //! This is done by registering which systems are interested in the crosshair state.
 
-use crate::{PostPhysicsAppSystems, screens::Screen};
+use crate::{PostPhysicsAppSystems, gameplay::interaction::AvailableInteraction, screens::Screen};
 use assets::{CROSSHAIR_DOT_PATH, CROSSHAIR_SQUARE_PATH};
 use bevy::{
 	picking::input::MousePointerPositionOverride,
@@ -20,7 +20,9 @@ pub(super) fn plugin(app: &mut App) {
 		Update,
 		(
 			update_pointer,
-			update_crosshair.in_set(PostPhysicsAppSystems::ChangeUi),
+			(square_cross_hair_if_interactable, update_crosshair)
+				.chain()
+				.in_set(PostPhysicsAppSystems::ChangeUi),
 		),
 	);
 	app.add_systems(OnEnter(Screen::Gameplay), spawn_crosshair);
@@ -82,6 +84,23 @@ fn update_pointer(
 			cursor_options.visible = true;
 		}
 		mouse_override.over_ride = None;
+	}
+}
+
+fn square_cross_hair_if_interactable(
+	mut crosshair: Single<&mut CrosshairState>,
+	interaction_opportunity: Res<AvailableInteraction>,
+) {
+	if interaction_opportunity.is_changed() {
+		if interaction_opportunity.target_entity.is_some() {
+			crosshair
+				.wants_square
+				.insert(square_cross_hair_if_interactable.type_id());
+		} else {
+			crosshair
+				.wants_square
+				.remove(&square_cross_hair_if_interactable.type_id());
+		}
 	}
 }
 
