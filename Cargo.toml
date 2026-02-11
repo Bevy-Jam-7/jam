@@ -114,6 +114,7 @@ bevy_hanabi = { version = "0.18", default-features = false, features = [
 ] }
 
 bevy_mod_skinned_aabb = "0.4"
+bevy_bae = "0.1.0"
 
 [features]
 default = [

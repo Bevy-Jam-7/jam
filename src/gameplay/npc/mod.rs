@@ -21,10 +21,17 @@ use super::animation::AnimationPlayerAncestor;
 pub(crate) mod ai;
 mod animation;
 mod assets;
+mod enemy;
 mod sound;
 
 pub(super) fn plugin(app: &mut App) {
-	app.add_plugins((ai::plugin, animation::plugin, assets::plugin, sound::plugin));
+	app.add_plugins((
+		ai::plugin,
+		animation::plugin,
+		assets::plugin,
+		sound::plugin,
+		enemy::plugin,
+	));
 	app.load_asset::<Gltf>(Npc::model_path());
 	app.add_observer(on_add);
 }

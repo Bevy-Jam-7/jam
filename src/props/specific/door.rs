@@ -1,8 +1,10 @@
 use std::f32::consts::PI;
 
+use avian_rerecast::ExcludeColliderFromNavmesh;
 use avian3d::{dynamics::solver::joint_graph::JointGraph, prelude::*};
 use bevy::{prelude::*, scene::SceneInstanceReady};
 
+use bevy_rerecast::editor_integration::EditorExluded;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
@@ -70,6 +72,7 @@ fn setup_door(add: On<Add, Door>, asset_server: Res<AssetServer>, mut commands: 
 					.remove::<ChildOf>()
 					.insert((
 						RigidBody::Dynamic,
+						ExcludeColliderFromNavmesh,
 						Transform::from(global_transform),
 						DespawnOnExit(Screen::Gameplay),
 						ColliderConstructorHierarchy::new(
@@ -93,6 +96,7 @@ fn setup_door(add: On<Add, Door>, asset_server: Res<AssetServer>, mut commands: 
 				// Make the original entity a static body with a collider.
 				commands.entity(ready.entity).insert((
 					RigidBody::Static,
+					ExcludeColliderFromNavmesh,
 					ColliderConstructorHierarchy::new(ColliderConstructor::ConvexHullFromMesh),
 				));
 
