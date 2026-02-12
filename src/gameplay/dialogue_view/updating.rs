@@ -123,12 +123,18 @@ fn present_line(
 		.strip_prefix("line:")
 		.unwrap_or(&event.line.id.0);
 	let path = format!("audio/dialogue/{id}.ogg");
-	let handle = if std::path::Path::new(&format!("assets/{path}")).exists() {
-		asset_server.load::<AudioSample>(path)
+	if std::path::Path::new(&format!("assets/{path}")).exists() {
+		let handle = asset_server.load::<AudioSample>(path);
+		commands.spawn((SamplePlayer::new(handle), SfxPool, VoiceAudio));
 	} else {
-		gibberish.0.pick(&mut rand::rng()).clone()
+		let handle = gibberish.0.pick(&mut rand::rng()).clone();
+		commands.spawn((
+			SamplePlayer::new(handle),
+			RandomPitch(1.05..1.25),
+			SfxPool,
+			VoiceAudio,
+		));
 	};
-	commands.spawn((SamplePlayer::new(handle), SfxPool, VoiceAudio));
 
 	let name = if let Some(name) = event.line.character_name() {
 		speaker_change_events.write(SpeakerChangeEvent {
