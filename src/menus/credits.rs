@@ -81,6 +81,9 @@ fn assets() -> impl Bundle {
 			"Rock",
 			"CC0 Rock Moss Set 01 by Kless Gyzen https://polyhaven.com/a/rock_moss_set_01",
 		],
+		["Fluorescent Light 1", "CC0 by EverydaySounds"],
+		["Fluorescent Light 2", "CC0 by kyles"],
+		["Floppy Disk", "CC0 by BigSoundBank"],
 		["More stuffs", "TODO :)"],
 	])
 }

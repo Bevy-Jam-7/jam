@@ -6,18 +6,24 @@ use crate::menus::Menu;
 use animation::AnimateCutoff;
 
 pub(crate) mod animation;
+pub(crate) mod doppler;
 pub(crate) mod layers;
 pub(crate) mod perceptual;
+pub(crate) mod world_emitter;
 
 pub(super) fn plugin(app: &mut App) {
-	app.add_plugins(layers::plugin)
-		.add_systems(Startup, initialize_audio)
-		.register_node::<SvfNode<2>>()
-		.register_type::<SvfNode<2>>()
-		.add_systems(Update, manage_filter_enabled)
-		.add_systems(Update, layer_testing)
-		.add_systems(OnExit(Menu::None), enable_music_filter)
-		.add_systems(OnEnter(Menu::None), disable_music_filter);
+	app.add_plugins((
+		layers::plugin,
+		doppler::DopplerPlugin,
+		world_emitter::EmitterPlugin,
+	))
+	.add_systems(Startup, initialize_audio)
+	.register_node::<SvfNode<2>>()
+	.register_type::<SvfNode<2>>()
+	.add_systems(Update, manage_filter_enabled)
+	.add_systems(Update, layer_testing)
+	.add_systems(OnExit(Menu::None), enable_music_filter)
+	.add_systems(OnEnter(Menu::None), disable_music_filter);
 }
 
 #[derive(PoolLabel, Reflect, PartialEq, Eq, Debug, Hash, Clone)]
@@ -80,6 +86,18 @@ fn initialize_audio(server: Res<AssetServer>, mut commands: Commands) {
 			MusicFilter,
 		));
 
+	// commands
+	// 	.spawn((
+	// 		Name::new("HRTF SFX pool"),
+	// 		SamplerPool(HrtfPool),
+	// 		sample_effects![(HrtfNode::default(), SpatialScale(Vec3::splat(2.0)))],
+	// 		VolumeNode {
+	// 			volume: DEFAULT_POOL_VOLUME,
+	// 			..default()
+	// 		},
+	// 	))
+	// 	.connect(SoundEffectsBus);
+
 	commands
 		.spawn((
 			Name::new("SFX audio sampler pool"),
@@ -125,7 +143,7 @@ fn silly_breakcore_layers(server: &AssetServer) -> impl Bundle {
 	)
 }
 
-/// A basic demonstration of how layering cna be used.
+/// A basic demonstration of how layering can be used.
 fn layer_testing(
 	mut events: MessageReader<KeyboardInput>,
 	lay: Single<(Entity, &mut layers::LayeredMusic, Has<layers::ActiveMusic>)>,
