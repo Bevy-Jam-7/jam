@@ -1,7 +1,7 @@
 use std::f32::consts::TAU;
 
 use avian3d::prelude::*;
-use bevy::prelude::*;
+use bevy::{prelude::*, scene::SceneInstanceReady};
 use bevy_ahoy::CharacterController;
 use bevy_bae::prelude::*;
 use bevy_trenchbroom::prelude::*;
@@ -51,11 +51,51 @@ fn on_add(add: On<Add, EnemyMelee>, mut commands: Commands, assets: Res<AssetSer
 			),
 			melee_enemy_htn(),
 		))
-		.with_child((
-			Name::new("Enemy Model"),
-			SceneRoot(assets.load_trenchbroom_model::<Npc>()),
-			Transform::from_xyz(0.0, -NPC_HALF_HEIGHT, 0.0),
-		))
+		.with_children(|parent| {
+			parent
+				.spawn((
+					Name::new("Enemy Model"),
+					SceneRoot(assets.load_trenchbroom_model::<Npc>()),
+					Transform::from_xyz(0.0, -NPC_HALF_HEIGHT, 0.0),
+				))
+				.observe(
+					|ready: On<SceneInstanceReady>,
+					 mut commands: Commands,
+					 children: Query<&Children>,
+					 bones: Query<(Entity, &Name)>| {
+						let Some(right_hand) = bones
+							.iter_many(children.iter_descendants(ready.entity))
+							.find_map(|(entity, name)| {
+								if name.as_str() == "mixamorig:RightHand" {
+									Some(entity)
+								} else {
+									None
+								}
+							})
+						else {
+							return;
+						};
+						commands
+							.entity(right_hand)
+							.with_child((
+								Name::new("Melee Enemy Hurtbox"),
+								Collider::sphere(0.6),
+								Sensor,
+								Transform::default(),
+								GlobalTransform::default(),
+								Visibility::default(),
+								CollisionEventsEnabled,
+								CollisionLayers::new(
+									[CollisionLayer::Hurtbox],
+									[CollisionLayer::PlayerCharacter],
+								),
+							))
+							.observe(|start: On<CollisionStart>| {
+								error!("ayyy lmao");
+							});
+					},
+				);
+		})
 		.observe(setup_npc_animations);
 }
 
