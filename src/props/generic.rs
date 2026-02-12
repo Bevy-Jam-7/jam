@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use crate::{
 	asset_tracking::LoadResource,
-	audio::{SfxPool, SpatialPool},
+	audio::SpatialPool,
 	gameplay::{
 		level::LevelAssets,
 		objectives::{CurrentObjective, Objective, ObjectiveCompleted, SubObjectives},
