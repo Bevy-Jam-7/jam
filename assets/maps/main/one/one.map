@@ -1067,6 +1067,8 @@
 "classname" "door"
 "origin" "-136 -168 40"
 "angles" "0 90 0"
+"locked" "true"
+"targetname" "first_door"
 }
 // entity 4
 {

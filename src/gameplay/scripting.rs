@@ -3,7 +3,7 @@
 use std::any::TypeId;
 
 use bevy::{
-	ecs::change_detection::MutUntyped, log, prelude::*, reflect::{DynamicStruct, ReflectFromPtr, TypeRegistry}
+	ecs::change_detection::MutUntyped, log, prelude::*, reflect::{DynamicStruct, ReflectFromPtr, ReflectMut, ReflectRef, TypeRegistry}
 };
 use bevy_inspector_egui::restricted_world_view::Error;
 
@@ -23,7 +23,7 @@ pub(crate) fn despawn_entity(
 
 pub fn set_value_on_entity(input: In<(String, String, String)>, world: &mut World) {
 	let (targetname, field_name, value_string) = (*input).clone();
-	mutate_component_on_entity_by_names(&targetname, &field_name, &|mut reflect_borrow, dyn_type| {
+	mutate_component_on_entity_by_names(&targetname, &field_name, &mut |mut reflect_borrow, dyn_type| {
 		let Some(value) = dyn_type.parse_string(&value_string) else {
 			warn!("Failed to set a value {value_string} on entity {targetname} in field {field_name}, because it could not be parsed as {dyn_type:?}");
 			return;
@@ -34,7 +34,57 @@ pub fn set_value_on_entity(input: In<(String, String, String)>, world: &mut Worl
 	}, world);
 }
 
-fn mutate_component_on_entity_by_names(targetname: &str, field_name: &str, mutator: &dyn Fn(Mut<dyn Reflect>, DynamicallyModifiableType), world: &mut World) {
+pub fn toggle_bool_on_entity(input: In<(String, String)>, world: &mut World) {
+	let (targetname, field_name) = (*input).clone();
+	mutate_component_on_entity_by_names(&targetname, &field_name, &mut |mut reflect_borrow, _dyn_type| {
+		match reflect_borrow.as_partial_reflect_mut().reflect_mut() {
+			ReflectMut::Struct(struct_data) => {
+				if let Some(inner_data) = struct_data.field_mut(&field_name) {
+					if let Some(value) = inner_data.try_downcast_mut::<bool>() {
+						*value = !*value;
+					} else if let Some(Some(value)) = inner_data.try_downcast_mut::<Option<bool>>() {
+						*value = !*value;
+					} else {
+						warn!("Could not parse field {field_name} of entity {targetname} as a bool")
+					}
+				}
+			}
+			_ => {
+				// Should not happen
+			}
+		}
+	}, world);
+}
+
+pub fn read_bool_from_entity(input: In<(String, String)>, world: &mut World) -> bool {
+	let (targetname, field_name) = (*input).clone();
+	let mut result = false;
+	mutate_component_on_entity_by_names(&targetname, &field_name, &mut |reflect_borrow, _dyn_type| {
+		match reflect_borrow.as_partial_reflect().reflect_ref() {
+			ReflectRef::Struct(struct_data) => {
+				if let Some(inner_data) = struct_data.field(&field_name) {
+					if let Some(value) = inner_data.try_downcast_ref::<bool>() {
+						if *value {
+							result = true;
+						}
+					} else if let Some(value) = inner_data.try_downcast_ref::<Option<bool>>() {
+						if value.is_some_and(|x| x) {
+							result = true;
+						}
+					} else {
+						warn!("Could not parse field {field_name} of entity {targetname} as a bool")
+					}
+				}
+			}
+			_ => {
+				// Should not happen
+			}
+		}
+	}, world);
+	result
+}
+
+fn mutate_component_on_entity_by_names(targetname: &str, field_name: &str, mutator: &mut dyn FnMut(Mut<dyn Reflect>, DynamicallyModifiableType), world: &mut World) {
 	world.resource_scope::<DynamicPropertyMap, ()>(|world, prop_index: Mut<'_, DynamicPropertyMap>| {
 		let Some(&(component_id, component_type, ref field_type)) = prop_index.get(field_name) else {
 			warn!("Did not set a value in {field_name} because there isn't such a registered field.");
@@ -43,7 +93,7 @@ fn mutate_component_on_entity_by_names(targetname: &str, field_name: &str, mutat
 		world.resource_scope::<TargetnameEntityIndex, ()>(|world, entity_index| {
 			for &entity in entity_index.get_entity_by_targetname(targetname) {
 				// Only modify entities which have the desired component
-				if !world.entity(entity).contains_id(component_id) {
+				if !world.get_entity(entity).is_ok_and(|x| x.contains_id(component_id)) {
 					return;
 				}
 				world.resource_scope::<AppTypeRegistry, ()>(|world, type_registry| {

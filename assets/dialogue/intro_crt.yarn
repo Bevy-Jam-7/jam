@@ -2,6 +2,12 @@ title: IntroCRT
 ---
 // # I hate sentinal values but hey
 
+<<if is_bool_set("first_door", "locked")>>
+  LLManager: Hm, it seems like the door may be locked, let's see what I can do.
+  <<toggle_value "first_door" "locked">>
+  LLManager: Hopefully this worked, otherwise I'll need to call HR to find a replacement for you.
+<<endif>>
+
 <<if get_current_objective() == "">>
   LLManager: Good morning, valued employee. You have been working with us for 450 days.
   LLManager: Thank you for your continued productivity, if you keep this up you might get a promotion.
