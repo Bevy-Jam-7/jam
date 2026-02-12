@@ -10,6 +10,8 @@ title: IntroCRT
   LLManager: It is employee No.6's birthday. Please go and congratulate them.
   LLManager: It is important to celebrate milestones to ensure worker productivity.
 
+  <<complete_objective "start_work">>
+
   <<create_objective "socialisation" "Socialise" 0.0>>
   <<create_subobjective "soc_1" "Congratulate employee No.6" "socialisation">>
 
