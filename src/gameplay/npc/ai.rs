@@ -13,7 +13,10 @@ use bevy_landmass::{
 
 use crate::{
 	gameplay::{
-		npc::{NPC_HALF_HEIGHT, NPC_SPEED},
+		npc::{
+			NPC_HALF_HEIGHT, NPC_SPEED,
+			enemy::{EnemyAiState, EnemyMelee},
+		},
 		player::navmesh_position::LastValidPlayerNavmeshPosition,
 	},
 	screens::Screen,
@@ -46,7 +49,7 @@ pub(super) fn plugin(app: &mut App) {
 /// Setup the NPC agent. An "agent" is what `bevy_landmass` can move around.
 /// Since we use a floating character controller, we need to offset the agent's position by the character's float height.
 fn setup_npc_agent(
-	add: On<Add, Npc>,
+	add: On<Add, (Npc, EnemyMelee)>,
 	mut commands: Commands,
 	archipelago: Single<Entity, With<Archipelago3d>>,
 ) {
@@ -132,6 +135,7 @@ fn update_agent_target_to_player(
 
 fn update_agent_target(
 	mut agents: Query<(&mut AgentTarget3d, &AgentOf)>,
+	enemy: Query<&EnemyAiState>,
 	targets: Query<&NpcWalkTarget>,
 	transforms: Query<&Transform>,
 	archipelago: Single<&Archipelago3d>,
@@ -143,6 +147,11 @@ fn update_agent_target(
 		else {
 			continue;
 		};
+		if let Ok(enemy) = enemy.get(agent_of.entity())
+			&& enemy.punching
+		{
+			continue;
+		}
 		let sample = match archipelago.sample_point(
 			transform.translation,
 			&PointSampleDistance3d {
@@ -195,7 +204,7 @@ fn set_controller_velocity(
 }
 
 fn rotate_npc(
-	mut agent_query: Query<(&mut Transform, &LinearVelocity), With<Npc>>,
+	mut agent_query: Query<(&mut Transform, &LinearVelocity), Or<(With<Npc>, With<EnemyMelee>)>>,
 	time: Res<Time>,
 ) {
 	for (mut transform, velocity) in &mut agent_query {

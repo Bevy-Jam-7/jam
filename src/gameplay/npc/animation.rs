@@ -106,7 +106,7 @@ fn play_animations(
 		&LinearVelocity,
 		&CharacterControllerState,
 		&AnimationPlayers,
-		&Npc,
+		Option<&Npc>,
 		Option<&mut EnemyAiState>,
 	)>,
 	mut q_animation: Query<(
@@ -119,7 +119,7 @@ fn play_animations(
 		let mut iter = q_animation.iter_many_mut(anim_players.iter());
 		while let Some((animations, mut anim_player, mut transitions)) = iter.fetch_next() {
 			match animating_state.update_by_discriminant({
-				if let Some(lock) = npc.animation_lock {
+				if let Some(lock) = npc.and_then(|npc| npc.animation_lock) {
 					lock
 				} else if let Some(enemy) = enemy.as_mut()
 					&& enemy.punching

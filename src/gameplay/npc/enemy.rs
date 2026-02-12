@@ -1,20 +1,62 @@
 use std::f32::consts::TAU;
 
-use avian3d::prelude::{ColliderOf, SpatialQuery, SpatialQueryFilter};
+use avian3d::prelude::*;
 use bevy::prelude::*;
+use bevy_ahoy::CharacterController;
 use bevy_bae::prelude::*;
+use bevy_trenchbroom::prelude::*;
 use rand::{Rng, rng};
 
 use crate::{
+	animation::AnimationState,
 	gameplay::{
-		npc::ai::{Agent, NpcWalkTargetOf},
+		animation::AnimationPlayerAncestor,
+		npc::{
+			NPC_HALF_HEIGHT, NPC_HEIGHT, NPC_RADIUS, Npc,
+			ai::{Agent, NpcWalkTargetOf},
+			animation::{NpcAnimationState, setup_npc_animations},
+		},
 		player::Player,
 	},
-	third_party::avian3d::CollisionLayer,
+	third_party::{avian3d::CollisionLayer, bevy_trenchbroom::LoadTrenchbroomModel as _},
 };
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_systems(FixedUpdate, update_sensors.before(BaeSystems::ExecutePlan));
+	app.add_observer(on_add);
+}
+
+#[point_class(base(Transform, Visibility), model("models/jan_npc/jan.gltf"))]
+#[derive(Default)]
+pub(crate) struct EnemyMelee;
+
+fn on_add(add: On<Add, EnemyMelee>, mut commands: Commands, assets: Res<AssetServer>) {
+	commands
+		.entity(add.entity)
+		.insert((
+			Collider::cylinder(NPC_RADIUS, NPC_HEIGHT),
+			CharacterController {
+				speed: 8.0,
+				filter: SpatialQueryFilter::DEFAULT
+					.with_mask(LayerMask::ALL & !CollisionLayer::Stomach.to_bits()),
+				..default()
+			},
+			ColliderDensity(1_000.0),
+			RigidBody::Kinematic,
+			AnimationState::<NpcAnimationState>::default(),
+			AnimationPlayerAncestor,
+			CollisionLayers::new(
+				[CollisionLayer::Character, CollisionLayer::Dialog],
+				LayerMask::ALL,
+			),
+			melee_enemy_htn(),
+		))
+		.with_child((
+			Name::new("Enemy Model"),
+			SceneRoot(assets.load_trenchbroom_model::<Npc>()),
+			Transform::from_xyz(0.0, -NPC_HALF_HEIGHT, 0.0),
+		))
+		.observe(setup_npc_animations);
 }
 
 fn update_sensors(
