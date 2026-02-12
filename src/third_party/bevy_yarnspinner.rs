@@ -5,7 +5,16 @@ use bevy::prelude::*;
 use bevy_trenchbroom::prelude::*;
 use bevy_yarnspinner::{events::DialogueCompleted, prelude::*};
 
-use crate::{gameplay::interaction::InteractableObject, screens::Screen};
+use crate::{
+	gameplay::{
+		interaction::InteractableObject,
+		objectives::{
+			complete_dialogue_objective, create_dialogue_objective, create_dialogue_subobjective,
+			get_dialogue_current_objective,
+		},
+	},
+	screens::Screen,
+};
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_plugins((
@@ -27,7 +36,25 @@ pub(super) fn plugin(app: &mut App) {
 }
 
 fn setup_dialogue_runner(mut commands: Commands, yarn_project: Res<YarnProject>) {
-	let dialogue_runner = yarn_project.create_dialogue_runner(&mut commands);
+	let mut dialogue_runner = yarn_project.create_dialogue_runner(&mut commands);
+	dialogue_runner
+		.commands_mut()
+		.add_command(
+			"complete_objective",
+			commands.register_system(complete_dialogue_objective),
+		)
+		.add_command(
+			"create_objective",
+			commands.register_system(create_dialogue_objective),
+		)
+		.add_command(
+			"create_subobjective",
+			commands.register_system(create_dialogue_subobjective),
+		);
+	dialogue_runner.library_mut().add_function(
+		"get_current_objective",
+		commands.register_system(get_dialogue_current_objective),
+	);
 	commands.spawn((
 		DespawnOnExit(Screen::Gameplay),
 		Name::new("Dialogue Runner"),
