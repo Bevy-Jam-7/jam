@@ -180,7 +180,7 @@ fn interact_with_door(
 		) else {
 			continue;
 		};
-		current_angle = joint_angle(&joint, gt1.rotation(), gt2.rotation());
+		current_angle = joint_angle(joint, gt1.rotation(), gt2.rotation());
 		break;
 	}
 

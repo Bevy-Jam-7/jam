@@ -77,6 +77,9 @@ fn assets() -> impl Bundle {
 			"Dark Mod assets",
 			"CC BY-NC-SA 3.0 by The Dark Mod Team, converted to Bevy-friendly assets by Jan Hohenheim",
 		],
+		["Fluorescent Light 1", "CC0 by EverydaySounds"],
+		["Fluorescent Light 2", "CC0 by kyles"],
+		["Floppy Disk", "CC0 by BigSoundBank"],
 		["More stuffs", "TODO :)"],
 	])
 }
