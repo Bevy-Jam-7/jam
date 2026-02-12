@@ -4,7 +4,6 @@ use bevy::{
 	ecs::{lifecycle::HookContext, world::DeferredWorld},
 	prelude::*,
 };
-use bevy_trenchbroom::util::IsSceneWorld;
 
 #[derive(EntityEvent)]
 pub(crate) struct TimerFinished<T> {

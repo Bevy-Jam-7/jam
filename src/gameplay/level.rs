@@ -76,7 +76,7 @@ impl FromWorld for LevelAssets {
 			// You can regenerate the navmesh by using `bevy_rerecast_editor`
 			navmesh: assets.load("maps/main/one/one.nav"),
 			music: assets.load("audio/music/corpo slop to eat your computer to.ogg"),
-			break_room_alarm: assets.load("audio/sound_effects/mental_health_alarm.ogg")
+			break_room_alarm: assets.load("audio/sound_effects/mental_health_alarm.ogg"),
 		}
 	}
 }
