@@ -117,10 +117,16 @@ fn main() -> AppExit {
 	};
 
 	#[cfg(feature = "native")]
-	app.add_plugins(SeedlingPlugin {
+	app.add_plugins(SeedlingPlugin::<firewheel::cpal::CpalBackend> {
 		graph_config: bevy_seedling::prelude::GraphConfiguration::Empty,
 		config: firewheel_config,
-		..Default::default()
+		stream_config: firewheel::cpal::CpalConfig {
+			output: firewheel::cpal::CpalOutputConfig {
+				desired_block_frames: Some(512),
+				..Default::default()
+			},
+			..Default::default()
+		},
 	});
 	#[cfg(feature = "web")]
 	app.add_plugins(SeedlingPlugin {
