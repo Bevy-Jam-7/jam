@@ -1,10 +1,9 @@
-use std::f32::consts::{PI, TAU};
+use std::f32::consts::TAU;
 
 use avian3d::prelude::{ColliderOf, SpatialQuery, SpatialQueryFilter};
 use bevy::prelude::*;
 use bevy_bae::prelude::*;
 use bevy_landmass::{Archipelago3d, FromAgentRadius as _, PointSampleDistance3d};
-use bevy_trenchbroom::prelude::*;
 use rand::{Rng, rng};
 
 use crate::{
@@ -21,13 +20,13 @@ pub(super) fn plugin(app: &mut App) {
 
 fn update_sensors(
 	spatial: SpatialQuery,
-	mut enemies: Query<(Entity, &GlobalTransform, &mut Props, &mut EnemyAiState)>,
+	mut enemies: Query<(&GlobalTransform, &mut Props, &mut EnemyAiState)>,
 	player: Single<(Entity, &Transform), With<Player>>,
 	colliders: Query<&ColliderOf>,
 	time: Res<Time>,
 ) {
 	let (player_entity, player_transform) = player.into_inner();
-	for (enemy, transform, mut props, mut state) in enemies.iter_mut() {
+	for (transform, mut props, mut state) in enemies.iter_mut() {
 		state.walk_timer.tick(time.delta());
 		if !props.get::<bool>("alert") {
 			let dist_sq = transform
@@ -56,7 +55,6 @@ fn update_sensors(
 				props.set("alert", true);
 			}
 		}
-		//if !props.get::<bool>("alert") {}
 	}
 }
 
@@ -65,10 +63,16 @@ pub(crate) fn enemy_htn() -> impl Bundle {
 		EnemyAiState::default(),
 		Plan::new(),
 		Select,
-		tasks![(
-			conditions![Condition::eq("alert", false)],
-			Operator::new(walk_randomly),
-		),],
+		tasks![
+			(
+				conditions![Condition::eq("alert", false)],
+				Operator::new(walk_randomly),
+			),
+			(
+				conditions![Condition::eq("alert", true)],
+				Operator::new(attack_player),
+			),
+		],
 	)
 }
 
@@ -125,6 +129,11 @@ fn walk_randomly(
 			.entity(input.entity)
 			.with_related::<NpcWalkTargetOf>(Transform::from_translation(target_pos_for_real));
 	}
+	OperatorStatus::Success
+}
+
+fn attack_player(In(_input): In<OperatorInput>) -> OperatorStatus {
+	// TODO: Implement lol
 	OperatorStatus::Success
 }
 
