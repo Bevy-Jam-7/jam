@@ -3,10 +3,7 @@
 use crate::gameplay::scatter::Landscape;
 use crate::third_party::avian3d::CollisionLayer;
 use crate::{
-	asset_tracking::LoadResource,
-	audio::MusicPool,
-	gameplay::npc::NPC_RADIUS,
-	screens::Screen,
+	asset_tracking::LoadResource, audio::MusicPool, gameplay::npc::NPC_RADIUS, screens::Screen,
 };
 use avian3d::prelude::*;
 use bevy::prelude::*;
