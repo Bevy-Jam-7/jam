@@ -31,8 +31,7 @@ fn initialise_objectives(
 			if let Some(&parent) = entity_index
 				.get_entity_by_targetname(target)
 				.iter()
-				.filter(|entity| objectives.contains(**entity))
-				.next()
+				.find(|entity| objectives.contains(**entity))
 			{
 				commands
 					.entity(entity)

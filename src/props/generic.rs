@@ -1,9 +1,12 @@
 use crate::{
-	asset_tracking::LoadResource, gameplay::TargetName, props::interactables::InteractableEntity, third_party::{
+	asset_tracking::LoadResource,
+	gameplay::TargetName,
+	props::interactables::InteractableEntity,
+	third_party::{
 		avian3d::CollisionLayer,
 		bevy_trenchbroom::{GetTrenchbroomModelPath as _, LoadTrenchbroomModel as _},
 		bevy_yarnspinner::YarnNode,
-	}
+	},
 };
 
 use super::setup::*;
@@ -56,7 +59,10 @@ pub(super) fn plugin(app: &mut App) {
 
 // office
 
-#[point_class(base(TargetName, Transform, Visibility, YarnNode), model("models/office/crt.gltf"))]
+#[point_class(
+	base(TargetName, Transform, Visibility, YarnNode),
+	model("models/office/crt.gltf")
+)]
 #[component(on_add = Crt::on_add)]
 #[derive(Default)]
 pub(crate) struct Crt;

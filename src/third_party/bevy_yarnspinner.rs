@@ -12,7 +12,9 @@ use crate::{
 			complete_dialogue_objective, create_dialogue_objective, create_dialogue_subobjective,
 			get_dialogue_current_objective,
 		},
-		scripting::{despawn_entity, read_bool_from_entity, set_value_on_entity, toggle_bool_on_entity},
+		scripting::{
+			despawn_entity, read_bool_from_entity, set_value_on_entity, toggle_bool_on_entity,
+		},
 	},
 	screens::Screen,
 };
@@ -50,14 +52,20 @@ fn setup_dialogue_runner(mut commands: Commands, yarn_project: Res<YarnProject>)
 		)
 		.add_command("despawn_entity", commands.register_system(despawn_entity))
 		.add_command("set_value", commands.register_system(set_value_on_entity))
-		.add_command("toggle_value", commands.register_system(toggle_bool_on_entity));
-	dialogue_runner.library_mut().add_function(
-		"get_current_objective",
-		commands.register_system(get_dialogue_current_objective),
-	).add_function(
-		"is_bool_set",
-		commands.register_system(read_bool_from_entity),
-	);
+		.add_command(
+			"toggle_value",
+			commands.register_system(toggle_bool_on_entity),
+		);
+	dialogue_runner
+		.library_mut()
+		.add_function(
+			"get_current_objective",
+			commands.register_system(get_dialogue_current_objective),
+		)
+		.add_function(
+			"is_bool_set",
+			commands.register_system(read_bool_from_entity),
+		);
 	commands.spawn((
 		DespawnOnExit(Screen::Gameplay),
 		Name::new("Dialogue Runner"),

@@ -4,7 +4,11 @@ use bevy::prelude::*;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-	asset_tracking::LoadResource as _, gameplay::{TargetName, core::*}, props::{effects::disable_shadow_casting_on_instance_ready, setup::static_bundle}, reflection::ReflAppExt, third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _
+	asset_tracking::LoadResource as _,
+	gameplay::{TargetName, core::*},
+	props::{effects::disable_shadow_casting_on_instance_ready, setup::static_bundle},
+	reflection::ReflAppExt,
+	third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _,
 };
 
 pub(super) fn plugin(app: &mut App) {

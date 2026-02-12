@@ -137,7 +137,7 @@ pub(crate) fn complete_dialogue_objective(
 	entity_name_index: Res<TargetnameEntityIndex>,
 ) {
 	for entity in entity_name_index
-		.get_entity_by_targetname(&*identifier)
+		.get_entity_by_targetname(&identifier)
 		.iter()
 		.filter(|entity| objective_query.contains(**entity))
 	{

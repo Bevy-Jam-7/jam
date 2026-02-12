@@ -67,7 +67,7 @@ impl TargetnameEntityIndex {
 
 	/// Registers an entity with a given targetname, if the targetname is empty, skips it.
 	pub fn register_entity(&mut self, entity: Entity, targetname: &str) {
-		if targetname == "" {
+		if targetname.is_empty() {
 			return;
 		}
 		self.targetname_to_entity
@@ -81,9 +81,9 @@ impl TargetnameEntityIndex {
 	/// Removes an entity from the index
 	pub fn remove_entity(&mut self, entity: Entity) {
 		if let Some(name) = self.entity_to_targetname.remove(&entity) {
-			self.targetname_to_entity
-				.get_mut(&name)
-				.map(|list| list.retain(|e| *e != entity));
+			if let Some(list) = self.targetname_to_entity.get_mut(&name) {
+				list.retain(|e| *e != entity)
+			}
 		}
 	}
 

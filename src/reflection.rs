@@ -22,7 +22,7 @@ impl ReflAppExt for App {
 	fn register_dynamic_component<T: DynamicComponent + Component>(&mut self) -> &mut Self {
 		let id = self.world_mut().register_component::<T>();
 		T::register(
-			&mut *self.world_mut().resource_mut::<DynamicPropertyMap>(),
+			&mut self.world_mut().resource_mut::<DynamicPropertyMap>(),
 			id,
 		);
 		self
@@ -80,11 +80,11 @@ impl DynamicallyModifiableType {
 				value_type: DynamicallyModifiableTypeKind::F32,
 			});
 		}
-		return None;
+		None
 	}
 
 	pub fn parse_string(&self, value: &str) -> Option<Box<dyn PartialReflect>> {
-		if self.option == true && *value == *"" {
+		if self.option && *value == *"" {
 			Some(match self.value_type {
 				DynamicallyModifiableTypeKind::String => Option::<String>::None.to_dynamic(),
 				DynamicallyModifiableTypeKind::Bool => Option::<bool>::None.to_dynamic(),
@@ -93,15 +93,25 @@ impl DynamicallyModifiableType {
 		} else {
 			if self.option {
 				match self.value_type {
-					DynamicallyModifiableTypeKind::String => Some(Some(value.to_string()).to_dynamic()),
-					DynamicallyModifiableTypeKind::Bool => value.parse::<bool>().ok().map(|x| Some(x).to_dynamic()),
-					DynamicallyModifiableTypeKind::F32 => value.parse::<f32>().ok().map(|x| Some(x).to_dynamic()),
+					DynamicallyModifiableTypeKind::String => {
+						Some(Some(value.to_string()).to_dynamic())
+					}
+					DynamicallyModifiableTypeKind::Bool => {
+						value.parse::<bool>().ok().map(|x| Some(x).to_dynamic())
+					}
+					DynamicallyModifiableTypeKind::F32 => {
+						value.parse::<f32>().ok().map(|x| Some(x).to_dynamic())
+					}
 				}
 			} else {
 				match self.value_type {
 					DynamicallyModifiableTypeKind::String => Some(value.to_string().to_dynamic()),
-					DynamicallyModifiableTypeKind::Bool => value.parse::<bool>().ok().map(|x| x.to_dynamic()),
-					DynamicallyModifiableTypeKind::F32 => value.parse::<f32>().ok().map(|x| x.to_dynamic()),
+					DynamicallyModifiableTypeKind::Bool => {
+						value.parse::<bool>().ok().map(|x| x.to_dynamic())
+					}
+					DynamicallyModifiableTypeKind::F32 => {
+						value.parse::<f32>().ok().map(|x| x.to_dynamic())
+					}
 				}
 			}
 		}
@@ -139,17 +149,16 @@ impl<T: Typed> DynamicComponent for T {
 		};
 		for field in struct_info.iter() {
 			let Some(dyn_type) = DynamicallyModifiableType::from_type_id(&field.type_id()) else {
-				info!("Reflection: Skipping field {} with type {} because it is not supported", field.name(), field.type_path());
+				info!(
+					"Reflection: Skipping field {} with type {} because it is not supported",
+					field.name(),
+					field.type_path()
+				);
 				continue;
 			};
-			prop_map.map.insert(
-				field.name().to_string(),
-				(
-					id,
-					T::type_info(),
-					dyn_type,
-				),
-			);
+			prop_map
+				.map
+				.insert(field.name().to_string(), (id, T::type_info(), dyn_type));
 		}
 	}
 }
