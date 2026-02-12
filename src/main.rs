@@ -118,10 +118,16 @@ fn main() -> AppExit {
 	};
 
 	#[cfg(feature = "native")]
-	app.add_plugins(SeedlingPlugin {
+	app.add_plugins(SeedlingPlugin::<firewheel::cpal::CpalBackend> {
 		graph_config: bevy_seedling::prelude::GraphConfiguration::Empty,
 		config: firewheel_config,
-		..Default::default()
+		stream_config: firewheel::cpal::CpalConfig {
+			output: firewheel::cpal::CpalOutputConfig {
+				desired_block_frames: Some(512),
+				..Default::default()
+			},
+			..Default::default()
+		},
 	});
 	#[cfg(feature = "web")]
 	app.add_plugins(SeedlingPlugin {
@@ -214,6 +220,15 @@ impl From<CameraOrder> for isize {
 	}
 }
 
+/// Whether or not the game is paused.
+#[derive(States, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
+#[states(scoped_entities)]
+struct Pause(pub(crate) bool);
+
+/// A system set for systems that shouldn't run while the game is paused.
+#[derive(SystemSet, Copy, Clone, Eq, PartialEq, Hash, Debug)]
+struct PausableSystems;
+
 bitflags! {
 	struct RenderLayer: u32 {
 		/// Used implicitly by all entities without a `RenderLayers` component.
@@ -235,18 +250,82 @@ bitflags! {
 	}
 }
 
+/// Creates a [`RenderLayers`] instance from a raw bitmask.
+///
+/// Iterates over set bits and maps them to the corresponding layer indices.
+fn layers_from_bits(mut bits: u32) -> RenderLayers {
+	RenderLayers::from_iter(std::iter::from_fn(move || {
+		if bits == 0 {
+			return None;
+		}
+		let i = bits.trailing_zeros();
+		bits &= bits - 1;
+		Some(i as usize)
+	}))
+}
+
 impl From<RenderLayer> for RenderLayers {
 	fn from(layer: RenderLayer) -> Self {
-		// Render layers are just vectors of ints, so we convert each active bit to an int.
-		RenderLayers::from_iter(layer.iter().map(|l| (l.bits() >> 1) as usize))
+		layers_from_bits(layer.bits())
 	}
 }
 
-/// Whether or not the game is paused.
-#[derive(States, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
-#[states(scoped_entities)]
-struct Pause(pub(crate) bool);
+#[cfg(test)]
+mod tests {
+	use super::*;
 
-/// A system set for systems that shouldn't run while the game is paused.
-#[derive(SystemSet, Copy, Clone, Eq, PartialEq, Hash, Debug)]
-struct PausableSystems;
+	#[test]
+	fn single_bit_should_map_correctly() {
+		// Arrange
+		let input = RenderLayer::GIZMO3;
+
+		// Act
+		let result = RenderLayers::from(input);
+
+		// Assert
+		assert!(result.intersects(&RenderLayers::layer(3)));
+		assert!(!result.intersects(&RenderLayers::layer(4)));
+	}
+
+	#[test]
+	fn mixed_bits_should_map_correctly() {
+		// Arrange
+		let input = RenderLayer::DEFAULT | RenderLayer::GIZMO3;
+
+		// Act
+		let result = RenderLayers::from(input);
+
+		// Assert
+		assert!(result.intersects(&RenderLayers::layer(0)));
+		assert!(result.intersects(&RenderLayers::layer(3)));
+		assert!(!result.intersects(&RenderLayers::layer(1)));
+	}
+
+	#[test]
+	fn high_bit_should_map_correctly() {
+		// Arrange
+		let input = RenderLayer::STOMACH;
+
+		// Act
+		let result = RenderLayers::from(input);
+
+		// Assert
+		assert!(result.intersects(&RenderLayers::layer(4)));
+	}
+
+	#[test]
+	fn bitmask_should_map_correctly() {
+		// Arrange
+		let input = (1 << 0) | (1 << 7) | (1 << 15) | (1 << 31);
+
+		// Act
+		let result = layers_from_bits(input);
+
+		// Assert
+		assert!(result.intersects(&RenderLayers::layer(0)));
+		assert!(result.intersects(&RenderLayers::layer(7)));
+		assert!(result.intersects(&RenderLayers::layer(15)));
+		assert!(result.intersects(&RenderLayers::layer(31)));
+		assert!(!result.intersects(&RenderLayers::layer(1)));
+	}
+}
