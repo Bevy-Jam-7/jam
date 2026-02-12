@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{ecs::{lifecycle::HookContext, world::DeferredWorld}, prelude::*};
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
@@ -35,7 +35,7 @@ pub struct ObjectiveCompletor {
 /// A game objective.
 #[derive(Default)]
 #[base_class]
-#[require(DespawnOnExit::<Screen>(Screen::Gameplay))]
+#[component(on_add=Objective::on_add)]
 pub struct Objective {
 	/// The description of the objective.
 	pub description: String,
@@ -47,6 +47,13 @@ impl Objective {
 		Self {
 			description: description.into(),
 		}
+	}
+
+	fn on_add(mut world: DeferredWorld, ctx: HookContext) {
+		if world.is_scene_world() {
+			return;
+		}
+		world.commands().entity(ctx.entity).insert(DespawnOnExit(Screen::Gameplay));
 	}
 }
 
