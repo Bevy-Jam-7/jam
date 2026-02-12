@@ -10,7 +10,10 @@
 			"nodes":[
 				0,
 				1,
-				2
+				2,
+				3,
+				4,
+				5
 			]
 		}
 	],
@@ -26,6 +29,18 @@
 		{
 			"mesh":2,
 			"name":"shroom.002"
+		},
+		{
+			"mesh":3,
+			"name":"shroom.003"
+		},
+		{
+			"mesh":4,
+			"name":"shroom.004"
+		},
+		{
+			"mesh":5,
+			"name":"shroom.005"
 		}
 	],
 	"materials":[
@@ -78,6 +93,48 @@
 						"POSITION":7,
 						"NORMAL":8,
 						"TEXCOORD_0":9
+					},
+					"indices":3,
+					"material":0
+				}
+			]
+		},
+		{
+			"name":"shroom.003",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":10,
+						"NORMAL":11,
+						"TEXCOORD_0":12
+					},
+					"indices":3,
+					"material":0
+				}
+			]
+		},
+		{
+			"name":"shroom.004",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":13,
+						"NORMAL":14,
+						"TEXCOORD_0":15
+					},
+					"indices":3,
+					"material":0
+				}
+			]
+		},
+		{
+			"name":"shroom.005",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":16,
+						"NORMAL":17,
+						"TEXCOORD_0":18
 					},
 					"indices":3,
 					"material":0
@@ -188,6 +245,90 @@
 			"componentType":5126,
 			"count":154,
 			"type":"VEC2"
+		},
+		{
+			"bufferView":10,
+			"componentType":5126,
+			"count":154,
+			"max":[
+				0.03336399793624878,
+				0.18725042045116425,
+				0.044669825583696365
+			],
+			"min":[
+				-0.036402277648448944,
+				4.598498344421387e-05,
+				-0.02509644627571106
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":11,
+			"componentType":5126,
+			"count":154,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":12,
+			"componentType":5126,
+			"count":154,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":13,
+			"componentType":5126,
+			"count":154,
+			"max":[
+				0.03721899539232254,
+				0.14979001879692078,
+				0.04753024876117706
+			],
+			"min":[
+				-0.040369484573602676,
+				0.0005283728241920471,
+				-0.030058229342103004
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":14,
+			"componentType":5126,
+			"count":154,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":15,
+			"componentType":5126,
+			"count":154,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":16,
+			"componentType":5126,
+			"count":154,
+			"max":[
+				0.03598257526755333,
+				0.09216893464326859,
+				0.04612850397825241
+			],
+			"min":[
+				-0.0395059771835804,
+				-1.667812466621399e-05,
+				-0.02936004102230072
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":17,
+			"componentType":5126,
+			"count":154,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":18,
+			"componentType":5126,
+			"count":154,
+			"type":"VEC2"
 		}
 	],
 	"bufferViews":[
@@ -250,6 +391,60 @@
 			"byteLength":1232,
 			"byteOffset":14656,
 			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1848,
+			"byteOffset":15888,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1848,
+			"byteOffset":17736,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1232,
+			"byteOffset":19584,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1848,
+			"byteOffset":20816,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1848,
+			"byteOffset":22664,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1232,
+			"byteOffset":24512,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1848,
+			"byteOffset":25744,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1848,
+			"byteOffset":27592,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1232,
+			"byteOffset":29440,
+			"target":34962
 		}
 	],
 	"samplers":[
@@ -260,7 +455,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":15888,
+			"byteLength":30672,
 			"uri":"mushroom.bin"
 		}
 	]
