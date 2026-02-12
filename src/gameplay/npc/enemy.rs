@@ -54,7 +54,6 @@ fn update_sensors(
 							.is_ok_and(|rb| rb.body == player_entity)
 					}) {
 				props.set("alert", true);
-				info!("Enemy {} alerted", enemy);
 			}
 		}
 		//if !props.get::<bool>("alert") {}
@@ -138,7 +137,7 @@ struct EnemyAiState {
 impl Default for EnemyAiState {
 	fn default() -> Self {
 		Self {
-			walk_timer: Timer::from_seconds(5.0, TimerMode::Repeating),
+			walk_timer: Timer::from_seconds(rng().random_range(4.0..6.0), TimerMode::Repeating),
 		}
 	}
 }

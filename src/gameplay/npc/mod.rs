@@ -51,7 +51,7 @@ pub(crate) const NPC_RADIUS: f32 = 0.225;
 // Height of 165 cm
 pub(crate) const NPC_HEIGHT: f32 = 1.65;
 const NPC_HALF_HEIGHT: f32 = NPC_HEIGHT / 2.0;
-const NPC_SPEED: f32 = 7.0;
+const NPC_SPEED: f32 = 3.0;
 
 fn on_add(add: On<Add, Npc>, mut commands: Commands, assets: Res<AssetServer>) {
 	commands
