@@ -77,7 +77,7 @@ fn setup_npc_agent(
 			},
 			archipelago_ref: ArchipelagoRef3d::new(*archipelago),
 		},
-		TargetReachedCondition::Distance(Some(3.0)),
+		TargetReachedCondition::Distance(Some(1.0)),
 		ChildOf(npc),
 		AgentOf(npc),
 		AgentTarget3d::default(),
@@ -149,12 +149,12 @@ fn update_agent_target(
 #[derive(Component, Deref, Debug, Reflect)]
 #[reflect(Component)]
 #[relationship(relationship_target = Agent)]
-struct AgentOf(Entity);
+pub(crate) struct AgentOf(Entity);
 
 #[derive(Component, Deref, Debug, Reflect)]
 #[reflect(Component)]
 #[relationship_target(relationship = AgentOf)]
-struct Agent(Entity);
+pub(crate) struct Agent(Entity);
 
 /// Use the desired velocity as the agent's velocity.
 fn set_controller_velocity(

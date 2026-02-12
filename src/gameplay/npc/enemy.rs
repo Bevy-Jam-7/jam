@@ -1,6 +1,6 @@
 use std::f32::consts::{PI, TAU};
 
-use avian3d::prelude::{SpatialQuery, SpatialQueryFilter};
+use avian3d::prelude::{ColliderOf, SpatialQuery, SpatialQueryFilter};
 use bevy::prelude::*;
 use bevy_bae::prelude::*;
 use bevy_landmass::{Archipelago3d, FromAgentRadius as _, PointSampleDistance3d};
@@ -8,7 +8,10 @@ use bevy_trenchbroom::prelude::*;
 use rand::{Rng, rng};
 
 use crate::{
-	gameplay::{npc::ai::NpcWalkTargetOf, player::Player},
+	gameplay::{
+		npc::ai::{Agent, NpcWalkTargetOf},
+		player::Player,
+	},
 	third_party::avian3d::CollisionLayer,
 };
 
@@ -19,10 +22,11 @@ pub(super) fn plugin(app: &mut App) {
 fn update_sensors(
 	spatial: SpatialQuery,
 	mut enemies: Query<(Entity, &GlobalTransform, &mut Props, &mut EnemyAiState)>,
-	player: Single<&Transform, With<Player>>,
+	player: Single<(Entity, &Transform), With<Player>>,
+	colliders: Query<&ColliderOf>,
 	time: Res<Time>,
 ) {
-	let player_transform = player.into_inner();
+	let (player_entity, player_transform) = player.into_inner();
 	for (enemy, transform, mut props, mut state) in enemies.iter_mut() {
 		state.walk_timer.tick(time.delta());
 		if !props.get::<bool>("alert") {
@@ -41,11 +45,16 @@ fn update_sensors(
 						&SpatialQueryFilter::from_mask([
 							CollisionLayer::Default,
 							CollisionLayer::Prop,
+							CollisionLayer::PlayerCharacter,
 						]),
 					)
-					.is_none()
-			{
+					.is_none_or(|hit| {
+						colliders
+							.get(hit.entity)
+							.is_ok_and(|rb| rb.body == player_entity)
+					}) {
 				props.set("alert", true);
+				info!("Enemy {} alerted", enemy);
 			}
 		}
 		//if !props.get::<bool>("alert") {}
@@ -66,7 +75,8 @@ pub(crate) fn enemy_htn() -> impl Bundle {
 
 fn walk_randomly(
 	In(input): In<OperatorInput>,
-	mut transforms: Query<&Transform>,
+	mut npcs: Query<&Agent>,
+	transforms: Query<&GlobalTransform>,
 	archipelago: Single<&Archipelago3d>,
 	mut states: Query<&EnemyAiState>,
 	spatial: SpatialQuery,
@@ -76,7 +86,10 @@ fn walk_randomly(
 		return OperatorStatus::Failure;
 	};
 
-	let Ok(transform) = transforms.get_mut(input.entity) else {
+	let Ok(agent) = npcs.get_mut(input.entity) else {
+		return OperatorStatus::Failure;
+	};
+	let Ok(transform) = transforms.get(agent.entity()) else {
 		return OperatorStatus::Failure;
 	};
 
@@ -86,7 +99,7 @@ fn walk_randomly(
 		const MAX_WALK_DIST: f32 = 10.0;
 		let target_dist = spatial
 			.cast_ray(
-				transform.translation,
+				transform.translation(),
 				dir,
 				MAX_WALK_DIST,
 				true,
@@ -96,17 +109,22 @@ fn walk_randomly(
 					CollisionLayer::Prop,
 				]),
 			)
-			.map_or(MAX_WALK_DIST, |hit| hit.distance);
-		let target_pos = transform.translation + dir * target_dist;
-		error!(?target_pos);
-		let Ok(target) =
-			archipelago.sample_point(target_pos, &PointSampleDistance3d::from_agent_radius(0.2))
-		else {
-			return OperatorStatus::Failure;
+			.map_or(MAX_WALK_DIST, |hit| (hit.distance - 0.1).max(0.0));
+		let target_pos = transform.translation() + dir * target_dist;
+		agent.entity();
+
+		let target_pos_for_real = match archipelago
+			.sample_point(target_pos, &PointSampleDistance3d::from_agent_radius(10.0))
+		{
+			Ok(target) => target.point(),
+			Err(err) => {
+				error!(position_sampling_error = ?err);
+				return OperatorStatus::Failure;
+			}
 		};
 		commands
 			.entity(input.entity)
-			.with_related::<NpcWalkTargetOf>(Transform::from_translation(target.point()));
+			.with_related::<NpcWalkTargetOf>(Transform::from_translation(target_pos_for_real));
 	}
 	OperatorStatus::Success
 }
