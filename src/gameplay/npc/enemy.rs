@@ -3,7 +3,6 @@ use std::f32::consts::TAU;
 use avian3d::prelude::{ColliderOf, SpatialQuery, SpatialQueryFilter};
 use bevy::prelude::*;
 use bevy_bae::prelude::*;
-use bevy_landmass::{Archipelago3d, FromAgentRadius as _, PointSampleDistance3d};
 use rand::{Rng, rng};
 
 use crate::{
@@ -100,7 +99,6 @@ fn walk_randomly(
 	In(input): In<OperatorInput>,
 	mut npcs: Query<&Agent>,
 	transforms: Query<&GlobalTransform>,
-	archipelago: Single<&Archipelago3d>,
 	mut states: Query<&EnemyAiState>,
 	spatial: SpatialQuery,
 	mut commands: Commands,
@@ -136,18 +134,9 @@ fn walk_randomly(
 		let target_pos = transform.translation() + dir * target_dist;
 		agent.entity();
 
-		let target_pos_for_real = match archipelago
-			.sample_point(target_pos, &PointSampleDistance3d::from_agent_radius(10.0))
-		{
-			Ok(target) => target.point(),
-			Err(err) => {
-				error!(position_sampling_error = ?err);
-				return OperatorStatus::Failure;
-			}
-		};
 		commands
 			.entity(input.entity)
-			.with_related::<NpcWalkTargetOf>(Transform::from_translation(target_pos_for_real));
+			.with_related::<NpcWalkTargetOf>(Transform::from_translation(target_pos));
 	}
 	OperatorStatus::Ongoing
 }
@@ -158,9 +147,14 @@ fn attack_player(In(_input): In<OperatorInput>) -> OperatorStatus {
 	OperatorStatus::Ongoing
 }
 
-fn go_to_player(In(_input): In<OperatorInput>) -> OperatorStatus {
-	// TODO: Implement lol
-	warn!("go_to_player");
+fn go_to_player(
+	In(input): In<OperatorInput>,
+	mut commands: Commands,
+	player: Single<&Transform, With<Player>>,
+) -> OperatorStatus {
+	commands
+		.entity(input.entity)
+		.with_related::<NpcWalkTargetOf>(**player);
 	OperatorStatus::Ongoing
 }
 

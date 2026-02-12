@@ -5,7 +5,7 @@ use bevy::prelude::*;
 use bevy_ahoy::input::GlobalMovement;
 use bevy_enhanced_input::prelude::*;
 use bevy_landmass::{
-	TargetReachedCondition,
+	PointSampleDistance3d, TargetReachedCondition,
 	prelude::{
 		AgentDesiredVelocity3d as LandmassAgentDesiredVelocity, Velocity3d as LandmassVelocity, *,
 	},
@@ -134,6 +134,7 @@ fn update_agent_target(
 	mut agents: Query<(&mut AgentTarget3d, &AgentOf)>,
 	targets: Query<&NpcWalkTarget>,
 	transforms: Query<&Transform>,
+	archipelago: Single<&Archipelago3d>,
 ) {
 	for (mut agent_target, agent_of) in &mut agents {
 		let Ok(transform) = targets
@@ -142,7 +143,23 @@ fn update_agent_target(
 		else {
 			continue;
 		};
-		*agent_target = AgentTarget3d::Point(transform.translation);
+		let sample = match archipelago.sample_point(
+			transform.translation,
+			&PointSampleDistance3d {
+				horizontal_distance: 1.0,
+				distance_above: 1.0,
+				distance_below: 1.0,
+				vertical_preference_ratio: 2.0,
+				animation_link_max_vertical_distance: 1.0,
+			},
+		) {
+			Ok(sample) => sample,
+			Err(_err) => {
+				//error!("Failed to sample point: {err}");
+				continue;
+			}
+		};
+		*agent_target = AgentTarget3d::Point(sample.point());
 	}
 }
 
