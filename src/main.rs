@@ -213,6 +213,15 @@ impl From<CameraOrder> for isize {
 	}
 }
 
+/// Whether or not the game is paused.
+#[derive(States, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
+#[states(scoped_entities)]
+struct Pause(pub(crate) bool);
+
+/// A system set for systems that shouldn't run while the game is paused.
+#[derive(SystemSet, Copy, Clone, Eq, PartialEq, Hash, Debug)]
+struct PausableSystems;
+
 bitflags! {
 	struct RenderLayer: u32 {
 		/// Used implicitly by all entities without a `RenderLayers` component.
@@ -234,18 +243,66 @@ bitflags! {
 	}
 }
 
-impl From<RenderLayer> for RenderLayers {
-	fn from(layer: RenderLayer) -> Self {
-		// Render layers are just vectors of ints, so we convert each active bit to an int.
-		RenderLayers::from_iter(layer.iter().map(|l| (l.bits() >> 1) as usize))
-	}
+/// Creates a [`RenderLayers`] instance from a raw bitmask.
+///
+/// Iterates over set bits and maps them to the corresponding layer indices.
+fn layers_from_bits(mut bits: u32) -> RenderLayers {
+    RenderLayers::from_iter(std::iter::from_fn(move || {
+        if bits == 0 {
+            return None;
+        }
+        let i = bits.trailing_zeros();
+        bits &= bits - 1;
+        Some(i as usize)
+    }))
 }
 
-/// Whether or not the game is paused.
-#[derive(States, Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
-#[states(scoped_entities)]
-struct Pause(pub(crate) bool);
+impl From<RenderLayer> for RenderLayers {
+    fn from(layer: RenderLayer) -> Self {
+			RenderLayers::from_iter(layer.iter().map(|l| (l.bits() >> 1) as usize))
+    }
+}
 
-/// A system set for systems that shouldn't run while the game is paused.
-#[derive(SystemSet, Copy, Clone, Eq, PartialEq, Hash, Debug)]
-struct PausableSystems;
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn bit_should_map_to_correct_index() {
+        // Arrange
+        let input = RenderLayer::GIZMO3;
+
+        // Act
+        let result = RenderLayers::from(input);
+
+        // Assert
+        assert!(result.intersects(&RenderLayers::layer(3)));
+        assert!(!result.intersects(&RenderLayers::layer(4)));
+    }
+
+    #[test]
+    fn bits_should_map_to_correct_indices() {
+        // Arrange
+        let input = RenderLayer::DEFAULT | RenderLayer::GIZMO3;
+
+        // Act
+        let result = RenderLayers::from(input);
+
+        // Assert
+        assert!(result.intersects(&RenderLayers::layer(0)));
+        assert!(result.intersects(&RenderLayers::layer(3)));
+        assert!(!result.intersects(&RenderLayers::layer(1)));
+    }
+
+    #[test]
+    fn high_bit_should_map_correctly() {
+        // Arrange
+        let input = RenderLayer::STOMACH;
+
+        // Act
+        let result = RenderLayers::from(input);
+
+        // Assert
+        assert!(result.intersects(&RenderLayers::layer(4)));
+    }
+}
