@@ -61,7 +61,6 @@ fn update_loading_assets_label(
 			resource_handles.finished_count(),
 			resource_handles.total_count()
 		);
-
 	}
 }
 
