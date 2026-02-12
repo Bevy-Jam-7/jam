@@ -5,8 +5,7 @@ use crate::third_party::avian3d::CollisionLayer;
 use crate::{
 	asset_tracking::LoadResource,
 	audio::MusicPool,
-	gameplay::{npc::NPC_RADIUS, objectives::Objective},
-	props::logic_entity::ObjectiveEntity,
+	gameplay::npc::NPC_RADIUS,
 	screens::Screen,
 };
 use avian3d::prelude::*;
