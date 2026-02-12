@@ -1,6 +1,6 @@
 use std::f32::consts::TAU;
 
-use avian3d::prelude::{ColliderOf, SpatialQuery, SpatialQueryFilter};
+use avian3d::prelude::*;
 use bevy::prelude::*;
 use bevy_bae::prelude::*;
 use bevy_landmass::{Archipelago3d, FromAgentRadius as _, PointSampleDistance3d};
@@ -42,11 +42,9 @@ fn update_sensors(
 						dir,
 						MAX_DIST,
 						true,
-						&SpatialQueryFilter::from_mask([
-							CollisionLayer::Default,
-							CollisionLayer::Prop,
-							CollisionLayer::PlayerCharacter,
-						]),
+						&SpatialQueryFilter::from_mask(
+							LayerMask::ALL & !CollisionLayer::Stomach.to_bits(),
+						),
 					)
 					.is_some_and(|hit| {
 						colliders
