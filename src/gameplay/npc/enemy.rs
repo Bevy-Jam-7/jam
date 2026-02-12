@@ -19,14 +19,15 @@ pub(super) fn plugin(app: &mut App) {
 }
 
 fn update_sensors(
+	mut commands: Commands,
 	spatial: SpatialQuery,
-	mut enemies: Query<(&GlobalTransform, &mut Props, &mut EnemyAiState)>,
+	mut enemies: Query<(Entity, &GlobalTransform, &mut Props, &mut EnemyAiState)>,
 	player: Single<(Entity, &Transform), With<Player>>,
 	colliders: Query<&ColliderOf>,
 	time: Res<Time>,
 ) {
 	let (player_entity, player_transform) = player.into_inner();
-	for (transform, mut props, mut state) in enemies.iter_mut() {
+	for (entity, transform, mut props, mut state) in enemies.iter_mut() {
 		state.walk_timer.tick(time.delta());
 		if !props.get::<bool>("alert") {
 			let dist_sq = transform
@@ -47,7 +48,7 @@ fn update_sensors(
 							CollisionLayer::PlayerCharacter,
 						]),
 					)
-					.is_none_or(|hit| {
+					.is_some_and(|hit| {
 						colliders
 							.get(hit.entity)
 							.is_ok_and(|rb| rb.body == player_entity)
@@ -55,10 +56,28 @@ fn update_sensors(
 				props.set("alert", true);
 			}
 		}
+		if props.get::<bool>("alert") {
+			const MELEE_RANGE: f32 = 1.0;
+			if transform
+				.translation()
+				.distance_squared(player_transform.translation)
+				< MELEE_RANGE * MELEE_RANGE
+			{
+				if !props.get::<bool>("in_melee_range") {
+					commands.entity(entity).trigger(UpdatePlan::from);
+					props.set("in_melee_range", true);
+				}
+			} else {
+				if props.get::<bool>("in_melee_range") {
+					commands.entity(entity).trigger(UpdatePlan::from);
+					props.set("in_melee_range", false);
+				}
+			}
+		}
 	}
 }
 
-pub(crate) fn enemy_htn() -> impl Bundle {
+pub(crate) fn melee_enemy_htn() -> impl Bundle {
 	(
 		EnemyAiState::default(),
 		Plan::new(),
@@ -69,9 +88,10 @@ pub(crate) fn enemy_htn() -> impl Bundle {
 				Operator::new(walk_randomly),
 			),
 			(
-				conditions![Condition::eq("alert", true)],
+				conditions![Condition::eq("in_melee_range", true)],
 				Operator::new(attack_player),
 			),
+			Operator::new(go_to_player),
 		],
 	)
 }
@@ -129,12 +149,19 @@ fn walk_randomly(
 			.entity(input.entity)
 			.with_related::<NpcWalkTargetOf>(Transform::from_translation(target_pos_for_real));
 	}
-	OperatorStatus::Success
+	OperatorStatus::Ongoing
 }
 
 fn attack_player(In(_input): In<OperatorInput>) -> OperatorStatus {
 	// TODO: Implement lol
-	OperatorStatus::Success
+	error!("attack_player");
+	OperatorStatus::Ongoing
+}
+
+fn go_to_player(In(_input): In<OperatorInput>) -> OperatorStatus {
+	// TODO: Implement lol
+	warn!("go_to_player");
+	OperatorStatus::Ongoing
 }
 
 #[derive(Component, Reflect, Debug)]
