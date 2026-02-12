@@ -9,6 +9,8 @@ use bevy_yarnspinner::{events::*, prelude::*};
 
 use crate::asset_tracking::LoadResource;
 use crate::audio::SfxPool;
+use crate::gameplay::player::camera::PlayerCameraParent;
+use crate::gameplay::player::dialogue::DialogueSpeaker;
 
 #[derive(Component)]
 struct VoiceAudio;
@@ -110,6 +112,8 @@ fn present_line(
 	mut commands: Commands,
 	voice_query: Query<Entity, With<VoiceAudio>>,
 	mut gibberish: ResMut<GibberishSounds>,
+	speaker: Res<DialogueSpeaker>,
+	transforms: Query<&GlobalTransform>,
 ) {
 	// Stop any previously playing voice line.
 	for entity in &voice_query {
@@ -126,15 +130,42 @@ fn present_line(
 	let path = format!("audio/dialogue/{id}.ogg");
 	if std::path::Path::new(&format!("assets/{path}")).exists() {
 		let handle = asset_server.load::<AudioSample>(path);
-		commands.spawn((SamplePlayer::new(handle), SfxPool, VoiceAudio));
+		if let Some(entity) = speaker.0.as_ref() {
+			commands.entity(*entity).with_child((
+				SamplePlayer::new(handle),
+				// Corvy why this no work with SpatialPool halp
+				SfxPool,
+				VoiceAudio,
+				Transform::default(),
+			));
+		} else {
+			commands.spawn((
+				SamplePlayer::new(handle),
+				SfxPool,
+				VoiceAudio,
+				Transform::default(),
+			));
+		}
 	} else {
 		let handle = gibberish.0.pick(&mut rand::rng()).clone();
-		commands.spawn((
-			SamplePlayer::new(handle),
-			RandomPitch(1.05..1.25),
-			SfxPool,
-			VoiceAudio,
-		));
+		if let Some(entity) = speaker.0.as_ref() {
+			commands.entity(*entity).with_child((
+				SamplePlayer::new(handle),
+				RandomPitch(1.05..1.25),
+				// Corvyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+				SfxPool,
+				VoiceAudio,
+				Transform::default(),
+			));
+		} else {
+			commands.spawn((
+				SamplePlayer::new(handle),
+				RandomPitch(1.05..1.25),
+				SfxPool,
+				VoiceAudio,
+				Transform::default(),
+			));
+		}
 	};
 
 	let name = if let Some(name) = event.line.character_name() {
