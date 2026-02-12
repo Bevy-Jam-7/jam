@@ -3,15 +3,11 @@
 use crate::{
 	asset_tracking::LoadResource,
 	audio::MusicPool,
-	gameplay::{
-		npc::NPC_RADIUS,
-		objectives::{Objective, SubObjectives},
-	},
+	gameplay::{npc::NPC_RADIUS, objectives::Objective},
 	props::logic_entity::ObjectiveEntity,
 	screens::Screen,
 };
 use bevy::prelude::*;
-use bevy_inspector_egui::inspector_options::std_options::EntityOptions;
 use bevy_landmass::prelude::*;
 use bevy_rerecast::prelude::*;
 use bevy_seedling::prelude::*;
