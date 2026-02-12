@@ -247,62 +247,78 @@ bitflags! {
 ///
 /// Iterates over set bits and maps them to the corresponding layer indices.
 fn layers_from_bits(mut bits: u32) -> RenderLayers {
-    RenderLayers::from_iter(std::iter::from_fn(move || {
-        if bits == 0 {
-            return None;
-        }
-        let i = bits.trailing_zeros();
-        bits &= bits - 1;
-        Some(i as usize)
-    }))
+	RenderLayers::from_iter(std::iter::from_fn(move || {
+		if bits == 0 {
+			return None;
+		}
+		let i = bits.trailing_zeros();
+		bits &= bits - 1;
+		Some(i as usize)
+	}))
 }
 
 impl From<RenderLayer> for RenderLayers {
-    fn from(layer: RenderLayer) -> Self {
-			RenderLayers::from_iter(layer.iter().map(|l| (l.bits() >> 1) as usize))
-    }
+	fn from(layer: RenderLayer) -> Self {
+		layers_from_bits(layer.bits())
+	}
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+	use super::*;
 
-    #[test]
-    fn bit_should_map_to_correct_index() {
-        // Arrange
-        let input = RenderLayer::GIZMO3;
+	#[test]
+	fn bit_should_map_to_correct_index() {
+		// Arrange
+		let input = RenderLayer::GIZMO3;
 
-        // Act
-        let result = RenderLayers::from(input);
+		// Act
+		let result = RenderLayers::from(input);
 
-        // Assert
-        assert!(result.intersects(&RenderLayers::layer(3)));
-        assert!(!result.intersects(&RenderLayers::layer(4)));
-    }
+		// Assert
+		assert!(result.intersects(&RenderLayers::layer(3)));
+		assert!(!result.intersects(&RenderLayers::layer(4)));
+	}
 
-    #[test]
-    fn bits_should_map_to_correct_indices() {
-        // Arrange
-        let input = RenderLayer::DEFAULT | RenderLayer::GIZMO3;
+	#[test]
+	fn bits_should_map_to_correct_indices() {
+		// Arrange
+		let input = RenderLayer::DEFAULT | RenderLayer::GIZMO3;
 
-        // Act
-        let result = RenderLayers::from(input);
+		// Act
+		let result = RenderLayers::from(input);
 
-        // Assert
-        assert!(result.intersects(&RenderLayers::layer(0)));
-        assert!(result.intersects(&RenderLayers::layer(3)));
-        assert!(!result.intersects(&RenderLayers::layer(1)));
-    }
+		// Assert
+		assert!(result.intersects(&RenderLayers::layer(0)));
+		assert!(result.intersects(&RenderLayers::layer(3)));
+		assert!(!result.intersects(&RenderLayers::layer(1)));
+	}
 
-    #[test]
-    fn high_bit_should_map_correctly() {
-        // Arrange
-        let input = RenderLayer::STOMACH;
+	#[test]
+	fn high_bit_should_map_correctly() {
+		// Arrange
+		let input = RenderLayer::STOMACH;
 
-        // Act
-        let result = RenderLayers::from(input);
+		// Act
+		let result = RenderLayers::from(input);
 
-        // Assert
-        assert!(result.intersects(&RenderLayers::layer(4)));
-    }
+		// Assert
+		assert!(result.intersects(&RenderLayers::layer(4)));
+	}
+
+	#[test]
+	fn bitmask_should_map_correctly() {
+		// Arrange
+		let input = (1 << 0) | (1 << 7) | (1 << 15) | (1 << 31);
+
+		// Act
+		let result = layers_from_bits(input);
+
+		// Assert
+		assert!(result.intersects(&RenderLayers::layer(0)));
+		assert!(result.intersects(&RenderLayers::layer(7)));
+		assert!(result.intersects(&RenderLayers::layer(15)));
+		assert!(result.intersects(&RenderLayers::layer(31)));
+		assert!(!result.intersects(&RenderLayers::layer(1)));
+	}
 }
