@@ -68,7 +68,6 @@ fn scatter(
 
 	mut mw_clear_root: MessageWriter<ClearScatterRoot>,
 ) {
-	println!("Cleaning up...");
 	mw_clear_root.write((*root).into());
 
 	println!("Scattering...");
