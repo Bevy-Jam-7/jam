@@ -59,7 +59,6 @@ fn tick_timer<T: Sync + Send + 'static>(
 ) {
 	for (entity, mut timer) in timers.iter_mut().filter(|(_, timer)| timer.active) {
 		timer.timer.tick(time.delta());
-		dbg!(timer.timer.elapsed_secs());
 
 		if timer.timer.just_finished() {
 			commands.trigger(TimerFinished {

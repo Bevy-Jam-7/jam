@@ -1,19 +1,11 @@
-use std::time::Duration;
-
 use crate::{
 	asset_tracking::LoadResource,
-	audio::SpatialPool,
-	gameplay::{
-		level::LevelAssets,
-		objectives::{CurrentObjective, Objective, ObjectiveCompleted, SubObjectives},
-	},
-	props::{interactables::InteractableEntity, logic_entity::ObjectiveEntity},
+	props::interactables::InteractableEntity,
 	third_party::{
 		avian3d::CollisionLayer,
 		bevy_trenchbroom::{GetTrenchbroomModelPath as _, LoadTrenchbroomModel as _},
 		bevy_yarnspinner::YarnNode,
 	},
-	timer::{GenericTimer, TimerFinished},
 };
 
 use super::setup::*;
@@ -23,7 +15,6 @@ use bevy::{
 	ecs::{lifecycle::HookContext, world::DeferredWorld},
 	prelude::*,
 };
-use bevy_seedling::{prelude::RepeatMode, sample::SamplePlayer};
 use bevy_trenchbroom::prelude::*;
 
 pub(super) fn plugin(app: &mut App) {

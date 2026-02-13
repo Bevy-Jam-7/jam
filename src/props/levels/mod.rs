@@ -1,10 +1,11 @@
 use std::time::Duration;
 
-use crate::gameplay::objectives::*;
+use crate::audio::SpatialPool;
+use crate::{gameplay::objectives::*, third_party::avian3d::CollisionLayer};
 use avian3d::prelude::*;
-use bevy::ecs::system::SystemParam;
-use bevy::ecs::{error::Result, query::QueryData};
+use bevy::ecs::error::Result;
 use bevy::prelude::*;
+use bevy_seedling::prelude::*;
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
@@ -17,51 +18,72 @@ pub(super) fn plugin(app: &mut App) {
 	app.add_observer(setup_break_room);
 }
 
-fn setup_break_room(add: On<Add, BreakRoomSensor>, mut commands: Commands) {
+fn setup_break_room(add: On<Add, BreakRoomSensor>, mut commands: Commands) -> Result {
+	let entity = add.entity;
 	commands
-		.entity(add.entity)
-		.insert(
+		.entity(entity)
+		.insert((
 			GenericTimer::<BreakRoomTimer>::new(Timer::new(
-				Duration::from_secs(3),
+				Duration::from_secs(6),
 				TimerMode::Once,
 			))
 			.with_active(false),
-		)
+			CollisionLayers::new([CollisionLayer::Sensor], [CollisionLayer::PlayerCharacter]),
+		))
 		.observe(tell_to_eat)
 		.observe(deactivate_timer)
-		.observe(eating_objective);
+		.observe(kick_out);
+	let objective = commands
+		.spawn((
+			Name::new(format!("Objective: work_6")),
+			ObjectiveEntity {
+				targetname: "work_6".into(),
+				target: None,
+				objective_order: 6.0,
+			},
+			Objective::new("Increase Shareholder Value"),
+		))
+		.id();
+	commands.entity(objective).observe(
+		move |_add: On<Add, ObjectiveCompleted>,
+		      mut timer: Query<&mut GenericTimer<BreakRoomTimer>>|
+		      -> Result {
+			let mut timer = timer.get_mut(entity)?;
+
+			timer.set_active(true);
+			Ok(())
+		},
+	);
+	Ok(())
 }
 
 fn kick_out(
-	_: On<TimerFinished<BreakRoomTimer>>,
+	finished: On<TimerFinished<BreakRoomTimer>>,
 	mut commands: Commands,
 	objectives: Query<(Entity, &ObjectiveEntity)>,
 	level_assets: Res<LevelAssets>,
+	transform: Query<&GlobalTransform>,
 ) {
 	if let Some((entity, _)) = objectives
 		.iter()
-		.find(|(_, ObjectiveEntity { targetname, .. })| targetname == "work_5")
+		.find(|(_, ObjectiveEntity { targetname, .. })| targetname == "work_7")
 	{
+		let translation = transform
+			.get(finished.entity)
+			.map(|t| t.translation())
+			.unwrap_or_default();
 		commands.spawn((
 			SamplePlayer {
 				sample: level_assets.break_room_alarm.clone(),
 				repeat_mode: RepeatMode::RepeatMultiple {
-					num_times_to_repeat: 5,
+					num_times_to_repeat: 3,
 				},
 				..default()
 			},
 			SpatialPool,
-			Transform::from_xyz(7.0, 21., -2.),
+			Transform::from_translation(translation),
 		));
 		commands.entity(entity).insert(ObjectiveCompleted);
-		commands.spawn((
-			Objective::new("Break's over"),
-			ObjectiveEntity {
-				targetname: "back_to_llm".into(),
-				..default()
-			},
-			related!(SubObjectives[Objective::new("Talk to LLManager")]),
-		));
 	}
 }
 
@@ -72,9 +94,8 @@ struct BreakRoomTimer;
 pub(crate) struct BreakRoomSensor;
 
 fn tell_to_eat(
-	collision: On<CollisionStart>,
+	_collision: On<CollisionStart>,
 	mut commands: Commands,
-	mut timer: Query<&mut GenericTimer<BreakRoomTimer>>,
 	objectives: Query<&ObjectiveEntity>,
 	current_objective: Res<CurrentObjective>,
 ) -> Result<(), BevyError> {
@@ -93,12 +114,6 @@ fn tell_to_eat(
 	Ok(())
 }
 
-fn tell_to_chill(mut timer: Query<&mut GenericTimer<BreakRoomTimer>>) {
-	let mut timer = timer.get_mut(collision.collider1)?;
-
-	timer.set_active(true);
-}
-
 fn deactivate_timer(
 	collision: On<CollisionEnd>,
 	mut timer: Query<&mut GenericTimer<BreakRoomTimer>>,
@@ -108,32 +123,4 @@ fn deactivate_timer(
 	timer.set_active(false);
 
 	Ok(())
-}
-
-#[derive(SystemParam)]
-struct ObjectiveQuery<'w, 's> {
-	objectives: Query<'w, 's, (Entity, &'static ObjectiveEntity)>,
-}
-
-impl<'w, 's> ObjectiveQuery<'w, 's> {
-	pub fn get_objective(&self, name: &str) -> Result<Entity> {
-		self.objectives
-			.iter()
-			.find_map(|(entity, objective)| (objective.targetname == name).then_some(entity))
-			.ok_or_else(|| format!("Failed to find objective {name}").into())
-	}
-}
-
-pub(crate) fn complete_objective(name: &str) -> impl Command<Result> {
-	let name = name.to_string();
-	move |world: &mut World| -> Result {
-		let entity = world
-			.query::<(Entity, &ObjectiveEntity)>()
-			.iter(world)
-			.find_map(|(entity, objective)| (objective.targetname == name).then_some(entity))
-			.ok_or_else(|| format!("Failed to find objective {name}"))?;
-
-		world.entity_mut(entity).insert(ObjectiveCompleted);
-		Ok(())
-	}
 }

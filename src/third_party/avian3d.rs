@@ -17,6 +17,7 @@ pub(crate) enum CollisionLayer {
 	Dialog,
 	Stomach,
 	PlayerCharacter,
+	Sensor,
 }
 
 fn enable_interpolation(
