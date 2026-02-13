@@ -1,11 +1,10 @@
 use crate::{
 	asset_tracking::LoadResource,
 	gameplay::TargetName,
-	props::interactables::InteractableEntity,
+	props::{interactables::InteractableEntity, logic_entity::YarnNode},
 	third_party::{
 		avian3d::CollisionLayer,
 		bevy_trenchbroom::{GetTrenchbroomModelPath as _, LoadTrenchbroomModel as _},
-		bevy_yarnspinner::YarnNode,
 	},
 };
 

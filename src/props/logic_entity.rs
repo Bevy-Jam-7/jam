@@ -12,6 +12,7 @@ use crate::{
 
 pub(super) fn plugin(app: &mut App) {
 	app.register_dynamic_component::<ObjectiveEntity>()
+		.register_dynamic_component::<YarnNode>()
 		.add_observer(uninitialise_objectives)
 		.add_systems(Update, initialise_objectives);
 }
@@ -57,4 +58,27 @@ pub(crate) struct ObjectiveEntity {
 	pub target: Option<String>,
 	/// The ordering of the objective, bigger = later
 	pub objective_order: f32,
+}
+
+/// An entity describing a dialogue node or a script
+/// To activate the script, launch an [`InteractEvent`]
+/// Either by having the entity itself be interactable, or by relaying the event.
+/// ## See Also
+/// [`InteractableEntity::interaction_relay`]
+#[point_class(base(TargetName))]
+#[derive(Eq, PartialEq, Clone, Debug)]
+pub(crate) struct YarnNode {
+	#[class(must_set)]
+	pub(crate) yarn_node: String,
+	/// Whether this node should avoid the restrictions placed upon dialogue.
+	pub(crate) is_non_dialogue: bool,
+}
+
+impl Default for YarnNode {
+	fn default() -> Self {
+		Self {
+			yarn_node: "".to_string(),
+			is_non_dialogue: false,
+		}
+	}
 }

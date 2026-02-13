@@ -1,5 +1,7 @@
+use crate::gameplay::TargetnameEntityIndex;
 use crate::gameplay::player::camera::PlayerCameraParent;
 use crate::gameplay::player::input::Interact;
+use crate::props::interactables::InteractableEntity;
 use crate::third_party::avian3d::CollisionLayer;
 use avian3d::prelude::*;
 use bevy::prelude::*;
@@ -32,10 +34,24 @@ pub(super) fn plugin(app: &mut App) {
 fn interact_by_input_action(
 	_trigger: On<Fire<Interact>>,
 	resource: Res<AvailableInteraction>,
+	entity_map: Option<Res<TargetnameEntityIndex>>,
+	interaction_query: Query<&InteractableEntity>,
 	mut commands: Commands,
 ) {
 	if let Some(entity) = resource.target_entity {
 		commands.trigger(InteractEvent(entity));
+
+		// Also try shooting events to friends!
+		if let (Some(entity_map), Ok(interactable)) = (entity_map, interaction_query.get(entity)) {
+			if let Some(target) = interactable.get_interaction_relay() {
+				for &related in entity_map.get_entity_by_targetname(target) {
+					// Don't double-trigger
+					if related != entity {
+						commands.trigger(InteractEvent(related));
+					}
+				}
+			}
+		}
 	}
 }
 

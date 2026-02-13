@@ -19,7 +19,7 @@ pub(super) fn plugin(app: &mut App) {
 /// Trenchbroom component for designing entities that can be interacted with.
 #[derive(Default, Clone)]
 #[base_class]
-#[component(on_add = InteractableEntity::on_add)]
+#[component(on_insert = InteractableEntity::on_insert)]
 pub struct InteractableEntity {
 	/// Whether this entity should be
 	is_edible: bool,
@@ -27,10 +27,13 @@ pub struct InteractableEntity {
 	interaction_text_override: Option<String>,
 	/// What objective, if any, should be completed by this name. Should be the `targetname` of said objective.
 	completes_subobjective: Option<String>,
+	/// What entity, if any, should additionally receive [`InteractEvent`](crate::gameplay::interaction::InteractEvent) when this one activates.
+	interaction_relay: Option<String>,
 }
 
+#[expect(dead_code)]
 impl InteractableEntity {
-	pub fn on_add(mut world: DeferredWorld, ctx: HookContext) {
+	pub fn on_insert(mut world: DeferredWorld, ctx: HookContext) {
 		if world.is_scene_world() {
 			return;
 		}
@@ -46,6 +49,8 @@ impl InteractableEntity {
 					.commands()
 					.entity(ctx.entity)
 					.insert_if_new(EdibleProp);
+			} else {
+				world.commands().entity(ctx.entity).remove::<EdibleProp>();
 			}
 			if let Some(objective_name) = values.completes_subobjective {
 				world
@@ -56,5 +61,21 @@ impl InteractableEntity {
 					});
 			}
 		}
+	}
+
+	pub fn get_is_edible(&self) -> bool {
+		self.is_edible
+	}
+
+	pub fn get_interaction_text_override(&self) -> Option<&str> {
+		self.interaction_text_override.as_deref()
+	}
+
+	pub fn get_completes_subobjective(&self) -> Option<&str> {
+		self.completes_subobjective.as_deref()
+	}
+
+	pub fn get_interaction_relay(&self) -> Option<&str> {
+		self.interaction_relay.as_deref()
 	}
 }

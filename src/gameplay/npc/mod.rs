@@ -11,10 +11,10 @@ use crate::{
 	animation::AnimationState,
 	asset_tracking::LoadResource,
 	gameplay::npc::enemy::enemy_htn,
+	props::logic_entity::YarnNode,
 	third_party::{
 		avian3d::CollisionLayer,
 		bevy_trenchbroom::{GetTrenchbroomModelPath, LoadTrenchbroomModel as _},
-		bevy_yarnspinner::YarnNode,
 	},
 };
 
