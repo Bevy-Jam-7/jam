@@ -1085,7 +1085,7 @@
 // entity 6
 {
 "classname" "crt"
-"yarn_node" "IntroCRT"
+"yarn_node" "Day2CRT"
 "origin" "-72 -252 80"
 "angles" "0 -180 0"
 }

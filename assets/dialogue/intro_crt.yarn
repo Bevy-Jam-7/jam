@@ -92,6 +92,7 @@ title: IntroCRT
 title: Day2CRT
 ---
 
+Debug: Day two yayyy #line:15516975 
 <<if get_current_objective() == "start_work">>
   LLManager: LLManager V3.1 BOOTING UP #line:7030598
   LLManager: Good morning, valued employee $EXTERNAL_NAME$. You have been working with us for 0451 days. #line:5715578

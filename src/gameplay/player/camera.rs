@@ -40,6 +40,7 @@ pub(super) fn plugin(app: &mut App) {
 	app.add_observer(add_render_layers_to_point_light);
 	app.add_observer(add_render_layers_to_spot_light);
 	app.add_observer(add_render_layers_to_directional_light);
+	app.add_systems(PreUpdate, reenable_cams);
 	app.add_systems(
 		Update,
 		update_world_model_fov
@@ -152,8 +153,10 @@ fn spawn_view_model(
 				Camera {
 					// Bump the order to render on top of the world model.
 					order: CameraOrder::ViewModel.into(),
+					is_active: true,
 					..default()
 				},
+				ReenableCameraToFixFuckingWeirdRenderingBugWtf,
 				Projection::from(PerspectiveProjection {
 					// We use whatever FOV we set in the animation software, e.g. Blender.
 					// Tip: if you want to set a camera in Blender to the same defaults as Bevy,
@@ -180,6 +183,25 @@ fn spawn_view_model(
 				.observe(configure_player_view_model);
 		})
 		.observe(move_anim_players_relationship_to_player);
+}
+
+#[derive(Component, Reflect, Debug)]
+#[reflect(Component)]
+pub(crate) struct ReenableCameraToFixFuckingWeirdRenderingBugWtf;
+
+fn reenable_cams(
+	mut cams: Query<(Entity, &mut Camera), With<ReenableCameraToFixFuckingWeirdRenderingBugWtf>>,
+	mut commands: Commands,
+) {
+	for (entity, mut cam) in cams.iter_mut() {
+		if cam.is_active {
+			cam.is_active = false;
+		} else {
+			commands
+				.entity(entity)
+				.remove::<ReenableCameraToFixFuckingWeirdRenderingBugWtf>();
+		}
+	}
 }
 
 /// It makes more sense for the animation players to be related to the [`Player`] entity
