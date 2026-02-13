@@ -54,22 +54,25 @@ title: IntroCRT
   LLManager:  It is employee No.6's birthday today. To increase efficiency, please engage in socialisation by congratulating them for being with us another another year. #line:10921058
   <<complete_objective "work_2">>
 
-
 <<elseif get_current_objective() == "work_3">>
   LLManager: Please engage in socialisation with your fellow employees. #line:523020
+
 <<elseif get_current_objective() == "work_4">>
   LLManager: Well done, you have engaged in productivity boosting activities. #line:5952661
   LLManager: Please stand still and wait for sentiment analysis to complete. #line:283844
   LLManager: ... #line:3460098
   LLManager: Please take your mandated mental health break (57% certainty). #line:5092548
+  <<set_value "breakroom_door" "locked" "false">>
   <<complete_objective "work_4">>
   LLManager: Proceed to the breakroom. #line:8695094
   LLManager: Just up the stairs and to the left, and then up the stairs and to the left. #line:12173553
   LLManager: Then, go up the stairs and to the left. #line:5421376
   LLManager: Finally, go up the stairs and to the left. #line:6584811
-  LLManager: Remember, a productive mind is a happy mind. #line:2486276
+  LLManager: Remember, a productive mind is a happy mind. #line:248627
+
 <<elseif get_current_objective() == "work_5">>
-  LLManager: Proceed to the breakroom. It is imperative to not take a break outside the designated area. #line:1543886
+  LLManager: Proceed to the breakroom. It is imperative to not take a break outside the designated area. #line:154388
+
 <<elseif get_current_objective() == "work_8">>
   <<complete_objective "back_to_llm">>
   LLManager: Congratulations, you have completed your mandatory mental health break. #line:12397097

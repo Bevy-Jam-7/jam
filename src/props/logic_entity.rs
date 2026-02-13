@@ -1,4 +1,6 @@
-use avian3d::prelude::{CollisionEventsEnabled, CollisionLayers, Sensor};
+use avian3d::prelude::{
+	CollisionEnd, CollisionEventsEnabled, CollisionLayers, CollisionStart, Sensor,
+};
 use bevy::{
 	ecs::{lifecycle::HookContext, world::DeferredWorld},
 	prelude::*,
@@ -25,6 +27,8 @@ pub(super) fn plugin(app: &mut App) {
 		.add_observer(interact_timers)
 		.add_observer(uninitialise_objectives)
 		.add_observer(talk_ify_yarnnode)
+		.add_observer(on_sensor_start)
+		.add_observer(on_sensor_end)
 		.add_systems(
 			Update,
 			(
@@ -226,6 +230,40 @@ impl SensorEntity {
 					.commands()
 					.entity(ctx.entity)
 					.insert(CollisionEventsEnabled);
+			}
+		}
+	}
+}
+
+fn on_sensor_start(
+	on: On<CollisionStart>,
+	sensor_query: Query<&SensorEntity>,
+	entity_index: Res<TargetnameEntityIndex>,
+	mut commands: Commands,
+) {
+	if let Ok(sensor) = sensor_query.get(on.collider1) {
+		if !sensor.sensor_disabled {
+			if let Some(targetname) = &sensor.sensor_on_collision_start {
+				for &entity in entity_index.get_entity_by_targetname(targetname) {
+					commands.trigger(InteractEvent(entity));
+				}
+			}
+		}
+	}
+}
+
+fn on_sensor_end(
+	on: On<CollisionEnd>,
+	sensor_query: Query<&SensorEntity>,
+	entity_index: Res<TargetnameEntityIndex>,
+	mut commands: Commands,
+) {
+	if let Ok(sensor) = sensor_query.get(on.collider1) {
+		if !sensor.sensor_disabled {
+			if let Some(targetname) = &sensor.sensor_on_collision_end {
+				for &entity in entity_index.get_entity_by_targetname(targetname) {
+					commands.trigger(InteractEvent(entity));
+				}
 			}
 		}
 	}

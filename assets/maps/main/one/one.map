@@ -1124,6 +1124,9 @@
 {
 "classname" "door"
 "origin" "8 -312 824"
+"targetname" "breakroom_door"
+"killtarget" ""
+"locked" "true"
 }
 // entity 10
 {
@@ -1200,7 +1203,7 @@
 "origin" "84 -336 872"
 "is_edible" "true"
 "completes_subobjective" "w6_eat"
-"interaction_relay" "break_room_timer"
+"interaction_relay" "breakroom_timer"
 }
 // entity 20
 {
@@ -1214,8 +1217,8 @@
 {
 "classname" "sensor_entity"
 "sensor_detect_player" "true"
-"sensor_on_collision_end" "work_7"
-"targetname" "break_room_sensor"
+"targetname" "breakroom_sensor"
+"sensor_on_collision_start" "work_5"
 // brush 0
 {
 ( 64 -320 864 ) ( 64 -319 864 ) ( 64 -320 865 ) origin [ 0 -1 0 16 ] [ 0 0 -1 48 ] 270 1 1
@@ -1246,9 +1249,9 @@
 {
 "classname" "timer_entity"
 "origin" "104 -312 952"
-"targetname" "break_room_timer"
+"targetname" "breakroom_timer"
 "timer_length" "5"
-"timer_on_finish" "work_6"
+"timer_on_finish" "work_7"
 }
 // entity 24
 {

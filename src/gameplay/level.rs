@@ -185,6 +185,7 @@ pub(crate) struct LevelAssets {
 	pub(crate) mushroom: Handle<Scene>,
 	#[dependency]
 	pub(crate) mushroom_density_map: Handle<Image>,
+	#[expect(dead_code)]
 	pub(crate) break_room_alarm: Handle<AudioSample>,
 }
 
