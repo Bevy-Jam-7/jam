@@ -119,9 +119,9 @@ impl FromWorld for LevelAssets {
 			// You can regenerate the navmesh by using `bevy_rerecast_editor`
 			navmesh: assets.load("maps/main/one/one.nav"),
 			landscape: assets.load("models/landscape/landscape_flat_large.gltf#Scene0"),
-			grass: assets.load("models/grass/grass.glb#Scene0"),
-			grass_med: assets.load("models/grass/grass_medium_lod.glb#Scene0"),
-			grass_low: assets.load("models/grass/grass_low_lod.glb#Scene0"),
+			grass: assets.load("models/grass/grass.gltf#Scene0"),
+			grass_med: assets.load("models/grass/grass_medium_lod.gltf#Scene0"),
+			grass_low: assets.load("models/grass/grass_low_lod.gltf#Scene0"),
 			rocks: assets.load("models/rocks/rocks_low_lod.gltf#Scene0"),
 			rocks_med: assets.load("models/rocks/rocks_low_lod.gltf#Scene0"),
 			rocks_low: assets.load("models/rocks/rocks_low_lod.gltf#Scene0"),
