@@ -67,12 +67,12 @@ fn setup_player(
 			PlayerInputContext,
 			Collider::cylinder(PLAYER_RADIUS, PLAYER_HEIGHT),
 			CharacterController {
-				speed: 7.0,
+				speed: 5.0,
 				filter: SpatialQueryFilter::DEFAULT
 					.with_mask(LayerMask::ALL & !CollisionLayer::Stomach.to_bits()),
 				..default()
 			},
-			ColliderDensity(1_000.0),
+			ColliderDensity(1000.0),
 			CollisionLayers::new(CollisionLayer::PlayerCharacter, LayerMask::ALL),
 			AnimationState::<PlayerAnimationState>::default(),
 			Fever,
