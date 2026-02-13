@@ -20,22 +20,31 @@ struct FeverPostProcessSettings {
 @fragment
 fn fragment(in: FullscreenVertexOutput) -> @location(0) vec4<f32> {
     // Reference: https://www.shadertoy=.com/view/fdS3Dy
+
+    // Filtered heavy textures, need to use textureLoad for depth/motion raw data
     let dims = vec2<f32>(textureDimensions(screen_texture));
     let coords = vec2<i32>(in.uv * dims);
 
     let time = globals.time;
     let resolution = settings.resolution;
+    let fever = clamp(settings.fever + settings.damage_indicator, 0.0, 1.0);
+
+    // Motion setup
+    let motion = textureLoad(motion_texture, coords, 0).xy;
+    let motion_warp = motion * 10.0 * settings.fever;
 
     // Convert UV to pixel coordinates
     let frag_coord = in.uv * resolution.xy;
 
     // Center coordinates
-    var coord = frag_coord - (resolution.xy * 0.5);
+    var coord = frag_coord - (resolution.xy * 0.5) + motion_warp;
     let x = coord.x;
     let y = coord.y;
 
-    // Time modulation
-    let j_time = glsl_mod(4.0 * sin(0.5 * time), 261.8) + 4.0;
+    // Time modulation with speed
+    let velocity = length(motion);
+    let motion_flash = velocity * 100.0 * fever;
+    let j_time = glsl_mod(4.0 * sin(0.5 * (time + motion_flash)), 261.8) + 4.0;
     coord *= pow(1.1, j_time);
 
     // Radial distances
@@ -76,12 +85,13 @@ fn fragment(in: FullscreenVertexOutput) -> @location(0) vec4<f32> {
     let depth = textureLoad(depth_texture, coords, 0);
     let depth_mask = smoothstep(0.0, 0.1, depth);
 
-    // Combine
+    // Motion
+    let motion_mask = smoothstep(0.0, 0.02, velocity) * 0.5 * fever;
+
     let mask = max(vignette, depth_mask);
     let base_color = textureSample(screen_texture, texture_sampler, in.uv);
-    let fever = (settings.fever + settings.damage_indicator) * settings.intensity;
-    let mix_factor = clamp(fever * mask, 0.0, 1.0);
 
+    let mix_factor = clamp((fever + motion_mask) * mask * settings.intensity, 0.0, 1.0);
     return vec4<f32>(mix(base_color.rgb, pattern, mix_factor), 1.0);
 }
 
