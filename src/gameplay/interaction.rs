@@ -15,7 +15,7 @@ pub struct AvailableInteraction {
 }
 
 /// [`Event`] triggered when the specified entity was interacted with.
-#[derive(EntityEvent)]
+#[derive(Event)]
 pub struct InteractEvent(pub Entity);
 
 pub(super) fn plugin(app: &mut App) {
