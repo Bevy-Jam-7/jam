@@ -27,7 +27,7 @@ fn fragment(in: UiVertexOutput) -> @location(0) vec4<f32> {
     // Time modulation
     let j_time = glsl_mod(4 * sin(0.5 * time), 261.8) + 4.0;
     coord *= pow(1.1, j_time);
-    
+
     // Radial distances
     let eps = 0.001;
     let r2 = abs((x * x + y * y) / max(abs(x), eps));
@@ -36,8 +36,8 @@ fn fragment(in: UiVertexOutput) -> @location(0) vec4<f32> {
     let r5 = abs((x * x + y * y) / max(abs(x + y), eps)) * sqrt(2.0);
 
     // Pattern scaling
-    let p2 = pow(16.0, 6.0 - ceil(log2(r2) / 4.0));
-    let p3 = pow(16.0, 6.0 - ceil(log2(r3) / 4.0));
+    let p2 = pow(sin(time * 0.05) * sin(time * 0.05) * 16.0, 6.0 - ceil(log2(r2) / 4.0));
+    let p3 = pow(cos(time * 0.02) * cos(time * 0.02) * 16.0, 6.0 - ceil(log2(r3) / 4.0));
     let p4 = pow(16.0, 6.0 - ceil(log2(r4) / 4.0));
     let p5 = pow(16.0, 6.0 - ceil(log2(r5) / 4.0));
 
@@ -49,7 +49,7 @@ fn fragment(in: UiVertexOutput) -> @location(0) vec4<f32> {
 
     // Combine patterns with XOR
     let e = (a | b) ^ (c | d);
-    
+
     // Color mapping
     let value = fract(f32(e) * 0.000003);
     let color = hsv2rgb(vec3(value + settings.time * 0.6, 0.6, 0.6));
