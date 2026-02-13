@@ -1,7 +1,7 @@
-use std::time::Duration;
-
 use crate::audio::SpatialPool;
-use crate::gameplay::{TargetName, TargetnameEntityIndex};
+use crate::gameplay::TargetName;
+use crate::gameplay::interaction::InteractEvent;
+use crate::props::logic_entity::TimerEntity;
 use crate::{gameplay::objectives::*, third_party::avian3d::CollisionLayer};
 use avian3d::prelude::*;
 use bevy::ecs::error::Result;
@@ -9,11 +9,7 @@ use bevy::prelude::*;
 use bevy_seedling::prelude::*;
 use bevy_trenchbroom::prelude::*;
 
-use crate::{
-	gameplay::level::LevelAssets,
-	props::logic_entity::ObjectiveEntity,
-	timer::{GenericTimer, TimerFinished},
-};
+use crate::{gameplay::level::LevelAssets, props::logic_entity::ObjectiveEntity};
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_observer(setup_break_room);
@@ -24,11 +20,10 @@ fn setup_break_room(add: On<Add, BreakRoomSensor>, mut commands: Commands) -> Re
 	commands
 		.entity(entity)
 		.insert((
-			GenericTimer::<BreakRoomTimer>::new(Timer::new(
-				Duration::from_secs(5),
-				TimerMode::Once,
-			))
-			.with_active(false),
+			TargetName::new("break_room_sensor"),
+			ObjectiveCompletor {
+				target: "work_7".to_string(),
+			},
 			CollisionLayers::new([CollisionLayer::Sensor], [CollisionLayer::PlayerCharacter]),
 		))
 		.observe(tell_to_eat)
@@ -42,14 +37,21 @@ fn setup_break_room(add: On<Add, BreakRoomSensor>, mut commands: Commands) -> Re
 				objective_order: 6.0,
 			},
 			Objective::new("Increase Shareholder Value"),
+			TimerEntity {
+				timer_length: 5.0,
+				timer_elapsed: 0.0,
+				timer_on_finish: Some("break_room_sensor".to_string()),
+				timer_active: false,
+				timer_repeating: false,
+			},
 		))
 		.observe(
 			move |_add: On<Add, ObjectiveCompleted>,
-			      mut timer: Query<&mut GenericTimer<BreakRoomTimer>>|
+			      mut timer: Query<&mut TimerEntity>|
 			      -> Result {
 				let mut timer = timer.get_mut(entity)?;
 
-				timer.set_active(true);
+				timer.timer_active = true;
 				Ok(())
 			},
 		);
@@ -57,33 +59,27 @@ fn setup_break_room(add: On<Add, BreakRoomSensor>, mut commands: Commands) -> Re
 }
 
 fn kick_out(
-	finished: On<TimerFinished<BreakRoomTimer>>,
+	trigger: On<InteractEvent>,
 	mut commands: Commands,
-	entity_index: Res<TargetnameEntityIndex>,
 	level_assets: Res<LevelAssets>,
 	transform: Query<&GlobalTransform>,
 ) {
-	for &entity in entity_index.get_entity_by_targetname("work_7") {
-		let translation = transform
-			.get(finished.entity)
-			.map(|t| t.translation())
-			.unwrap_or_default();
-		commands.spawn((
-			SamplePlayer {
-				sample: level_assets.break_room_alarm.clone(),
-				repeat_mode: RepeatMode::RepeatMultiple {
-					num_times_to_repeat: 2,
-				},
-				..default()
+	let translation = transform
+		.get(trigger.0)
+		.map(|t| t.translation())
+		.unwrap_or_default();
+	commands.spawn((
+		SamplePlayer {
+			sample: level_assets.break_room_alarm.clone(),
+			repeat_mode: RepeatMode::RepeatMultiple {
+				num_times_to_repeat: 2,
 			},
-			SpatialPool,
-			Transform::from_translation(translation),
-		));
-		commands.entity(entity).insert(ObjectiveCompleted);
-	}
+			..default()
+		},
+		SpatialPool,
+		Transform::from_translation(translation),
+	));
 }
-
-struct BreakRoomTimer;
 
 #[solid_class(base(Transform, Visibility))]
 #[require(Sensor, CollisionEventsEnabled)]
