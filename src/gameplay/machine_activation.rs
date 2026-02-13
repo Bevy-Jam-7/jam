@@ -17,10 +17,7 @@ const ACTIVATION_SFX: &str = "audio/sound_effects/machine_activation.ogg";
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_observer(on_machine_activated);
-	app.add_systems(
-		Update,
-		(tick_screen_flash, tick_camera_shake),
-	);
+	app.add_systems(Update, (tick_screen_flash, tick_camera_shake));
 }
 
 // -- Components --
