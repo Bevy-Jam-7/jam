@@ -7,6 +7,7 @@ mod brush_entity;
 mod effects;
 mod generic;
 pub mod interactables;
+mod levels;
 pub mod logic_entity;
 mod setup;
 mod specific;
@@ -20,5 +21,6 @@ pub(super) fn plugin(app: &mut App) {
 		brush_entity::plugin,
 		logic_entity::plugin,
 		interactables::plugin,
+		levels::plugin,
 	));
 }
