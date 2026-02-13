@@ -6,7 +6,7 @@ use bevy::{
 use bevy_trenchbroom::prelude::*;
 
 use crate::{
-	gameplay::{objectives::ObjectiveCompletor, stomach::EdibleProp},
+	gameplay::stomach::EdibleProp,
 	reflection::ReflAppExt,
 };
 
@@ -44,14 +44,6 @@ impl InteractableEntity {
 					.insert_if_new(EdibleProp);
 			} else {
 				world.commands().entity(ctx.entity).remove::<EdibleProp>();
-			}
-			if let Some(objective_name) = values.completes_subobjective {
-				world
-					.commands()
-					.entity(ctx.entity)
-					.insert_if_new(ObjectiveCompletor {
-						target: objective_name,
-					});
 			}
 		}
 	}

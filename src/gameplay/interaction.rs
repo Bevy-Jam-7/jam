@@ -4,6 +4,7 @@ use crate::gameplay::player::input::Interact;
 use crate::props::interactables::InteractableEntity;
 use crate::third_party::avian3d::CollisionLayer;
 use avian3d::prelude::*;
+use bevy::platform::collections::HashSet;
 use bevy::prelude::*;
 use bevy_enhanced_input::prelude::*;
 
@@ -35,12 +36,18 @@ fn interact_by_input_action(
 
 		// Also try shooting events to friends!
 		if let (Some(entity_map), Ok(interactable)) = (entity_map, interaction_query.get(entity)) {
-			if let Some(target) = interactable.get_interaction_relay() {
-				for &related in entity_map.get_entity_by_targetname(target) {
-					// Don't double-trigger
-					if related != entity {
-						commands.trigger(InteractEvent(related));
-					}
+			let relay_name = interactable.get_interaction_relay();
+			let objective_name = interactable.get_completes_subobjective();
+			let targets = relay_name
+				.into_iter()
+				.chain(objective_name.into_iter())
+				.flat_map(|targetname| entity_map.get_entity_by_targetname(targetname).iter())
+				.copied()
+				.collect::<HashSet<Entity>>();
+			for &related in targets.iter() {
+				// Don't double-trigger
+				if related != entity {
+					commands.trigger(InteractEvent(related));
 				}
 			}
 		}

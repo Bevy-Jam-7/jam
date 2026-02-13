@@ -22,8 +22,7 @@ pub(super) fn plugin(app: &mut App) {
 		Update,
 		(update_current_objective, trigger_all_objectives_done).chain(),
 	);
-	//	app.add_systems(Update, find_current_objective);
-	app.add_observer(watch_for_completors);
+	app.add_observer(watch_for_completions);
 	app.add_systems(PostUpdate, complete_parent_objectives);
 	#[cfg(feature = "dev")]
 	app.add_systems(
@@ -38,14 +37,6 @@ pub(super) fn plugin(app: &mut App) {
 #[derive(Resource, Reflect, Debug, Deref, Default, PartialEq)]
 #[reflect(Resource)]
 pub struct CurrentObjective(Option<Entity>);
-
-/// Marker for entities that complete subobjectives on interact
-#[derive(Component, Reflect, Debug)]
-#[reflect(Component)]
-pub struct ObjectiveCompletor {
-	/// `ObjectiveEntity::targetname` of the objective completed by this completor
-	pub target: String,
-}
 
 /// A game objective.
 #[derive(Default)]
@@ -93,19 +84,13 @@ pub struct SubObjectiveOf {
 #[relationship_target(relationship = SubObjectiveOf)]
 pub struct SubObjectives(Vec<Entity>);
 
-fn watch_for_completors(
+fn watch_for_completions(
 	trigger: On<InteractEvent>,
 	objective_query: Query<(), With<Objective>>,
-	completor_query: Query<&ObjectiveCompletor>,
-	entity_name_index: Res<TargetnameEntityIndex>,
 	mut commands: Commands,
 ) {
-	if let Ok(completor) = completor_query.get(trigger.0) {
-		for &entity in entity_name_index.get_entity_by_targetname(&completor.target) {
-			if objective_query.contains(entity) {
-				commands.entity(entity).insert(ObjectiveCompleted);
-			}
-		}
+	if objective_query.contains(trigger.0) {
+		commands.entity(trigger.0).insert(ObjectiveCompleted);
 	}
 }
 

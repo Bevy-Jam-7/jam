@@ -1,4 +1,8 @@
-use bevy::prelude::*;
+use avian3d::prelude::{CollisionEventsEnabled, CollisionLayers, Sensor};
+use bevy::{
+	ecs::{lifecycle::HookContext, world::DeferredWorld},
+	prelude::*,
+};
 
 use bevy_trenchbroom::prelude::*;
 
@@ -11,6 +15,7 @@ use crate::{
 	},
 	props::interactables::InteractableEntity,
 	reflection::ReflAppExt,
+	third_party::avian3d::CollisionLayer,
 };
 
 pub(super) fn plugin(app: &mut App) {
@@ -163,6 +168,64 @@ fn tick_timers(
 				for &entity in entity_index.get_entity_by_targetname(target) {
 					commands.trigger(InteractEvent(entity));
 				}
+			}
+		}
+	}
+}
+
+/// A sensor entity describing an area that reacts to the presence of entities
+#[solid_class(base(TargetName, Transform, Visibility))]
+#[component(on_insert=SensorEntity::on_insert)]
+#[component(immutable)]
+#[derive(Default)]
+pub(crate) struct SensorEntity {
+	/// Entities to interact with when collision starts
+	sensor_on_collision_start: Option<String>,
+	/// Entities to interact with when collision ends
+	sensor_on_collision_end: Option<String>,
+	/// Whether the sensor detects the player
+	sensor_detect_player: bool,
+	/// Whether the sensor detects characters (like NPCs)
+	sensor_detect_character: bool,
+	/// Whether the sensor detects props
+	sensor_detect_props: bool,
+	/// Whether the sensor is disabled and will not respond to events
+	sensor_disabled: bool,
+}
+
+impl SensorEntity {
+	pub fn on_insert(mut world: DeferredWorld, ctx: HookContext) {
+		if world.is_scene_world() {
+			return;
+		}
+		if let Some(values) = world.get::<SensorEntity>(ctx.entity) {
+			let mut filter_layers: Vec<_> = vec![];
+			if values.sensor_detect_player {
+				filter_layers.push(CollisionLayer::PlayerCharacter);
+			}
+			if values.sensor_detect_character {
+				filter_layers.push(CollisionLayer::Character);
+			}
+			if values.sensor_detect_props {
+				filter_layers.push(CollisionLayer::Prop);
+			}
+			let sensor_disabled = values.sensor_disabled;
+			let _ = values;
+
+			world.commands().entity(ctx.entity).insert((
+				Sensor,
+				CollisionLayers::new([CollisionLayer::Sensor], filter_layers),
+			));
+			if sensor_disabled {
+				world
+					.commands()
+					.entity(ctx.entity)
+					.remove::<CollisionEventsEnabled>();
+			} else {
+				world
+					.commands()
+					.entity(ctx.entity)
+					.insert(CollisionEventsEnabled);
 			}
 		}
 	}
