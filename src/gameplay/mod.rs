@@ -17,7 +17,6 @@ pub(crate) mod dialogue_view;
 pub(crate) mod hud;
 pub(crate) mod interaction;
 pub(crate) mod level;
-mod machine_activation;
 pub(crate) mod npc;
 pub(crate) mod objectives;
 pub(crate) mod player;
@@ -43,7 +42,6 @@ pub(super) fn plugin(app: &mut App) {
 		core::plugin,
 		interaction::plugin,
 		hud::plugin,
-		machine_activation::plugin,
 		fever::plugin,
 	));
 }
