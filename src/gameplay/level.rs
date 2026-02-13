@@ -267,7 +267,6 @@ fn advance_level(
 	match *current_level {
 		CurrentLevel::DayOne => commands.queue(advance_level_command::<LevelTwoAssets>()),
 		CurrentLevel::DayTwo => commands.queue(advance_level_command::<LevelAssets>()),
-		//CurrentLevel::DayThree => commands.queue(advance_level_command::<LevelThreeAssets>()),
 	};
 }
 
