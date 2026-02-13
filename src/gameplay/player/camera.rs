@@ -16,9 +16,9 @@ use avian3d::{picking::PhysicsPickingCamera, prelude::*};
 #[cfg(feature = "native")]
 use bevy::pbr::ScreenSpaceAmbientOcclusion;
 use bevy::{
-	anti_alias::{fxaa::Fxaa, taa::TemporalAntiAliasing},
+	anti_alias::taa::TemporalAntiAliasing,
 	camera::{Exposure, visibility::RenderLayers},
-	core_pipeline::prepass::{DeferredPrepass, DepthPrepass},
+	core_pipeline::prepass::DeferredPrepass,
 	light::{AtmosphereEnvironmentMapLight, NotShadowCaster, ShadowFilteringMethod},
 	pbr::{Atmosphere, ScatteringMedium},
 	post_process::bloom::Bloom,
@@ -146,32 +146,6 @@ fn spawn_view_model(
 				Atmosphere::earthlike(medium.clone()),
 				DistanceFog {
 					falloff: FogFalloff::Exponential { density: 0.0005 },
-					..default()
-				},
-			));
-
-			// Spawn view model camera.
-			parent.spawn((
-				Name::new("View Model Camera"),
-				Camera3d::default(),
-				Camera {
-					// Bump the order to render on top of the world model.
-					order: CameraOrder::ViewModel.into(),
-					..default()
-				},
-				Projection::from(PerspectiveProjection {
-					// We use whatever FOV we set in the animation software, e.g. Blender.
-					// Tip: if you want to set a camera in Blender to the same defaults as Bevy,
-					// see [this issue](https://github.com/kaosat-dev/Blenvy/issues/223)
-					fov: 62.0_f32.to_radians(),
-					..default()
-				}),
-				// Only render objects belonging to the view model.
-				RenderLayers::from(RenderLayer::VIEW_MODEL),
-				exposure,
-				(DepthPrepass, Msaa::Off, DeferredPrepass, Fxaa::default()),
-				AtmosphereEnvironmentMapLight {
-					intensity: 0.5,
 					..default()
 				},
 			));

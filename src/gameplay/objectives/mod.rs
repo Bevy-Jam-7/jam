@@ -1,3 +1,5 @@
+#[cfg(feature = "dev")]
+use bevy::input::common_conditions::input_just_pressed;
 use bevy::prelude::*;
 use bevy_trenchbroom::prelude::*;
 
@@ -13,10 +15,21 @@ pub(super) fn plugin(app: &mut App) {
 	app.add_plugins(ui::plugin);
 	app.init_resource::<CurrentObjective>();
 
-	app.add_systems(Update, update_current_objective);
+	app.add_systems(
+		Update,
+		(update_current_objective, trigger_all_objectives_done).chain(),
+	);
 	//	app.add_systems(Update, find_current_objective);
 	app.add_observer(watch_for_completors);
 	app.add_systems(PostUpdate, complete_parent_objectives);
+	#[cfg(feature = "dev")]
+	app.add_systems(
+		Update,
+		(|mut commands: Commands| {
+			commands.trigger(AllObjectivesDone);
+		})
+		.run_if(input_just_pressed(KeyCode::F10)),
+	);
 }
 
 #[derive(Resource, Reflect, Debug, Deref, Default, PartialEq)]
@@ -134,6 +147,25 @@ pub(crate) fn get_dialogue_current_objective(
 		.and_then(|entity| objective_query.get(entity).ok())
 		.map(|objective| objective.targetname.clone())
 		.unwrap_or_default()
+}
+
+#[derive(Event)]
+pub(crate) struct AllObjectivesDone;
+
+fn trigger_all_objectives_done(
+	not_done_objectives: Query<
+		(Entity, &ObjectiveEntity),
+		(Without<ObjectiveCompleted>, Without<SubObjectiveOf>),
+	>,
+	done_objectives: Query<
+		(Entity, &ObjectiveEntity),
+		(With<ObjectiveCompleted>, Without<SubObjectiveOf>),
+	>,
+	mut commands: Commands,
+) {
+	if not_done_objectives.is_empty() && !done_objectives.is_empty() {
+		commands.trigger(AllObjectivesDone);
+	}
 }
 
 fn update_current_objective(
