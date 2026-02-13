@@ -1,8 +1,7 @@
 //! Spawn the main level.
 
 use crate::gameplay::TargetName;
-use crate::gameplay::scatter::Landscape;
-use crate::third_party::avian3d::CollisionLayer;
+use crate::scatter::components::Landscape;
 use crate::{
 	asset_tracking::{LoadResource, ResourceHandles},
 	audio::MusicPool,
@@ -11,7 +10,6 @@ use crate::{
 	props::logic_entity::ObjectiveEntity,
 	screens::{Screen, loading::LoadingScreen},
 };
-use avian3d::prelude::*;
 use bevy::prelude::*;
 use bevy_feronia::prelude::*;
 use bevy_landmass::prelude::*;
@@ -29,7 +27,7 @@ pub(super) fn plugin(app: &mut App) {
 	app.init_resource::<CurrentLevel>();
 }
 
-#[derive(Resource, Reflect, Debug, Default, Copy, Clone)]
+#[derive(Resource, Reflect, Debug, Default, Copy, Clone, PartialEq)]
 #[reflect(Resource)]
 pub(crate) enum CurrentLevel {
 	#[default]
@@ -43,6 +41,7 @@ pub(crate) fn spawn_level(
 	level_assets: Res<LevelAssets>,
 	level_two_assets: Option<Res<LevelTwoAssets>>,
 	current_level: Res<CurrentLevel>,
+	scatter_root: Single<Entity, With<ScatterRoot>>,
 ) {
 	match *current_level {
 		CurrentLevel::DayOne => {
@@ -97,36 +96,13 @@ pub(crate) fn spawn_level(
 			let level_two_assets = level_two_assets.expect("If we don't have level two assets when spawning level two, we're in deep shit. Sorry player, we bail here.");
 
 			commands.spawn((
-				Landscape,
-				ScatterRoot::default(),
-				ChunkRoot::default(),
-				MapHeight,
-				children![(
-					Name::new("Level"),
-					SceneRoot(level_two_assets.level.clone()),
-					DespawnOnExit(Screen::Gameplay),
-					Level,
-					children![
-						(
-							Name::new("Level Music"),
-							SamplePlayer::new(level_two_assets.music.clone()).looping(),
-							MusicPool
-						),
-						(
-							RigidBody::Static,
-							SceneRoot(level_assets.landscape.clone()),
-							ColliderConstructorHierarchy::new(
-								ColliderConstructor::ConvexHullFromMesh
-							)
-							.with_default_layers(CollisionLayers::new(
-								CollisionLayer::Default,
-								LayerMask::ALL,
-							))
-							.with_default_density(1_000.0)
-						),
-					]
-				)],
+				ChildOf(*scatter_root),
+				Name::new("Level"),
+				SceneRoot(level_two_assets.level.clone()),
+				DespawnOnExit(Screen::Gameplay),
+				Level,
 			));
+			commands.spawn((Landscape, ChildOf(*scatter_root)));
 
 			let archipelago = commands
 				.spawn((
@@ -144,6 +120,11 @@ pub(crate) fn spawn_level(
 					archipelago_ref: ArchipelagoRef3d::new(archipelago),
 					nav_mesh: NavMeshHandle3d(level_assets.navmesh.clone()),
 				},
+				children![(
+					Name::new("Level Music"),
+					SamplePlayer::new(level_two_assets.music.clone()).looping(),
+					MusicPool
+				)],
 			));
 		}
 	}
