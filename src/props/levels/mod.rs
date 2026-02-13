@@ -33,9 +33,9 @@ fn setup_break_room(add: On<Add, BreakRoomSensor>, mut commands: Commands) -> Re
 		.observe(tell_to_eat)
 		.observe(deactivate_timer)
 		.observe(kick_out);
-	let objective = commands
+	commands
 		.spawn((
-			Name::new(format!("Objective: work_6")),
+			Name::new("Objective: work_6".to_string()),
 			ObjectiveEntity {
 				targetname: "work_6".into(),
 				target: None,
@@ -43,17 +43,16 @@ fn setup_break_room(add: On<Add, BreakRoomSensor>, mut commands: Commands) -> Re
 			},
 			Objective::new("Increase Shareholder Value"),
 		))
-		.id();
-	commands.entity(objective).observe(
-		move |_add: On<Add, ObjectiveCompleted>,
-		      mut timer: Query<&mut GenericTimer<BreakRoomTimer>>|
-		      -> Result {
-			let mut timer = timer.get_mut(entity)?;
+		.observe(
+			move |_add: On<Add, ObjectiveCompleted>,
+			      mut timer: Query<&mut GenericTimer<BreakRoomTimer>>|
+			      -> Result {
+				let mut timer = timer.get_mut(entity)?;
 
-			timer.set_active(true);
-			Ok(())
-		},
-	);
+				timer.set_active(true);
+				Ok(())
+			},
+		);
 	Ok(())
 }
 

@@ -32,7 +32,7 @@ title: IntroCRT
 
   // done in code, sorry
   // <<create_objective "work_6" "Increase Shareholder Value" 6.0>>
-  <<create_subobjective "w6_eat" "Eat the provided snack on the table to allow your body to perform cellular respiration.Cellular respiration is the process of oxidizing biological fuels using an inorganic electron acceptor, such as oxygen, to drive production of adenosine triphosphate (ATP), which stores chemical energy in a biologically accessible form. Cellular respiration may be described as a set of metabolic reactions and processes that take place in the cells to transfer chemical energy from nutrients to ATP, with the flow of electrons to an electron acceptor, and then release waste products. To learn more, visit wikipedia.org, the free online encyclopaedia." "work_6">>
+  <<create_subobjective "w6_eat" "Eat the provided snack on the table to allow your body to perform cellular respiration. Cellular respiration is the process of oxidizing biological fuels using an inorganic electron acceptor, such as oxygen, to drive production of adenosine triphosphate (ATP), which stores chemical energy in a biologically accessible form. Cellular respiration may be described as a set of metabolic reactions and processes that take place in the cells to transfer chemical energy from nutrients to ATP, with the flow of electrons to an electron acceptor, and then release waste products. To learn more, visit wikipedia.org, the free online encyclopedia." "work_6">>
 
   <<create_objective "work_7" "Increase Shareholder Value" 7.0>>
   <<create_subobjective "w7_look" "Take a moment to unwind. Enjoy the moment." "work_7">>
