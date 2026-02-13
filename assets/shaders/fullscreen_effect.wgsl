@@ -66,7 +66,7 @@ fn fragment(in: FullscreenVertexOutput) -> @location(0) vec4<f32> {
 
     // Vignette
     let dist = distance(in.uv, vec2<f32>(0.5));
-    let vignette= smoothstep(0.2, 0.8, dist);
+    let vignette = smoothstep(0.2, 0.8, dist);
 
     // Combine Fever and Damage into a single intensity value,
     // tweaking the dmg indicator manually for now
