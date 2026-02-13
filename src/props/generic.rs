@@ -31,7 +31,8 @@ pub(super) fn plugin(app: &mut App) {
 	app.add_observer(setup_static_prop_with_convex_hull::<Keyboard>)
 		.add_observer(setup_static_prop_with_convex_hull::<Mouse>)
 		.add_observer(setup_dynamic_prop_with_convex_hull::<PackageMedium>)
-		.add_observer(setup_dynamic_prop_with_convex_hull::<PackageSmall>);
+		.add_observer(setup_dynamic_prop_with_convex_hull::<PackageSmall>)
+		.add_observer(setup_dynamic_prop_with_convex_hull::<Rohlik>);
 
 	app.add_observer(setup_nonphysical_prop::<IvyPart8>)
 		.add_observer(setup_nonphysical_prop::<SmallDoorSign1>);
@@ -51,7 +52,8 @@ pub(super) fn plugin(app: &mut App) {
 		.load_asset::<Gltf>(FenceBarsDecorativeSingle::model_path())
 		.load_asset::<Gltf>(DoorStainedGlass::model_path())
 		.load_asset::<Gltf>(IvyPart8::model_path())
-		.load_asset::<Gltf>(SmallDoorSign1::model_path());
+		.load_asset::<Gltf>(SmallDoorSign1::model_path())
+		.load_asset::<Gltf>(Rohlik::model_path());
 }
 
 // generic dynamic props
@@ -179,3 +181,9 @@ pub(crate) struct IvyPart8;
 	model("models/darkmod/decorative/signs/small_door_sign1.gltf")
 )]
 pub(crate) struct SmallDoorSign1;
+
+#[point_class(
+	base(InteractableEntity, Transform, Visibility),
+	model("models/rohlik/rohlik.gltf")
+)]
+pub(crate) struct Rohlik;
