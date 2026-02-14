@@ -49,7 +49,7 @@ pub fn scatter(
 	mw_clear_root.write((*root).into());
 
 	match *current_level {
-		CurrentLevel::DayTwo | CurrentLevel::Shaders => {
+		CurrentLevel::Commune | CurrentLevel::Shaders => {
 			debug!("Scattering...");
 			cmd.trigger(Scatter::<StandardMaterial>::new(*root));
 		}
