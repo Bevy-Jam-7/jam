@@ -1,4 +1,4 @@
-use crate::gameplay::level::{CurrentLevel, LevelAssets};
+use crate::gameplay::level::{CurrentLevel, EnvironmentAssets};
 use crate::scatter::{components::*, layers::*};
 
 use bevy::asset::{AssetEvent, Assets};
@@ -12,25 +12,13 @@ pub fn clear_scatter_root(mut cmd: Commands, root: Single<Entity, With<ScatterRo
 	cmd.trigger(ClearScatterRoot(*root));
 }
 
-pub fn spawn_scatter_layers(
-	mut cmd: Commands,
-	landscape: Single<Entity, With<ScatterRoot>>,
-) {
+pub fn spawn_scatter_layers(mut cmd: Commands, landscape: Single<Entity, With<ScatterRoot>>) {
 	let landscape = landscape.into_inner();
 	debug!("Spawning scatter layers...");
 
-	cmd.spawn((
-		RockLayer,
-		ChildOf(landscape),
-	));
-	cmd.spawn((
-		MushroomLayer,
-		ChildOf(landscape),
-	));
-	cmd.spawn((
-		GrassLayer,
-		ChildOf(landscape),
-	));
+	cmd.spawn((RockLayer, ChildOf(landscape)));
+	cmd.spawn((MushroomLayer, ChildOf(landscape)));
+	cmd.spawn((GrassLayer, ChildOf(landscape)));
 }
 
 pub fn scatter(
@@ -52,7 +40,7 @@ pub fn scatter(
 pub fn update_density_map(
 	mut ev_asset: MessageReader<AssetEvent<Image>>,
 	mut assets: ResMut<Assets<Image>>,
-	mut level_assets: ResMut<LevelAssets>,
+	mut level_assets: ResMut<EnvironmentAssets>,
 ) {
 	for ev in ev_asset.read() {
 		if let AssetEvent::Modified { id, .. } = ev {

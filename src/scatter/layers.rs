@@ -1,4 +1,4 @@
-use crate::gameplay::level::LevelAssets;
+use crate::gameplay::level::EnvironmentAssets;
 use crate::third_party::avian3d::CollisionLayer;
 use crate::{RenderLayer, RenderLayers};
 use avian3d::prelude::*;
@@ -27,14 +27,14 @@ pub(crate) struct RockLayer;
 
 impl RockLayer {
 	fn on_add(mut world: DeferredWorld, ctx: HookContext) {
-		let LevelAssets {
+		let EnvironmentAssets {
 			rocks,
 			rocks_med,
 			rocks_low,
 			rock_density_map,
 			..
 		} = world
-			.get_resource::<LevelAssets>()
+			.get_resource::<EnvironmentAssets>()
 			.cloned()
 			.expect("Assets should be added!");
 
@@ -101,12 +101,12 @@ pub struct MushroomLayer;
 
 impl MushroomLayer {
 	fn on_add(mut world: DeferredWorld, ctx: HookContext) {
-		let LevelAssets {
+		let EnvironmentAssets {
 			mushroom,
 			mushroom_density_map,
 			..
 		} = world
-			.get_resource::<LevelAssets>()
+			.get_resource::<EnvironmentAssets>()
 			.cloned()
 			.expect("Assets should be added!");
 
@@ -185,14 +185,14 @@ pub(crate) struct GrassLayer;
 
 impl GrassLayer {
 	fn on_add(mut world: DeferredWorld, ctx: HookContext) {
-		let LevelAssets {
+		let EnvironmentAssets {
 			grass,
 			grass_med,
 			grass_low,
 			grass_density_map,
 			..
 		} = world
-			.get_resource::<LevelAssets>()
+			.get_resource::<EnvironmentAssets>()
 			.cloned()
 			.expect("Assets should be added!");
 

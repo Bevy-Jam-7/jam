@@ -1,4 +1,4 @@
-use crate::gameplay::level::{CurrentLevel, LevelAssets};
+use crate::gameplay::level::{CurrentLevel, EnvironmentAssets};
 use crate::third_party::avian3d::CollisionLayer;
 
 use avian3d::prelude::*;
@@ -33,7 +33,7 @@ impl Landscape {
 			CurrentLevel::DayOne => {}
 			CurrentLevel::DayTwo => {
 				let landscape = world
-					.get_resource::<LevelAssets>()
+					.get_resource::<EnvironmentAssets>()
 					.map(|a| a.landscape.clone())
 					.expect("Assets should be loaded.");
 

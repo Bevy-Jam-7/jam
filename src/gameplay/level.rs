@@ -20,7 +20,8 @@ use bevy_seedling::sample::AudioSample;
 use landmass_rerecast::{Island3dBundle, NavMeshHandle3d};
 
 pub(super) fn plugin(app: &mut App) {
-	app.load_resource::<LevelAssets>()
+	app.load_resource::<EnvironmentAssets>()
+		.load_resource::<LevelAssets>()
 		.init_asset::<LevelTwoAssets>()
 		.init_asset::<LevelTrainAssets>()
 		.init_asset::<LevelKarolineAssets>();
@@ -231,14 +232,20 @@ pub(crate) struct Level;
 #[derive(Resource, Asset, Clone, TypePath)]
 pub(crate) struct LevelAssets {
 	#[dependency]
-	pub(crate) landscape: Handle<Scene>,
-	#[dependency]
 	pub(crate) level: Handle<Scene>,
 	#[dependency]
 	pub(crate) navmesh: Handle<Navmesh>,
 	#[dependency]
 	pub(crate) music: Handle<AudioSample>,
 	#[dependency]
+	pub(crate) break_room_alarm: Handle<AudioSample>,
+}
+
+/// A [`Resource`] that contains all the assets needed to spawn the Environment (landscape and scatter assets).
+#[derive(Resource, Asset, Clone, TypePath)]
+pub(crate) struct EnvironmentAssets {
+	#[dependency]
+	pub(crate) landscape: Handle<Scene>,
 	pub(crate) grass: Handle<Scene>,
 	#[dependency]
 	pub(crate) grass_med: Handle<Scene>,
@@ -258,19 +265,12 @@ pub(crate) struct LevelAssets {
 	pub(crate) mushroom: Handle<Scene>,
 	#[dependency]
 	pub(crate) mushroom_density_map: Handle<Image>,
-	#[expect(dead_code)]
-	pub(crate) break_room_alarm: Handle<AudioSample>,
 }
 
-impl FromWorld for LevelAssets {
+impl FromWorld for EnvironmentAssets {
 	fn from_world(world: &mut World) -> Self {
 		let assets = world.resource::<AssetServer>();
-
 		Self {
-			// Our main level is inspired by the TheDarkMod fan mission [Volta I: The Stone](https://www.thedarkmod.com/missiondetails/?internalName=volta1_3)
-			level: assets.load("maps/main/one/one.map#Scene"),
-			// You can regenerate the navmesh by using `bevy_rerecast_editor`
-			navmesh: assets.load("maps/main/one/one.nav"),
 			landscape: assets.load("models/landscape/landscape_flat_large.gltf#Scene0"),
 			grass: assets.load("models/grass/grass.gltf#Scene0"),
 			grass_med: assets.load("models/grass/grass_medium_lod.gltf#Scene0"),
@@ -291,6 +291,20 @@ impl FromWorld for LevelAssets {
 			#[cfg(feature = "release")]
 			mushroom_density_map: assets.load("textures/mushroom_density_map.ktx2"),
 			mushroom: assets.load("models/mushroom/mushroom.gltf#Scene0"),
+		}
+	}
+}
+
+impl FromWorld for LevelAssets {
+	fn from_world(world: &mut World) -> Self {
+		let assets = world.resource::<AssetServer>();
+
+		Self {
+			// Our main level is inspired by the TheDarkMod fan mission [Volta I: The Stone](https://www.thedarkmod.com/missiondetails/?internalName=volta1_3)
+			level: assets.load("maps/main/one/one.map#Scene"),
+			// You can regenerate the navmesh by using `bevy_rerecast_editor`
+			navmesh: assets.load("maps/main/one/one.nav"),
+
 			music: assets.load("audio/music/corpo slop to eat your computer to.ogg"),
 			break_room_alarm: assets.load("audio/sound_effects/mental_health_alarm.ogg"),
 		}

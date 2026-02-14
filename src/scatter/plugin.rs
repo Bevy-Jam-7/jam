@@ -1,4 +1,4 @@
-use crate::gameplay::level::LevelAssets;
+use crate::gameplay::level::EnvironmentAssets;
 use crate::scatter::observers::*;
 use crate::scatter::systems::*;
 use crate::screens::Screen;
@@ -33,14 +33,13 @@ impl Plugin for ScatterPlugin {
 		));
 
 		app.add_systems(OnExit(Screen::Gameplay), clear_scatter_root)
-			.add_systems(OnEnter(HeightMapState::Ready), spawn_scatter_layers)
 			.add_systems(OnEnter(ScatterState::Ready), scatter)
-			.add_systems(Startup, spawn_scatter_root)
+			.add_systems(Startup, (spawn_scatter_root,spawn_scatter_layers).chain())
 			.add_systems(
 				Update,
 				(
-					scatter.run_if(resource_exists_and_changed::<LevelAssets>),
-					update_density_map.run_if(resource_exists::<LevelAssets>),
+					scatter.run_if(resource_exists_and_changed::<EnvironmentAssets>),
+					update_density_map.run_if(resource_exists::<EnvironmentAssets>),
 				),
 			)
 			.add_observer(scatter_extended)
