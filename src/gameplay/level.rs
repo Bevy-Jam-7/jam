@@ -227,7 +227,7 @@ pub(crate) fn spawn_level(
 			));
 		}
 		CurrentLevel::Train => {
-			let level_train_assets = level_train_assets.expect("If we don't have level two assets when spawning level two, we're in deep shit. Sorry player, we bail here.");
+			let level_train_assets = level_train_assets.expect("If we don't have level train assets when spawning level train, we're in deep shit. Sorry player, we bail here.");
 
 			commands.spawn((
 				Name::new("Level"),
@@ -477,7 +477,7 @@ fn advance_level(
 	match *current_level {
 		CurrentLevel::DayOne => commands.queue(advance_level_command::<LevelTwoAssets>()),
 		CurrentLevel::DayTwo => commands.queue(advance_level_command::<LevelThreeAssets>()),
-		CurrentLevel::Commune => commands.queue(advance_level_command::<LevelOneAssets>()),
+		CurrentLevel::Commune => commands.queue(advance_level_command::<LevelTrainAssets>()),
 		CurrentLevel::Train => commands.queue(advance_level_command::<LevelKarolineAssets>()),
 		CurrentLevel::Karoline | CurrentLevel::Shaders => {
 			commands.queue(advance_level_command::<LevelOneAssets>())

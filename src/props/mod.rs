@@ -4,7 +4,7 @@
 use bevy::prelude::*;
 
 mod brush_entity;
-mod effects;
+pub mod effects;
 mod generic;
 pub mod interactables;
 pub mod logic_entity;
