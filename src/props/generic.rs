@@ -28,6 +28,7 @@ pub(super) fn plugin(app: &mut App) {
 		.add_observer(setup_static_prop_with_convex_hull::<FenceBarsDecorativeSingle>)
 		.add_observer(setup_static_prop_with_convex_hull::<DoorStainedGlass>)
 		.add_observer(setup_static_prop_with_convex_hull::<Jesus>)
+		.add_observer(setup_static_prop_with_convex_hull::<Speaker>)
 		.add_observer(setup_static_prop_with_convex_hull::<Teeth>);
 
 	app.add_observer(setup_static_prop_with_trimesh::<Train>);
@@ -60,6 +61,7 @@ pub(super) fn plugin(app: &mut App) {
 		.load_asset::<Gltf>(Rohlik::model_path())
 		.load_asset::<Gltf>(Train::model_path())
 		.load_asset::<Gltf>(Teeth::model_path())
+		.load_asset::<Gltf>(Speaker::model_path())
 		.load_asset::<Gltf>(Jesus::model_path());
 }
 
@@ -212,3 +214,9 @@ pub(crate) struct Jesus;
 	model("models/teeth/teeth.gltf")
 )]
 pub(crate) struct Teeth;
+
+#[point_class(
+	base(InteractableEntity, Transform, Visibility, TargetName),
+	model("models/speaker/speaker.gltf")
+)]
+pub(crate) struct Speaker;
