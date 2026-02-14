@@ -12,6 +12,7 @@ mod lamp_shaded;
 mod lamp_sitting;
 mod lamp_wall_electric;
 mod mushroom;
+mod suv;
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_plugins((
@@ -25,5 +26,6 @@ pub(super) fn plugin(app: &mut App) {
 		lamp_shaded::plugin,
 		lamp_plain::plugin,
 		mushroom::plugin,
+		suv::plugin,
 	));
 }
