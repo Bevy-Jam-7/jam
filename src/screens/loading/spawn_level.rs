@@ -1,10 +1,11 @@
 //! The loading screen that appears when the game is starting, but still spawning the level.
 
 use bevy::{prelude::*, scene::SceneInstance};
+use bevy_feronia::prelude::{HeightMapState, ScatterRoot};
 use bevy_landmass::{NavMesh, coords::ThreeD};
 
 use super::LoadingScreen;
-use crate::gameplay::level::spawn_level;
+use crate::gameplay::level::{spawn_landscape, spawn_level};
 use crate::scatter::ScatterDone;
 use crate::{
 	screens::Screen,
@@ -14,13 +15,14 @@ use crate::{
 pub(super) fn plugin(app: &mut App) {
 	app.add_systems(
 		OnEnter(LoadingScreen::Level),
-		(spawn_level, spawn_level_loading_screen),
+		(spawn_level_loading_screen, spawn_landscape, spawn_level),
 	);
 
 	app.add_systems(
 		Update,
 		advance_to_gameplay_screen.run_if(in_state(LoadingScreen::Level)),
-	);
+	)
+	.add_observer(on_scatter_done);
 }
 
 fn spawn_level_loading_screen(mut commands: Commands) {
@@ -32,6 +34,9 @@ fn spawn_level_loading_screen(mut commands: Commands) {
 	));
 }
 
+#[derive(Component)]
+struct ScatterReadyToAdvance;
+
 fn advance_to_gameplay_screen(
 	mut next_screen: ResMut<NextState<Screen>>,
 	scene_spawner: Res<SceneSpawner>,
@@ -39,7 +44,7 @@ fn advance_to_gameplay_screen(
 	just_added_scenes: Query<(), (With<SceneRoot>, Without<SceneInstance>)>,
 	just_added_meshes: Query<(), Added<Mesh3d>>,
 	nav_mesh_events: MessageReader<AssetEvent<NavMesh<ThreeD>>>,
-	scatter_done: Res<ScatterDone>,
+	_: Single<(), With<ScatterReadyToAdvance>>,
 ) {
 	if !(just_added_meshes.is_empty() && just_added_scenes.is_empty()) {
 		return;
@@ -48,15 +53,20 @@ fn advance_to_gameplay_screen(
 		return;
 	}
 
-	println!("{scatter_done:?}");
-	if !**scatter_done {
-		return;
-	}
-
 	for scene_instance in scene_instances.iter() {
 		if !scene_spawner.instance_is_ready(**scene_instance) {
 			return;
 		}
 	}
+	println!("Advancing to gameplay screen...");
+
 	next_screen.set(Screen::Gameplay);
+}
+
+fn on_scatter_done(
+	_: On<ScatterDone>,
+	mut cmd: Commands,
+	scatter_root: Single<Entity, With<ScatterRoot>>,
+) {
+	cmd.entity(*scatter_root).insert(ScatterReadyToAdvance);
 }

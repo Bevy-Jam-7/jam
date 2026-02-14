@@ -31,7 +31,10 @@ impl Plugin for MushroomPlugin {
 #[require(EnvironmentTemperature)]
 pub(crate) struct Mushroom;
 
-#[point_class(base(Transform, Visibility), model("models/mushroom/mushroom.gltf"))]
+#[point_class(
+	base(Transform, Visibility),
+	model("models/mushroom/mushroom_single.gltf")
+)]
 pub(crate) struct MushroomModel;
 
 fn setup_mushroom(
@@ -41,9 +44,7 @@ fn setup_mushroom(
 ) {
 	let bundle =
 		static_bundle::<MushroomModel>(&asset_server, ColliderConstructor::ConvexHullFromMesh);
-	commands
-		.entity(add.entity)
-		.insert((bundle, Mushroom));
+	commands.entity(add.entity).insert((bundle, Mushroom));
 }
 
 pub fn scattered_shroom(

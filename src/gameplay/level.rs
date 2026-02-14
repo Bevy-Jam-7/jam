@@ -35,6 +35,15 @@ pub(crate) enum CurrentLevel {
 	DayTwo,
 }
 
+pub(crate) fn spawn_landscape(mut cmd: Commands, scatter_root: Single<Entity, With<ScatterRoot>>) {
+	debug!("Spawning landscape...");
+	cmd.spawn((
+		Landscape,
+		DespawnOnExit(Screen::Gameplay),
+		ChildOf(*scatter_root),
+	));
+}
+
 /// A system that spawns the main level.
 pub(crate) fn spawn_level(
 	mut commands: Commands,
@@ -43,6 +52,7 @@ pub(crate) fn spawn_level(
 	current_level: Res<CurrentLevel>,
 	scatter_root: Single<Entity, With<ScatterRoot>>,
 ) {
+	println!("Spawning level...");
 	match *current_level {
 		CurrentLevel::DayOne => {
 			commands.spawn((
@@ -102,7 +112,6 @@ pub(crate) fn spawn_level(
 				DespawnOnExit(Screen::Gameplay),
 				Level,
 			));
-			commands.spawn((Landscape, ChildOf(*scatter_root)));
 
 			let archipelago = commands
 				.spawn((

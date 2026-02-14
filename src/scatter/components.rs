@@ -1,27 +1,22 @@
 use crate::gameplay::level::{CurrentLevel, LevelAssets};
 use crate::third_party::avian3d::CollisionLayer;
+
 use avian3d::prelude::*;
 use bevy::ecs::lifecycle::HookContext;
 use bevy::ecs::world::DeferredWorld;
 use bevy::prelude::*;
 use bevy_feronia::prelude::{HeightMapState, ScatterState};
 
-#[derive(Resource, Reflect, Debug, Default, Clone, Copy, Deref, DerefMut)]
-#[reflect(Resource)]
-pub struct ScatterDone(pub(crate) bool);
+#[derive(Event)]
+pub struct ScatterDone;
 
 #[derive(Component)]
 #[component(on_add = Self::on_add)]
-#[require(RigidBody::Static)]
+#[require(RigidBody::Static, Name::new("Landscape"))]
 pub struct Landscape;
 
 impl Landscape {
 	pub fn on_add(mut world: DeferredWorld, ctx: HookContext) {
-		let level = world.get_resource::<CurrentLevel>().unwrap();
-		if *level == CurrentLevel::DayOne {
-			return;
-		}
-
 		world
 			.get_resource_mut::<NextState<ScatterState>>()
 			.unwrap()
@@ -32,19 +27,26 @@ impl Landscape {
 			.unwrap()
 			.set(HeightMapState::Setup);
 
-		let landscape = world
-			.get_resource::<LevelAssets>()
-			.map(|a| a.landscape.clone())
-			.expect("Assets should be loaded.");
+		let level = world.get_resource::<CurrentLevel>().unwrap();
 
-		world.commands().entity(ctx.entity).insert((
-			SceneRoot(landscape.clone()),
-			ColliderConstructorHierarchy::new(ColliderConstructor::ConvexHullFromMesh)
-				.with_default_layers(CollisionLayers::new(
-					CollisionLayer::Default,
-					LayerMask::ALL,
-				))
-				.with_default_density(1_000.0),
-		));
+		match *level {
+			CurrentLevel::DayOne => {}
+			CurrentLevel::DayTwo => {
+				let landscape = world
+					.get_resource::<LevelAssets>()
+					.map(|a| a.landscape.clone())
+					.expect("Assets should be loaded.");
+
+				world.commands().entity(ctx.entity).insert((
+					SceneRoot(landscape.clone()),
+					ColliderConstructorHierarchy::new(ColliderConstructor::ConvexHullFromMesh)
+						.with_default_layers(CollisionLayers::new(
+							CollisionLayer::Default,
+							LayerMask::ALL,
+						))
+						.with_default_density(1_000.0),
+				));
+			}
+		}
 	}
 }
