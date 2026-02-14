@@ -6,34 +6,66 @@ use crate::{
 	asset_tracking::{LoadResource, ResourceHandles},
 	audio::MusicPool,
 	gameplay::npc::NPC_RADIUS,
-	gameplay::objectives::{AllObjectivesDone, Objective},
+	gameplay::objectives::Objective,
 	props::logic_entity::ObjectiveEntity,
 	screens::{Screen, loading::LoadingScreen},
 };
+use bevy::input::common_conditions::input_just_pressed;
 use bevy::prelude::*;
+use bevy_eidolon::prelude::*;
 use bevy_feronia::prelude::*;
 use bevy_landmass::prelude::*;
 use bevy_rerecast::prelude::*;
 use bevy_seedling::prelude::*;
 use bevy_seedling::sample::AudioSample;
 
+use crate::shader_compilation::CompileShadersAssets;
 use landmass_rerecast::{Island3dBundle, NavMeshHandle3d};
 
 pub(super) fn plugin(app: &mut App) {
 	app.load_resource::<EnvironmentAssets>()
-		.load_resource::<LevelAssets>()
+		.init_asset::<LevelOneAssets>()
 		.init_asset::<LevelTwoAssets>()
 		.init_asset::<LevelTrainAssets>()
 		.init_asset::<LevelKarolineAssets>();
 
+	#[cfg(feature = "dev")]
+	app.add_systems(
+		Update,
+		(|mut commands: Commands| {
+			commands.trigger(AdvanceLevel);
+		})
+		.run_if(input_just_pressed(KeyCode::F10)),
+	);
+
+	// This is a hack, a [`Screen:Shader`] stage could be added
+	// instead of using [`LoadingScreen::Assets`] for compiling shaders.
+	app.add_systems(
+		Update,
+		enter_level.run_if(
+			all_assets_loaded
+				.and(in_state(LoadingScreen::Assets))
+				.and(not(resource_equals(CurrentLevel::Shaders))),
+		),
+	);
+
 	app.add_observer(advance_level);
 	app.init_resource::<CurrentLevel>();
+}
+
+pub fn all_assets_loaded(resource_handles: Res<ResourceHandles>) -> bool {
+	resource_handles.is_all_done()
+}
+
+fn enter_level(mut next_screen: ResMut<NextState<LoadingScreen>>) {
+	next_screen.set(LoadingScreen::Level);
 }
 
 #[derive(Resource, Reflect, Debug, Default, Copy, Clone, PartialEq)]
 #[reflect(Resource)]
 pub(crate) enum CurrentLevel {
 	#[default]
+	Shaders,
 	DayOne,
 	DayTwo,
 	Train,
@@ -43,6 +75,7 @@ pub(crate) enum CurrentLevel {
 impl CurrentLevel {
 	pub(crate) fn next(&self) -> Self {
 		match self {
+			CurrentLevel::Shaders => CurrentLevel::DayOne,
 			CurrentLevel::DayOne => CurrentLevel::DayTwo,
 			CurrentLevel::DayTwo => CurrentLevel::Train,
 			CurrentLevel::Train => CurrentLevel::Karoline,
@@ -53,24 +86,30 @@ impl CurrentLevel {
 
 pub(crate) fn spawn_landscape(mut cmd: Commands, scatter_root: Single<Entity, With<ScatterRoot>>) {
 	debug!("Spawning landscape...");
-	cmd.spawn((
-		Landscape,
-		DespawnOnExit(Screen::Gameplay),
-		ChildOf(*scatter_root),
-	));
+	cmd.spawn((Landscape, ChildOf(*scatter_root)));
 }
 
 /// A system that spawns the main level.
 pub(crate) fn spawn_level(
 	mut commands: Commands,
-	level_assets: Res<LevelAssets>,
+	level_assets: Option<Res<LevelOneAssets>>,
 	level_two_assets: Option<Res<LevelTwoAssets>>,
 	level_train_assets: Option<Res<LevelTrainAssets>>,
 	level_karoline_assets: Option<Res<LevelKarolineAssets>>,
 	current_level: Res<CurrentLevel>,
 	scatter_root: Single<Entity, With<ScatterRoot>>,
+	compile_shaders_assets: Res<CompileShadersAssets>,
 ) {
 	match *current_level {
+		CurrentLevel::Shaders => {
+			commands.spawn((
+				Center,
+				GpuCullCompute,
+				Name::new("Compile Shaders Level"),
+				SceneRoot(compile_shaders_assets.level.clone()),
+				DespawnOnExit(LoadingScreen::Shaders),
+			));
+		}
 		CurrentLevel::DayOne => {
 			commands.spawn((
 				Objective::new("Clock In"),
@@ -81,9 +120,10 @@ pub(crate) fn spawn_level(
 				},
 			));
 
+			let level_one_assets = level_assets.expect("If we don't have level assets when spawning level one, we're in deep shit. Sorry player, we bail here.");
 			commands.spawn((
 				Name::new("Level"),
-				SceneRoot(level_assets.level.clone()),
+				SceneRoot(level_one_assets.level.clone()),
 				DespawnOnExit(Screen::Gameplay),
 				Level,
 				// children![(
@@ -107,7 +147,7 @@ pub(crate) fn spawn_level(
 				Island3dBundle {
 					island: Island,
 					archipelago_ref: ArchipelagoRef3d::new(archipelago),
-					nav_mesh: NavMeshHandle3d(level_assets.navmesh.clone()),
+					nav_mesh: NavMeshHandle3d(level_one_assets.navmesh.clone()),
 				},
 			));
 		}
@@ -149,7 +189,7 @@ pub(crate) fn spawn_level(
 				Island3dBundle {
 					island: Island,
 					archipelago_ref: ArchipelagoRef3d::new(archipelago),
-					nav_mesh: NavMeshHandle3d(level_assets.navmesh.clone()),
+					nav_mesh: NavMeshHandle3d(level_two_assets.navmesh.clone()),
 				},
 			));
 		}
@@ -229,7 +269,7 @@ pub(crate) struct Level;
 /// A [`Resource`] that contains all the assets needed to spawn the level.
 /// We use this to preload assets before the level is spawned.
 #[derive(Resource, Asset, Clone, TypePath)]
-pub(crate) struct LevelAssets {
+pub(crate) struct LevelOneAssets {
 	#[dependency]
 	pub(crate) level: Handle<Scene>,
 	#[dependency]
@@ -294,7 +334,7 @@ impl FromWorld for EnvironmentAssets {
 	}
 }
 
-impl FromWorld for LevelAssets {
+impl FromWorld for LevelOneAssets {
 	fn from_world(world: &mut World) -> Self {
 		let assets = world.resource::<AssetServer>();
 
@@ -388,8 +428,11 @@ impl FromWorld for LevelKarolineAssets {
 	}
 }
 
+#[derive(Event)]
+pub(crate) struct AdvanceLevel;
+
 fn advance_level(
-	_done: On<AllObjectivesDone>,
+	_done: On<AdvanceLevel>,
 	mut commands: Commands,
 	current_level: Res<CurrentLevel>,
 ) {
@@ -397,7 +440,9 @@ fn advance_level(
 		CurrentLevel::DayOne => commands.queue(advance_level_command::<LevelTwoAssets>()),
 		CurrentLevel::DayTwo => commands.queue(advance_level_command::<LevelTrainAssets>()),
 		CurrentLevel::Train => commands.queue(advance_level_command::<LevelKarolineAssets>()),
-		CurrentLevel::Karoline => commands.queue(advance_level_command::<LevelAssets>()),
+		CurrentLevel::Karoline | CurrentLevel::Shaders => {
+			commands.queue(advance_level_command::<LevelOneAssets>())
+		}
 	};
 }
 
@@ -415,12 +460,14 @@ fn advance_level_command<T: Asset + Resource + Clone + FromWorld>() -> impl Comm
 					world.insert_resource(value.clone());
 				}
 			}));
+
 		world
 			.resource_mut::<NextState<LoadingScreen>>()
 			.set(LoadingScreen::Assets);
 		world
 			.resource_mut::<NextState<Screen>>()
 			.set(Screen::Loading);
+
 		let mut current_level = world.resource_mut::<CurrentLevel>();
 		*current_level = current_level.next();
 	}
