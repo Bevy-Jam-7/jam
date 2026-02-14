@@ -177,45 +177,6 @@ fn present_line(
 		}
 	}
 
-	// let path = format!("audio/dialogue/{id}.ogg");
-	// if std::path::Path::new(&format!("assets/{path}")).exists() {
-	// 	let handle = asset_server.load::<AudioSample>(path);
-	// 	if let Some(entity) = speaker.0.as_ref() {
-	// 		commands.entity(*entity).with_child((
-	// 			SamplePlayer::new(handle).with_volume(Volume::Decibels(9.0)),
-	// 			SpatialPool,
-	// 			VoiceAudio,
-	// 			Transform::default(),
-	// 		));
-	// 	} else {
-	// 		commands.spawn((
-	// 			SamplePlayer::new(handle).with_volume(Volume::Decibels(2.0)),
-	// 			SfxPool,
-	// 			VoiceAudio,
-	// 			Transform::default(),
-	// 		));
-	// 	}
-	// } else {
-	// 	let handle = gibberish.0.pick(&mut rand::rng()).clone();
-	// 	if let Some(entity) = speaker.0.as_ref() {
-	// 		commands.entity(*entity).with_child((
-	// 			SamplePlayer::new(handle).with_volume(Volume::Decibels(2.0)),
-	// 			RandomPitch(1.05..1.25),
-	// 			SpatialPool,
-	// 			VoiceAudio,
-	// 			Transform::default(),
-	// 		));
-	// 	} else {
-	// 		commands.spawn((
-	// 			SamplePlayer::new(handle).with_volume(Volume::Decibels(2.0)),
-	// 			RandomPitch(1.05..1.25),
-	// 			SfxPool,
-	// 			VoiceAudio,
-	// 			Transform::default(),
-	// 		));
-	// 	}
-	// };
-
 	let name = if let Some(name) = event.line.character_name() {
 		speaker_change_events.write(SpeakerChangeEvent {
 			character_name: name.to_string(),
