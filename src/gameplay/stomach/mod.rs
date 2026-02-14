@@ -57,37 +57,8 @@ const STOMACH_POSITION: Vec3 = Vec3::new(2000.0, 2000.0, 2000.0);
 
 const MESH_THICKNESS: f32 = 0.25;
 
-fn spawn_stomach(
-	mut commands: Commands,
-	mut meshes: ResMut<Assets<Mesh>>,
-	mut materials: ResMut<Assets<StandardMaterial>>,
-	assets: Res<AssetServer>,
-) {
+fn spawn_stomach(mut commands: Commands, assets: Res<AssetServer>) {
 	let stomach = Stomach::default();
-	let mesh_thickness = MESH_THICKNESS;
-	let vertical_mesh = meshes.add(Cuboid::new(
-		mesh_thickness,
-		stomach.target_size.y + mesh_thickness * 2.0,
-		stomach.target_size.z + mesh_thickness * 2.0,
-	));
-	let horizontal_mesh = meshes.add(Cuboid::new(
-		stomach.target_size.x + mesh_thickness * 2.0,
-		mesh_thickness,
-		stomach.target_size.z + mesh_thickness * 2.0,
-	));
-	let back_mesh = meshes.add(Cuboid::new(
-		stomach.target_size.x + mesh_thickness * 2.0,
-		stomach.target_size.y + mesh_thickness * 2.0,
-		mesh_thickness,
-	));
-	let wall_material = materials.add(StandardMaterial {
-		unlit: true,
-		..Color::srgb(0.8, 0.1, 0.1).into()
-	});
-	let back_material = materials.add(StandardMaterial {
-		unlit: true,
-		..Color::srgb(0.4, 0.0, 0.0).into()
-	});
 
 	// TODO: Make the walls springy
 	commands.spawn((
