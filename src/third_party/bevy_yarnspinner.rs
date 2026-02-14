@@ -23,6 +23,7 @@ pub(super) fn plugin(app: &mut App) {
 		YarnSpinnerPlugin::with_yarn_sources(vec![
 			YarnFileSource::file("dialogue/intro_crt.yarn"),
 			YarnFileSource::file("dialogue/intro_npc.yarn"),
+			YarnFileSource::file("dialogue/commune.yarn"),
 		])
 		.with_localizations(Localizations {
 			base_localization: "en".into(),

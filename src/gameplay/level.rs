@@ -33,9 +33,9 @@ pub(super) fn plugin(app: &mut App) {
 #[derive(Resource, Reflect, Debug, Default, Copy, Clone)]
 #[reflect(Resource)]
 pub(crate) enum CurrentLevel {
+	#[default]
 	DayOne,
 	DayTwo,
-	#[default]
 	Commune,
 }
 
