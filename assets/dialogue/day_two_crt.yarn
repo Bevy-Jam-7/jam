@@ -43,7 +43,7 @@ title: Day2CRT
   <<set_value "breakroom_door" "locked" "false">>
   <<complete_objective "work_2">>
   LLManager: Note this is the second day requiring an unscheduled productivity buffer. #line:16091743
-  LLManager: Any further incidents will result in relocation to our disciplinary center $LOCATION_SCUNTHORPE$. #line:16120215
+  LLManager: Any further incidents will result in relocation to our trauma department. $LOCATION_SCUNTHORPE$. #line:16120215
 
 <<elseif get_current_objective() == "work_3">>
   LLManager: Please do not extend your mandated mental health break without prior approval. #line:10540699
