@@ -49,7 +49,7 @@ impl LoadedPipelineCount {
 		let count = {
 			#[cfg(feature = "native")]
 			{
-				105
+				106
 			}
 			#[cfg(feature = "web")]
 			{

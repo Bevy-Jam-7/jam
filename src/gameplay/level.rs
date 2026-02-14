@@ -38,9 +38,8 @@ pub(super) fn plugin(app: &mut App) {
 		.run_if(input_just_pressed(KeyCode::F10)),
 	);
 
-	// This is a hack, ideally [`Screen:Shader`] stage should be added
-	// instead of using the level loading asset state for compiling shaders since
-	// the shader level is a level.
+	/// This is a hack, a [`Screen:Shader`] stage could be added
+	/// instead of using [`LoadingScreen::Assets`] for compiling shaders.
 	app.add_systems(
 		Update,
 		enter_level.run_if(
