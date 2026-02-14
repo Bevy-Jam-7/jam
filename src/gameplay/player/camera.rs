@@ -77,12 +77,12 @@ fn spawn_view_model(
 	let medium = media.add(ScatteringMedium::default());
 
 	let (exposure, env_light) = match *current_level {
-		CurrentLevel::Shaders => (13., 0.4),
-		CurrentLevel::DayOne => (13., 0.4),
-		CurrentLevel::DayTwo => (14., 0.2),
-		CurrentLevel::Commune => (13., 0.2),
-		CurrentLevel::Train => (13., 0.4),
-		CurrentLevel::Karoline => (13., 0.4),
+		CurrentLevel::Shaders => (12., 0.4),
+		CurrentLevel::DayOne => (12., 0.4),
+		CurrentLevel::DayTwo => (12., 0.2),
+		CurrentLevel::Commune => (12., 0.2),
+		CurrentLevel::Train => (12., 0.4),
+		CurrentLevel::Karoline => (12., 0.4),
 	};
 
 	// Spawn the player camera
