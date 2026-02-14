@@ -29,14 +29,16 @@ pub fn scatter(
 	current_level: Res<CurrentLevel>,
 ) {
 	debug!("Scattering...");
-	if *current_level != CurrentLevel::DayTwo {
-		cmd.trigger(ScatterDone);
-		return;
-	};
-
 	mw_clear_root.write((*root).into());
 
-	cmd.trigger(Scatter::<StandardMaterial>::new(*root));
+	match *current_level {
+		CurrentLevel::DayOne | CurrentLevel::Karoline | CurrentLevel::Train => {
+			cmd.trigger(ScatterDone);
+		}
+		CurrentLevel::DayTwo => {
+			cmd.trigger(Scatter::<StandardMaterial>::new(*root));
+		}
+	}
 }
 
 pub fn update_density_map(

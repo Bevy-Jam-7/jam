@@ -30,7 +30,7 @@ impl Landscape {
 		let level = world.get_resource::<CurrentLevel>().unwrap();
 
 		match *level {
-			CurrentLevel::DayOne => {}
+			CurrentLevel::DayOne | CurrentLevel::Karoline | CurrentLevel::Train => {}
 			CurrentLevel::DayTwo => {
 				let landscape = world
 					.get_resource::<EnvironmentAssets>()
@@ -47,8 +47,6 @@ impl Landscape {
 						.with_default_density(1_000.0),
 				));
 			}
-			CurrentLevel::Train => {}
-			CurrentLevel::Karoline => {}
 		}
 	}
 }
