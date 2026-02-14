@@ -67,7 +67,6 @@ fn advance_to_gameplay_screen(
 			return;
 		}
 	}
-	println!("Advancing to gameplay screen...");
 
 	next_screen.set(Screen::Gameplay);
 }

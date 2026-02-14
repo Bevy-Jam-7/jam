@@ -70,7 +70,6 @@ pub(crate) fn spawn_level(
 	current_level: Res<CurrentLevel>,
 	scatter_root: Single<Entity, With<ScatterRoot>>,
 ) {
-	println!("Spawning level...");
 	match *current_level {
 		CurrentLevel::DayOne => {
 			commands.spawn((
