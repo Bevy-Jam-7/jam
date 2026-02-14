@@ -43,24 +43,24 @@ title: IntroNpc6
 
 <<if $birthday_celebrated == false>>
   Jannick: Today I turned 29. #line:12131023
-  Jannick: One more year until I'm old. I should start saving for retirement.
+  Jannick: One more year until I'm old. I should start saving for retirement. #line:5689025
   -> Happy birthday #line:4588995
     <<set $birthday_celebrated = true>>
     <<complete_objective "w3_soc">>
-    Jannick: You're the first person to say that.
-    Jannick: Are you hitting on me?
+    Jannick: You're the first person to say that. #line:16292834
+    Jannick: Are you hitting on me? #line:16219417
     -> Yes #line:13343041
       <<set $date = true>>
-      Jannick: I accept your flirt. Let's meet at the break room this weekend.
+      Jannick: I accept your flirt. Let's meet at the break room this weekend. #line:13571270
     -> No #line:14615155
       <<set $date = false>>
       Jannick: Then save your happy birthday. #line:4933784
-    -> Maybe
+    -> Maybe #line:4517366
       <<set $date = false>>
-      Jannick: Hesitation is defeat.
-    -> I don't know
+      Jannick: Hesitation is defeat. #line:16460676
+    -> I don't know #line:14375325
       <<set $date = false>>
-      Jannick: Hesitation is defeat.
+      Jannick: Hesitation is defeat. #line:7232990
 
 <<else>>
   <<if $date == true>>
