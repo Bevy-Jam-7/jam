@@ -26,7 +26,12 @@ pub(super) fn plugin(app: &mut App) {
 		.add_observer(setup_static_prop_with_convex_hull::<Barrel01>)
 		.add_observer(setup_static_prop_with_convex_hull::<CrateSquare>)
 		.add_observer(setup_static_prop_with_convex_hull::<FenceBarsDecorativeSingle>)
-		.add_observer(setup_static_prop_with_convex_hull::<DoorStainedGlass>);
+		.add_observer(setup_static_prop_with_convex_hull::<DoorStainedGlass>)
+		.add_observer(setup_static_prop_with_convex_hull::<Jesus>)
+		.add_observer(setup_static_prop_with_convex_hull::<Speaker>)
+		.add_observer(setup_static_prop_with_convex_hull::<Teeth>);
+
+	app.add_observer(setup_static_prop_with_trimesh::<Train>);
 
 	app.add_observer(setup_static_prop_with_convex_hull::<Keyboard>)
 		.add_observer(setup_static_prop_with_convex_hull::<Mouse>)
@@ -53,7 +58,11 @@ pub(super) fn plugin(app: &mut App) {
 		.load_asset::<Gltf>(DoorStainedGlass::model_path())
 		.load_asset::<Gltf>(IvyPart8::model_path())
 		.load_asset::<Gltf>(SmallDoorSign1::model_path())
-		.load_asset::<Gltf>(Rohlik::model_path());
+		.load_asset::<Gltf>(Rohlik::model_path())
+		.load_asset::<Gltf>(Train::model_path())
+		.load_asset::<Gltf>(Teeth::model_path())
+		.load_asset::<Gltf>(Speaker::model_path())
+		.load_asset::<Gltf>(Jesus::model_path());
 }
 
 // generic dynamic props
@@ -187,3 +196,27 @@ pub(crate) struct SmallDoorSign1;
 	model("models/rohlik/rohlik.gltf")
 )]
 pub(crate) struct Rohlik;
+
+#[point_class(
+	base(Transform, Visibility, TargetName),
+	model("models/train/train.gltf")
+)]
+pub(crate) struct Train;
+
+#[point_class(
+	base(InteractableEntity, Transform, Visibility, TargetName),
+	model("models/jc/jc.gltf")
+)]
+pub(crate) struct Jesus;
+
+#[point_class(
+	base(InteractableEntity, Transform, Visibility, TargetName),
+	model("models/teeth/teeth.gltf")
+)]
+pub(crate) struct Teeth;
+
+#[point_class(
+	base(InteractableEntity, Transform, Visibility, TargetName),
+	model("models/speaker/speaker.gltf")
+)]
+pub(crate) struct Speaker;
