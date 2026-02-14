@@ -16,7 +16,10 @@ use bevy::{
 use crate::{
 	CameraOrder, RenderLayer,
 	font::VARIABLE_FONT,
-	gameplay::player::{Player, camera::PlayerCameraParent},
+	gameplay::{
+		level::CurrentLevel,
+		player::{Player, camera::PlayerCameraParent},
+	},
 	screens::Screen,
 	third_party::avian3d::CollisionLayer,
 };
@@ -246,8 +249,11 @@ fn move_stomach(
 fn update_stomach_ui_visibility(
 	stomach: Single<&Stomach>,
 	mut node: Single<&mut Node, With<StomachUi>>,
+	current_level: Res<CurrentLevel>,
 ) {
-	let new_display = if stomach.contents.is_empty() {
+	// Hide the stomach UI if the stomach is empty, or if we are
+	// on the first level.
+	let new_display = if stomach.contents.is_empty() || *current_level == CurrentLevel::DayOne {
 		Display::None
 	} else {
 		Display::Flex
