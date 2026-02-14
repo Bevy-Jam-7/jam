@@ -15,8 +15,8 @@ use crate::{
 			toggle_bool_on_entity,
 		},
 	},
-	screens::Screen,
 	props::specific::intro_crt::set_intro_crt_emote,
+	screens::Screen,
 };
 
 pub(super) fn plugin(app: &mut App) {
@@ -62,7 +62,10 @@ fn setup_dialogue_runner(mut commands: Commands, yarn_project: Res<YarnProject>)
 			"toggle_value",
 			commands.register_system(toggle_bool_on_entity),
 		)
-		.add_command("llmanager_emote", commands.register_system(set_intro_crt_emote))
+		.add_command(
+			"llmanager_emote",
+			commands.register_system(set_intro_crt_emote),
+		)
 		.add_command(
 			"interact_with",
 			commands.register_system(interact_with_entity),
