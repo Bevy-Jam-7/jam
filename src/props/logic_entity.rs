@@ -20,6 +20,7 @@ use crate::{
 	},
 	props::interactables::InteractableEntity,
 	reflection::ReflAppExt,
+	screens::Screen,
 	third_party::avian3d::CollisionLayer,
 };
 
@@ -83,6 +84,7 @@ struct UnitialisedObjective;
 /// An entity describing the identity of an objective
 /// Activates (completes) on [`InteractEvent`]
 #[point_class(base(TargetName, Objective))]
+#[require(DespawnOnExit::<Screen>(Screen::Gameplay))]
 #[derive(Default)]
 pub(crate) struct ObjectiveEntity {
 	/// The objective, if any, that this is a subobjective of

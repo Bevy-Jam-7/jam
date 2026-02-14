@@ -51,19 +51,6 @@ title: Day2CRT
   LLManager: Please do not extend your mandated mental health break without prior approval. #line:10540699
 
 <<elseif get_current_objective() == "work_6">>
-  LLManager: Well done, you have engaged in productivity boosting activities. #line:15823908
-  LLManager: Please stand still and wait for sentiment analysis to complete. #line:7477901
-  LLManager: ... #line:3205990
-  LLManager: Please take your mandated mental health break (57% certainty). #line:11415983
-  <<complete_objective "work_4">>
-  LLManager: Proceed to the breakroom. #line:10186919
-  LLManager: Just up the stairs and to the left, and then up the stairs and to the left. #line:8455142
-  LLManager: Then, go up the stairs and to the left. #line:4995274
-  LLManager: Finally, go up the stairs and to the left. #line:13410456
-  LLManager: Remember, a productive mind is a happy mind. #line:3907472
-<<elseif get_current_objective() == "work_5">>
-  LLManager: Proceed to the breakroom. It is imperative to not take a break outside the designated area. #line:1232786
-<<elseif get_current_objective() == "work_8">>
   <<complete_objective "back_to_llm">>
   LLManager: Congratulations, you have completed your mandatory mental health break. #line:7941483
   LLManager: You are now more productive (1.67% increase / boost) #line:14644463
@@ -72,7 +59,7 @@ title: Day2CRT
   -> Sigh... okay boss #line:11427451
     LLManager: That is the spirit, employee $EXTERNAL_NAME$! #line:6987213
     -> (continue working for the day) #line:14610086
-      <<complete_objective "work_8">>
+      <<complete_objective "work_6">>
   -> Listen, I'm feeling a bit weird today. #line:6766630
     LLManager: Please proceed to describe the relevance of your inquiry to your work. #line:408557
     -> My head feels kinda hot. #line:6831445
@@ -83,6 +70,6 @@ title: Day2CRT
       LLManager: Unfortunately, you did not collect enough Business Loyalty Points this quarter yet to unlock that request. #line:376982
       LLManager: (you have 1524 Google ReCAPTCHA labels remaining) #line:13681399
       -> ...Okay (continue working for the day) #line:3947450
-         <<complete_objective "work_8">>
+         <<complete_objective "work_6">>
 <<endif>>
 ===
