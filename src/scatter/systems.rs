@@ -29,7 +29,7 @@ pub fn scatter(
 		CurrentLevel::DayOne | CurrentLevel::Karoline | CurrentLevel::Train => {
 			cmd.trigger(ScatterDone);
 		}
-		CurrentLevel::DayTwo => {
+		CurrentLevel::DayTwo | CurrentLevel::CompileShaders => {
 			debug!("Scattering...");
 			cmd.trigger(Scatter::<StandardMaterial>::new(*root));
 		}
