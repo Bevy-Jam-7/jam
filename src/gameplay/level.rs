@@ -38,12 +38,15 @@ pub(super) fn plugin(app: &mut App) {
 		.run_if(input_just_pressed(KeyCode::F10)),
 	);
 
+	// This is a hack, ideally [`Screen:Shader`] stage should be added
+	// instead of using the level loading asset state for compiling shaders since
+	// the shader level is a level.
 	app.add_systems(
 		Update,
 		enter_level.run_if(
 			all_assets_loaded
 				.and(in_state(LoadingScreen::Assets))
-				.and(not(resource_equals(CurrentLevel::CompileShaders))),
+				.and(not(resource_equals(CurrentLevel::Shaders))),
 		),
 	);
 
@@ -64,7 +67,7 @@ fn enter_level(mut next_screen: ResMut<NextState<LoadingScreen>>) {
 #[reflect(Resource)]
 pub(crate) enum CurrentLevel {
 	#[default]
-	CompileShaders,
+	Shaders,
 	DayOne,
 	DayTwo,
 	Train,
@@ -74,7 +77,7 @@ pub(crate) enum CurrentLevel {
 impl CurrentLevel {
 	pub(crate) fn next(&self) -> Self {
 		match self {
-			CurrentLevel::CompileShaders => CurrentLevel::DayOne,
+			CurrentLevel::Shaders => CurrentLevel::DayOne,
 			CurrentLevel::DayOne => CurrentLevel::DayTwo,
 			CurrentLevel::DayTwo => CurrentLevel::Train,
 			CurrentLevel::Train => CurrentLevel::Karoline,
@@ -104,7 +107,7 @@ pub(crate) fn spawn_level(
 	compile_shaders_assets: Res<CompileShadersAssets>,
 ) {
 	match *current_level {
-		CurrentLevel::CompileShaders => {
+		CurrentLevel::Shaders => {
 			commands.spawn((
 				Center,
 				GpuCullCompute,
@@ -440,7 +443,7 @@ fn advance_level(
 	current_level: Res<CurrentLevel>,
 ) {
 	match *current_level {
-		CurrentLevel::CompileShaders => commands.queue(advance_level_command::<LevelOneAssets>()),
+		CurrentLevel::Shaders => commands.queue(advance_level_command::<LevelOneAssets>()),
 		CurrentLevel::DayOne => commands.queue(advance_level_command::<LevelTwoAssets>()),
 		CurrentLevel::DayTwo => commands.queue(advance_level_command::<LevelTrainAssets>()),
 		CurrentLevel::Train => commands.queue(advance_level_command::<LevelKarolineAssets>()),
@@ -472,5 +475,7 @@ fn advance_level_command<T: Asset + Resource + Clone + FromWorld>() -> impl Comm
 
 		let mut current_level = world.resource_mut::<CurrentLevel>();
 		*current_level = current_level.next();
+
+		println!("Advancing level to {:?}", current_level);
 	}
 }
