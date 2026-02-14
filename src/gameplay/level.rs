@@ -47,8 +47,7 @@ impl CurrentLevel {
 		match self {
 			CurrentLevel::DayOne => CurrentLevel::DayTwo,
 			CurrentLevel::DayTwo => CurrentLevel::Commune,
-			CurrentLevel::Commune => CurrentLevel::DayOne,
-			CurrentLevel::DayTwo => CurrentLevel::Train,
+			CurrentLevel::Commune => CurrentLevel::Train,
 			CurrentLevel::Train => CurrentLevel::Karoline,
 			CurrentLevel::Karoline => CurrentLevel::DayOne,
 		}
