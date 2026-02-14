@@ -46,8 +46,8 @@ fn spawn_pause_overlay(mut commands: Commands) {
 			height: Percent(100.0),
 			..default()
 		},
-		GlobalZIndex(1),
-		BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.8)),
+		GlobalZIndex(-1),
+		BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.93)),
 		DespawnOnExit(Pause(true)),
 		DespawnOnExit(Screen::Gameplay),
 		Pickable::IGNORE,
