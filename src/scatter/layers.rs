@@ -156,6 +156,7 @@ impl MushroomLayer {
 	DistributionDensity(150.0),
     InstanceJitter,
     InstanceScale,
+    ScatterChunked,
     ScaleDensity,
 
     // Material options
