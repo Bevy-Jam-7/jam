@@ -1,5 +1,7 @@
 use crate::gameplay::level::{CurrentLevel, EnvironmentAssets};
 use crate::third_party::avian3d::CollisionLayer;
+use crate::screens::Screen;
+use crate::screens::loading::LoadingScreen;
 
 use avian3d::prelude::*;
 use bevy::ecs::lifecycle::HookContext;
@@ -27,10 +29,8 @@ impl Landscape {
 			.unwrap()
 			.set(HeightMapState::Setup);
 
-		let level = world.get_resource::<CurrentLevel>().unwrap();
-
-		match *level {
-			CurrentLevel::DayOne | CurrentLevel::Karoline | CurrentLevel::Train => {}
+		let level = world.get_resource::<CurrentLevel>().cloned().unwrap();
+		match level {
 			CurrentLevel::DayTwo | CurrentLevel::Shaders => {
 				let landscape = world
 					.get_resource::<EnvironmentAssets>()
@@ -46,7 +46,20 @@ impl Landscape {
 						))
 						.with_default_density(1_000.0),
 				));
+
+				if level == CurrentLevel::Shaders {
+					world
+						.commands()
+						.entity(ctx.entity)
+						.insert(DespawnOnExit(LoadingScreen::Shaders));
+				} else {
+					world
+						.commands()
+						.entity(ctx.entity)
+						.insert(DespawnOnExit(Screen::Gameplay));
+				}
 			}
+			_ => {}
 		}
 	}
 }

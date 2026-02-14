@@ -86,11 +86,7 @@ impl CurrentLevel {
 
 pub(crate) fn spawn_landscape(mut cmd: Commands, scatter_root: Single<Entity, With<ScatterRoot>>) {
 	debug!("Spawning landscape...");
-	cmd.spawn((
-		Landscape,
-		DespawnOnExit(Screen::Gameplay),
-		ChildOf(*scatter_root),
-	));
+	cmd.spawn((Landscape, ChildOf(*scatter_root)));
 }
 
 /// A system that spawns the main level.
@@ -441,11 +437,12 @@ fn advance_level(
 	current_level: Res<CurrentLevel>,
 ) {
 	match *current_level {
-		CurrentLevel::Shaders => commands.queue(advance_level_command::<LevelOneAssets>()),
 		CurrentLevel::DayOne => commands.queue(advance_level_command::<LevelTwoAssets>()),
 		CurrentLevel::DayTwo => commands.queue(advance_level_command::<LevelTrainAssets>()),
 		CurrentLevel::Train => commands.queue(advance_level_command::<LevelKarolineAssets>()),
-		CurrentLevel::Karoline => commands.queue(advance_level_command::<LevelOneAssets>()),
+		CurrentLevel::Karoline | CurrentLevel::Shaders => {
+			commands.queue(advance_level_command::<LevelOneAssets>())
+		}
 	};
 }
 
