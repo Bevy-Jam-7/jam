@@ -46,17 +46,20 @@ pub fn update_density_map(
 	mut assets: ResMut<Assets<Image>>,
 	mut level_assets: ResMut<EnvironmentAssets>,
 ) {
-	for ev in ev_asset.read() {
-		if let AssetEvent::Modified { id, .. } = ev {
-			if *id == level_assets.grass_density_map.id() {
-				level_assets.grass_density_map = assets.get_strong_handle(*id).unwrap();
-			}
-			if *id == level_assets.rock_density_map.id() {
-				level_assets.rock_density_map = assets.get_strong_handle(*id).unwrap();
-			}
-			if *id == level_assets.mushroom_density_map.id() {
-				level_assets.mushroom_density_map = assets.get_strong_handle(*id).unwrap();
-			}
+	for id in ev_asset.read().filter_map(|ev| {
+		let AssetEvent::Modified { id, .. } = ev else {
+			return None;
+		};
+		Some(id)
+	}) {
+		if *id == level_assets.grass_density_map.id() {
+			level_assets.grass_density_map = assets.get_strong_handle(*id).unwrap();
+		}
+		if *id == level_assets.rock_density_map.id() {
+			level_assets.rock_density_map = assets.get_strong_handle(*id).unwrap();
+		}
+		if *id == level_assets.mushroom_density_map.id() {
+			level_assets.mushroom_density_map = assets.get_strong_handle(*id).unwrap();
 		}
 	}
 }
