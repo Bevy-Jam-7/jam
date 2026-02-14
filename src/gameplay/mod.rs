@@ -12,6 +12,8 @@ use bevy::{
 };
 use bevy_trenchbroom::prelude::*;
 
+use crate::screens::Screen;
+
 mod animation;
 pub(crate) mod core;
 pub(crate) mod crosshair;
@@ -127,6 +129,10 @@ impl TargetName {
 			if let Some(mut resource) = world.get_resource_mut::<TargetnameEntityIndex>() {
 				resource.register_entity(ctx.entity, &targetname);
 			}
+			world
+				.commands()
+				.entity(ctx.entity)
+				.insert(DespawnOnExit(Screen::Gameplay));
 		}
 	}
 
