@@ -2643,12 +2643,12 @@
 "classname" "light_point"
 "origin" "-3480 -232 136"
 "range" "20.000000"
-"intensity" "100000.000000"
+"intensity" "300000.000000"
 }
 // entity 67
 {
 "classname" "player"
-"origin" "-3176 -120 120"
+"origin" "-168 -248 168"
 }
 // entity 68
 {
