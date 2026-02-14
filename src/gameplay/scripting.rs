@@ -8,7 +8,6 @@ use bevy::{
 	prelude::*,
 	reflect::{DynamicStruct, ReflectFromPtr, ReflectMut, ReflectRef, TypeRegistry},
 };
-use bevy_inspector_egui::restricted_world_view::Error;
 
 use crate::{
 	gameplay::{TargetName, TargetnameEntityIndex, interaction::InteractEvent},
@@ -223,13 +222,13 @@ unsafe fn mut_untyped_to_reflect<'a>(
 	value: MutUntyped<'a>,
 	type_registry: &TypeRegistry,
 	type_id: TypeId,
-) -> Result<Mut<'a, dyn Reflect>, Error> {
+) -> Result<Mut<'a, dyn Reflect>> {
 	let registration = type_registry
 		.get(type_id)
-		.ok_or(Error::NoTypeRegistration(type_id))?;
+		.ok_or_else(|| format!("No type registration for type ID: {type_id:?}"))?;
 	let reflect_from_ptr = registration
 		.data::<ReflectFromPtr>()
-		.ok_or(Error::NoTypeData(type_id, "ReflectFromPtr"))?;
+		.ok_or_else(|| format!("No type data for type ID: {type_id:?}"))?;
 
 	assert_eq!(reflect_from_ptr.type_id(), type_id);
 
