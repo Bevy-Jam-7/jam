@@ -20,7 +20,7 @@ pub(super) fn plugin(app: &mut App) {
 		Update,
 		(
 			update_loading_shaders_label,
-			enter_spawn_level_screen.run_if(all_pipelines_loaded),
+			exit_shader_level.run_if(all_pipelines_loaded),
 		)
 			.chain()
 			.run_if(in_state(LoadingScreen::Shaders)),
@@ -44,7 +44,7 @@ fn spawn_or_skip_shader_compilation_loading_screen(
 	));
 }
 
-fn enter_spawn_level_screen(mut cmd: Commands) {
+fn exit_shader_level(mut cmd: Commands) {
 	cmd.trigger(AdvanceLevel);
 }
 
