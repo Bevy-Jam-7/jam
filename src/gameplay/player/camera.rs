@@ -7,6 +7,7 @@ use std::iter;
 
 use super::Player;
 use crate::gameplay::fever::postprocess::FeverPostProcessSettings;
+use crate::gameplay::level::CurrentLevel;
 use crate::{
 	CameraOrder, PostPhysicsAppSystems, RenderLayer,
 	gameplay::animation::{AnimationPlayerAncestor, AnimationPlayerOf, AnimationPlayers},
@@ -61,7 +62,7 @@ pub(crate) struct PlayerCameraParent;
 #[require(Transform, Visibility, PhysicsPickingCamera {
 	max_distance: INTERACTION_DISTANCE,
 }, PhysicsPickingFilter(SpatialQueryFilter::from_mask(!CollisionLayer::Stomach.to_bits() & !CollisionLayer::PlayerCharacter.to_bits())))]
-struct WorldModelCamera;
+pub(crate) struct WorldModelCamera;
 
 fn spawn_view_model(
 	add: On<Add, Player>,
@@ -69,12 +70,18 @@ fn spawn_view_model(
 	assets: Res<AssetServer>,
 	fov: Res<WorldModelFov>,
 	mut media: ResMut<Assets<ScatteringMedium>>,
+	current_level: Res<CurrentLevel>,
 ) {
 	use bevy_seedling::spatial::SpatialListener3D;
 
 	let medium = media.add(ScatteringMedium::default());
 
-	let exposure = Exposure { ev100: 12.0 };
+	let (exposure, env_light) = match *current_level {
+		CurrentLevel::DayOne => (13., 0.4),
+		CurrentLevel::DayTwo => (14., 0.2),
+		CurrentLevel::Train => (13., 0.4),
+		CurrentLevel::Karoline => (13., 0.4),
+	};
 
 	// Spawn the player camera
 	commands
@@ -129,7 +136,7 @@ fn spawn_view_model(
 						| RenderLayer::GIZMO3
 						| RenderLayer::GRASS,
 				),
-				exposure,
+				Exposure { ev100: exposure },
 				Bloom::NATURAL,
 				(
 					Msaa::Off,
@@ -143,7 +150,7 @@ fn spawn_view_model(
 					// See https://github.com/bevyengine/bevy/issues/20459
 					ScreenSpaceAmbientOcclusion::default(),
 					AtmosphereEnvironmentMapLight {
-						intensity: 0.5,
+						intensity: env_light,
 						..default()
 					},
 					Atmosphere::earthlike(medium.clone()),
