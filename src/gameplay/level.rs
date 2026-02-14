@@ -12,7 +12,7 @@ use crate::{
 };
 use bevy::input::common_conditions::input_just_pressed;
 use bevy::prelude::*;
-use bevy_eidolon::prelude::GpuCullCompute;
+use bevy_eidolon::prelude::*;
 use bevy_feronia::prelude::*;
 use bevy_landmass::prelude::*;
 use bevy_rerecast::prelude::*;
