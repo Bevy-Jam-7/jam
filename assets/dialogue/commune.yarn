@@ -98,6 +98,7 @@ Dave: That's me! #line:12496552
   Dave: Maybe give it a try. #line:11792722
   <<create_objectve "leave", "Leave", 2.0>>
   <<create_subobjective "jump", "Jump of, trust">, 3.0>
+  <<complete_objective "look_around">>
 <<set $talked = $talked + 1>>
 ===
 
