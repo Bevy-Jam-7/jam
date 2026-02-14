@@ -128,6 +128,11 @@ pub(crate) fn spawn_level(
 				SceneRoot(level_two_assets.level.clone()),
 				DespawnOnExit(Screen::Gameplay),
 				Level,
+				children![(
+					Name::new("Level Music"),
+					SamplePlayer::new(level_two_assets.music.clone()).looping(),
+					MusicPool
+				)],
 			));
 
 			let archipelago = commands
@@ -146,11 +151,6 @@ pub(crate) fn spawn_level(
 					archipelago_ref: ArchipelagoRef3d::new(archipelago),
 					nav_mesh: NavMeshHandle3d(level_assets.navmesh.clone()),
 				},
-				children![(
-					Name::new("Level Music"),
-					SamplePlayer::new(level_two_assets.music.clone()).looping(),
-					MusicPool
-				)],
 			));
 		}
 		CurrentLevel::Train => {
