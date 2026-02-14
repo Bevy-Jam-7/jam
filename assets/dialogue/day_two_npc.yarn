@@ -1,113 +1,57 @@
-title: D2Npc1
----
-Jan: I wish I had a Visa, but they say it's blocked on BSN. #line:1293892
-Jan: The visa agency says they'd need to re-issue all the visas anyway, so might as well wait now, right? #line:5643816
--> Oof #line:9878240
-  Jan: Don't worry, it's here any day now. #line:2245231
--> You sure you want to wait? #line:11170606
-  Jan: Corporate says that patience is a virtue and increases shareholder value. #line:7825950
-===
-
 title: D2Npc2
 ---
-Jannet: Scrolling the internet almost makes you wish for a Y2K. #line:8076018
-Jannet: ... #line:9148112
-Jannet: ... #line:11811933
-Jannet: I should start estrogen. #line:6253687
+Jannet: The office is much lonelier than usual. #line:12510488 
+Jannet: But I don't mind. #line:16098898 
+Jannet: I allowed myself to be me. #line:10191732 
+Jannet: I'm happy. #line:11798594 
 ===
 
 title: D2Npc3
 ---
-Janitor: My friend tried to tell me about how burgers control the world. #line:7665656
-Janitor: But then LLManager made him go on holiday. #line:9665027
-Janitor: Said he had the "Proliterian Fever". #line:2562802
-Janitor: I miss him. #line:3278106
+Janitor: John got the fever. #line:8061815 
+Janitor: I miss him too. #line:3651679 
+Janitor: Will I be missed? #line:1573424 
 ===
 
 title: D2Npc4
 ---
-Janissary: I could be relaxing on a beach sipping on a cocktail of moonshine, speed, and managers tears... #line:13452808
-Janissary: But instead I computer. #line:12191278
+Janissary: I'm a bit shy about the generator being so close to me. #line:13927065 
+Janissary: I mean, generator? I hardly know her. #line:12216199 
 ===
 
 title: D2Npc5
 ---
-Janibal Lectern: I love computer. #line:10583675
-Janibal Lectern: It shows me coporate propoganda 24/7. #line:7832744
-Janibal Lectern: I want to become a propoganda maker when I grow up. #line:11242966
+Janibal Lectern: Did you know that instead of doing drugs, you could consume Pepsi? #line:4863241 
+Janibal Lectern: You should consider it. It is the only drink. #line:4232730 
+Janibal Lectern: How is my propaganda improving? #line:1997580 
 ===
 
 title: D2Npc6
 ---
-
-<<if $birthday_celebrated == false>>
-  Jannick: I would go to a therapist but the last one I went to didn't understand exposure therapy. #line:10862833
-  Jannick: I think he might have been hitting on me. #line:16650544
-  -> Happy birthday #line:14101480
-    <<set $birthday_celebrated = true>>
-    <<complete_objective "w3_soc">>
-    Jannick: He tried to take me out for dinner on my birthday. #line:5147445
-    Jannick: Said I was very special. #line:16702600
-    Jannick: Are you going to do that to. #line:12841241
-    -> No #line:7448653
-      <<set $date = false>>
-      Jannick: Then save your happy birthday. #line:13623919
-    -> Yes #line:2528642
-      <<set $date = true>>
-      Jannick: I'll be waiting under the big green sign. #line:9393060
-
-<<else>>
-  <<if $date == true>>
-    I can't wait for our date tonight. #line:5041477
-  <<else>>
-    Leave me alone, you don't even love me like he did. #line:10786436
-  <<endif>>
-<<endif>>
+Jannick: My birthday is over. #line:7584525 
+Jannick: My workday isn't. I'm still here. #line:10090132 
+Jannick: ... #line:2374192 
+Jannick: Thanks for remembering me. #line:6442536 
 ===
 
-title: D2Npc7
----
-Janderstülz: Last time I tried to say no to LLManager they sent me to Scunthorpe. #line:6291781
-Janderstülz: And like I don't have anything against the British, I just don't think they should be around kids. #line:173220
-===
-
-title: D2Npc8
----
-Janthorpe: Janderstülz hates me. #line:2314710
-Janthorpe: He says he's not a racist, but all the racists say that. #line:16669999
-Janthorpe: I should know, I'm a racist too. #line:16616481
-===
-
-
-title: D2Npc9
----
-Janniri: I used to be a tiler. #line:10154420
-Janniri: But then the market crashed when big concrete took over. #line:4963426
-===
 
 title: D2Npc10
 ---
-Jandice: I used to drink two bottles a day. #line:4024338
-Jandice: But my doctor said that glass was bad for my digestive system. #line:12276008
-Jandice: Now I drink three bottles a day. #line:10261467
+Jandice: I swear, I don't have a problem with alcohol. #line:13307224 
+Jandice: But I do without. #line:6521554 
 ===
 
 title: D2Npc11
 ---
-Janateer: I swaped Jandice's vodka for water. #line:16196750
-Janateer: He can't tell the difference when he's drunk. #line:12657644
-===
-
-title: D2Npc12
----
-John: Why did my parents name me this way. #line:6181528
-John: I just want to be normal. #line:5010143
+Janateer: Janissary thinks the machine is a generator. #line:16412261 
+Janateer: Fool that he is. #line:3548202 
+Janateer: The machine is something much bigger than us all. #line:3792523 
 ===
 
 title: D2NpcHint
 ---
-Jandice: The generator spoke to me. #line:168938
-Jandice: It told me to use right click to vomit. #line:11612151
-Jandice: But I can't find my mouse. #line:6161458
-Jandice: Truly, I have no mouse and I must scream. #line:14718875
+Janateer: The machine spoke to me. #line:168938
+Janateer: It told me to use right click to vomit. #line:11612151
+Janateer: But I can't find my mouse. #line:6161458
+Janateer: Truly, I have no mouse and I must scream. #line:14718875
 ===
