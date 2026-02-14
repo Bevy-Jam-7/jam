@@ -4266,9 +4266,9 @@
 // entity 174
 {
 "classname" "npc"
-"yarn_node" "IntroNpc10"
-"origin" "-2232 296 152"
-"angles" "0 135 0"
+"yarn_node" "D2NpcHint"
+"origin" "-2072 296 152"
+"angles" "0 15 0"
 "_tb_layer" "4"
 }
 // entity 175
