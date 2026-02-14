@@ -59,23 +59,6 @@ fn setup(
 			UiRootNode,
 		))
 		.with_children(|parent| {
-			parent.spawn((
-				fmt_name("name"),
-				Text::default(),
-				text_style::name(),
-				Node {
-					margin: UiRect {
-						left: Val::Px(TEXT_BORDER_HORIZONTAL / 2.0),
-						bottom: Val::Px(-8.0),
-						..default()
-					},
-					..default()
-				},
-				ZIndex(1),
-				DialogueNameNode,
-				Label,
-			));
-
 			parent
 				.spawn((
 					fmt_name("dialogue"),
@@ -99,6 +82,19 @@ fn setup(
 					))),
 				))
 				.with_children(|parent| {
+					// Speaker name
+					parent.spawn((
+						fmt_name("name"),
+						Text::default(),
+						text_style::name(),
+						Node {
+							margin: UiRect::bottom(Val::Px(10.0)),
+							..default()
+						},
+						DialogueNameNode,
+						Label,
+					));
+
 					// Dialog itself
 					parent.spawn((
 						fmt_name("text"),
@@ -108,8 +104,7 @@ fn setup(
 						DialogueNode,
 						Label,
 					));
-				})
-				.with_children(|parent| {
+
 					// Options
 					parent.spawn((
 						fmt_name("options"),
@@ -211,8 +206,8 @@ where
 	});
 }
 
-const DIALOG_WIDTH: f32 = 800.0 * 0.8;
-const TEXT_BORDER_HORIZONTAL: f32 = 120.0;
+const DIALOG_WIDTH: f32 = 600.0;
+const TEXT_BORDER_HORIZONTAL: f32 = 60.0;
 const TEXT_BORDER_TOP: f32 = 30.0;
 const TEXT_BORDER_BOTTOM: f32 = TEXT_BORDER_TOP + 10.0;
 
