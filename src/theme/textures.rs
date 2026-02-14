@@ -23,9 +23,10 @@ pub(crate) fn plugin(app: &mut App) {
 
 	app.add_plugins(UiMaterialPlugin::<ButtonMaterial>::default());
 	app.add_observer(on_add_button);
+	app.add_systems(Update, animate_button_material);
 }
 
-#[derive(AsBindGroup, Asset, TypePath, Debug, Clone)]
+#[derive(AsBindGroup, Asset, TypePath, Debug, Default, Clone)]
 pub struct ButtonMaterial {
 	/// Color multiplied with the image
 	#[uniform(0)]
@@ -37,6 +38,10 @@ pub struct ButtonMaterial {
 	/// Color of the image's border
 	#[uniform(3)]
 	pub border_color: Vec4,
+	#[uniform(4)]
+	time: f32,
+	#[uniform(4)]
+	padding: Vec3,
 }
 
 impl UiMaterial for ButtonMaterial {
@@ -49,6 +54,7 @@ fn on_add_button(
 	add: On<Add, Button>,
 	mut materials: ResMut<Assets<ButtonMaterial>>,
 	mut query: Query<&mut MaterialNode<ButtonMaterial>>,
+	time: Res<Time<Real>>,
 ) {
 	let Ok(mut material_node) = query.get_mut(add.entity) else {
 		return;
@@ -57,9 +63,23 @@ fn on_add_button(
 		color: Vec4::ONE,
 		color_texture: BUTTON_TEXTURE,
 		border_color: Vec4::ZERO,
+		time: time.elapsed_secs(),
+		padding: Vec3::ZERO,
 	};
 	let material_handle = materials.add(material);
 	material_node.0 = material_handle;
+}
+
+fn animate_button_material(
+	mut materials: ResMut<Assets<ButtonMaterial>>,
+	query: Query<&MaterialNode<ButtonMaterial>>,
+	time: Res<Time<Real>>,
+) {
+	for material_node in query.iter() {
+		if let Some(material) = materials.get_mut(&material_node.0) {
+			material.time = time.elapsed_secs();
+		}
+	}
 }
 
 fn load_image(bytes: &[u8], _path: String) -> Image {
