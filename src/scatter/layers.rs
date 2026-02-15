@@ -58,7 +58,7 @@ impl RockLayer {
 		cmd.spawn((
 			ChildOf(ctx.entity),
 			SceneRoot(rocks),
-			collider_hierarchy.clone(),
+			collider_hierarchy,
 		))
 		.observe(disable_shadow_casting_on_instance_ready);
 	}
@@ -115,9 +115,9 @@ impl MushroomLayer {
 
 		cmd.spawn_batch([(
 			ChildOf(ctx.entity),
-			SceneRoot(mushroom.clone()),
+			SceneRoot(mushroom),
 			RigidBody::Static,
-			collider_hierarchy.clone(),
+			collider_hierarchy,
 		)]);
 	}
 }
