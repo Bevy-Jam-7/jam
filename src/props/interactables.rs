@@ -35,7 +35,6 @@ impl InteractableEntity {
 		}
 		if let Some(values) = world.get::<InteractableEntity>(ctx.entity).cloned() {
 			if values.is_edible {
-				error!("a");
 				world
 					.commands()
 					.entity(ctx.entity)
