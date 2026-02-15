@@ -995,7 +995,7 @@ dependencies = [
 [[package]]
 name = "bevy_feronia"
 version = "0.8.1"
-source = "git+https://github.com/NicoZweifel/bevy_feronia?branch=fix-deferred#1068d43e236d6f924251966635bf28b57fc50686"
+source = "git+https://github.com/NicoZweifel/bevy_feronia?branch=fix-deferred#4a28c80472107500c26a8bc13b60182fc6fc822c"
 dependencies = [
  "avian3d",
  "bevy_app",
@@ -6869,11 +6869,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5773a4c030a19d9bfaa090f49746ff35c75dfddfa700df7a5939d5e076a57039"
 dependencies = [
  "lazy_static",
+ "symphonia-bundle-mp3",
  "symphonia-codec-pcm",
  "symphonia-codec-vorbis",
  "symphonia-core",
  "symphonia-format-ogg",
  "symphonia-format-riff",
+ "symphonia-metadata",
+]
+
+[[package]]
+name = "symphonia-bundle-mp3"
+version = "0.5.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4872dd6bb56bf5eac799e3e957aa1981086c3e613b27e0ac23b176054f7c57ed"
+dependencies = [
+ "lazy_static",
+ "log",
+ "symphonia-core",
  "symphonia-metadata",
 ]
 

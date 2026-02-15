@@ -7,14 +7,14 @@ use avian3d::prelude::*;
 use bevy::ecs::lifecycle::HookContext;
 use bevy::ecs::world::DeferredWorld;
 use bevy::prelude::*;
-use bevy_feronia::prelude::{HeightMapState, ScatterState};
+use bevy_feronia::prelude::*;
 
 #[derive(Event)]
 pub struct ScatterDone;
 
 #[derive(Component)]
 #[component(on_add = Self::on_add)]
-#[require(RigidBody::Static, Name::new("Landscape"))]
+#[require(RigidBody::Static, Name::new("Landscape"), MapHeight)]
 pub struct Landscape;
 
 impl Landscape {
@@ -22,12 +22,12 @@ impl Landscape {
 		world
 			.get_resource_mut::<NextState<ScatterState>>()
 			.unwrap()
-			.set(ScatterState::Setup);
+			.set(ScatterState::Loading);
 
 		world
 			.get_resource_mut::<NextState<HeightMapState>>()
 			.unwrap()
-			.set(HeightMapState::Setup);
+			.set(HeightMapState::Loading);
 
 		let level = world.get_resource::<CurrentLevel>().cloned().unwrap();
 		match level {

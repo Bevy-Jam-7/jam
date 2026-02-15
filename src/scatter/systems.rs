@@ -17,29 +17,41 @@ pub fn spawn_scatter_layers(mut cmd: Commands, landscape: Single<Entity, With<Sc
 	cmd.spawn((GrassLayer, ChildOf(landscape)));
 }
 
-pub fn toggle_chunked_grass(
+pub fn clear_scatter_root(
+	mut mw_clear_root: MessageWriter<ClearScatterRoot>,
+	scatter_root: Single<Entity, With<ScatterRoot>>,
+) {
+	debug!("Clearing scatter root...");
+	mw_clear_root.write((*scatter_root).into());
+}
+
+pub fn toggle_layers(
 	mut cmd: Commands,
-	q_grass_layer: Query<Entity, With<GrassLayer>>,
+	q_layer: Query<Entity, With<ScatterLayer>>,
 	current_level: Res<CurrentLevel>,
 ) {
-	let chunked_grass = matches!(*current_level, CurrentLevel::Shaders | CurrentLevel::DayTwo);
-	for layer in q_grass_layer.iter() {
-		if chunked_grass {
-			cmd.entity(layer).insert(ScatterChunked);
-		} else {
-			cmd.entity(layer).remove::<ScatterChunked>();
-		}
+	let enabled = matches!(
+		*current_level,
+		CurrentLevel::Commune | CurrentLevel::Shaders
+	);
+	for layer in q_layer.iter() {
+		cmd.entity(layer).insert(ScatterLayerEnabled(enabled));
 	}
+}
+
+pub fn advance_to_setup(
+	mut ns_scatter: ResMut<NextState<ScatterState>>,
+	mut ns_height_state: ResMut<NextState<HeightMapState>>,
+) {
+	ns_scatter.set(ScatterState::Setup);
+	ns_height_state.set(HeightMapState::Setup);
 }
 
 pub fn scatter(
 	mut cmd: Commands,
-	mut mw_clear_root: MessageWriter<ClearScatterRoot>,
 	root: Single<Entity, With<ScatterRoot>>,
 	current_level: Res<CurrentLevel>,
 ) {
-	mw_clear_root.write((*root).into());
-
 	match *current_level {
 		CurrentLevel::Commune | CurrentLevel::Shaders => {
 			debug!("Scattering...");
@@ -75,5 +87,5 @@ pub fn update_density_map(
 }
 
 pub fn spawn_scatter_root(mut cmd: Commands) {
-	cmd.spawn((ScatterRoot::default(), ChunkRoot::default(), MapHeight));
+	cmd.spawn((ScatterRoot::default(), ChunkRoot::default()));
 }

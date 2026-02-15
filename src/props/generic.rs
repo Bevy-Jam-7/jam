@@ -72,7 +72,6 @@ pub(super) fn plugin(app: &mut App) {
 		.load_asset::<Gltf>(Teeth::model_path())
 		.load_asset::<Gltf>(Speaker::model_path())
 		.load_asset::<Gltf>(Jesus::model_path())
-		.load_asset::<Gltf>(Jesus::model_path())
 		.load_asset::<Gltf>(Cctv::model_path())
 		.load_asset::<Gltf>(Trash::model_path());
 

@@ -29,33 +29,17 @@
 	],
 	"materials":[
 		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularColorFactor":[
-						0.016761956736445427,
-						0.016761956736445427,
-						0.016761956736445427
-					],
-					"specularColorTexture":{
-						"index":0
-					}
-				},
-				"KHR_materials_ior":{
-					"ior":1000
-				}
-			},
 			"name":"cctvcamera.003",
 			"normalTexture":{
-				"index":1
+				"index":0
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":2
+					"index":1
 				},
 				"metallicFactor":0,
 				"metallicRoughnessTexture":{
-					"index":3
+					"index":2
 				}
 			}
 		}
@@ -104,18 +88,9 @@
 		{
 			"sampler":0,
 			"source":2
-		},
-		{
-			"sampler":0,
-			"source":3
 		}
 	],
 	"images":[
-		{
-			"mimeType":"image/png",
-			"name":"Image_1",
-			"uri":"Image_1.png"
-		},
 		{
 			"mimeType":"image/png",
 			"name":"Image_2",

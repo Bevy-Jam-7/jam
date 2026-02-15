@@ -144,13 +144,115 @@ title: beep
 <<declare $beeps = 0>>
 <<if $beeps == 0>>
   <<set $beeps = $beeps + 1>>
-  beep: Beep #line:13738479 
+  CCTV: Beep #line:13738479
 <<elseif $beeps == 1>>
   <<set $beeps = $beeps + 1>>
-  beep: Beep beep #line:2729136 
+  CCTV: Beep beep #line:2729136
 <<elseif $beeps == 2>>
   <<set $beeps = $beeps + 1>>
+  CCTV: Beep boop #line:12283268
+<<elseif $beeps == 3>>
+  <<set $beeps = $beeps + 1>>
+  CCTV: Beep #line:6752250
+<<elseif $beeps == 4>>
+  <<set $beeps = $beeps + 1>>
+  CCTV: I see you. #line:12424581
 <<else>>
-  beep: Beep #line:6752250 
+  CCTV: Beep. #line:16042998
 <<endif>>
+===
+
+title: guardian
+---
+<<if get_current_objective() == "obj_1">>
+  Glossy Jesus: Greetings, child. #line:8420538
+  Glossy Jesus: Are you a pilgrim, taking on the blessed journey? #line:6913331
+  -> The what now? #line:10172214
+    Glossy Jesus: The journey to see the pinnacle of human achievement. #line:571454
+  -> Why are you glossy? #line:16487685
+    Glossy Jesus: Wow, rude. I don't ask you about your skin. #line:9666913
+    -> Maybe you should #line:9918401
+      Glossy Jesus: Okay, I'll bite: why is your skin so smooth? #line:3091800
+      -> Estrogen #line:3966975
+        Glossy Jesus: *Takes notes* #line:16524615
+        -> Anyhow, what are you doing here? #line:1107112
+          Glossy Jesus: I'm guiding those who seek to see the pinnacle of human achievement. #line:6388150
+    -> Okay, okay, sorry #line:2437556
+      Glossy Jesus: Sorries accepted, child #line:7144465
+        -> Anyhow, what are you doing here? #line:5043295
+          Glossy Jesus: I'm guiding those who seek to see the pinnacle of human achievement. #line:9197329
+  Glossy Jesus: Are you? #line:11701961
+  -> Uuuh #line:406524
+  -> Eeeeh #line:1706009
+  Glossy Jesus: You seem lost and sick of flesh. We can help. #line:13283932
+  -> Is this a religion metaphor? #line:9558524
+    Glossy Jesus: Are you comfortable with that? #line:7479622
+      -> No, not really #line:11277672
+          <<set $religion = "Dude">>
+          Glossy {$religion}: Noted. #line:15247284
+      -> Yeah, why not #line:15746355
+        Glossy Jesus: Great, then please tell me the religion you are most comfortable with using as the strawman. #line:6065672
+        -> Jesusism #line:16502417
+          <<set $religion = "Jesus">>
+          Glossy {$religion}: Noted. #line:11375134
+        -> Allahism #line:8251446
+        -> Buddhaism #line:2494017
+          <<set $religion = "Not Jesus">>
+          Glossy {$religion}: Noted. #line:12039955
+        -> Atheism #line:4046466
+          Glossy Jesus: That's not a religion. #line:5897190
+          -> St. Darwin's Church of Evolution #line:3344592
+            <<set $religion = "St. Darwin">>
+            Glossy {$religion}: Fair enough. #line:4627260
+
+  -> You said something about helping me out #line:12942039
+    Glossy {$religion}: Yes, child. Seek the Library, that is the only way. Lest this land swallow you whole. #line:16152538
+    -> That's going to be hard with this big old fence here #line:6674040
+      Glossy {$religion}: One hand washes the other child. Do a service for us, and I will lift the gate. #line:16702576
+      -> What do I do? #line:6858559
+        <<complete_objective "obj_1">>
+        Glossy {$religion}: Cleanse this holy station of the filth the rowdy teenagers scattered. #line:15127642
+
+<<elseif get_current_objective() == "obj_2">>
+  Glossy {$religion}: The path is there for all to follow. #line:11928825
+  Glossy {$religion}: Once the station is clear. #line:1426473
+<<elseif get_current_objective() == "obj_3">>
+  Glossy {$religion}: Excellent work, my child. #line:15160383
+  -> You know I'm an adult, right? #line:1062072
+    Glossy {$religion}: It's not meant literally. #line:10602682
+    -> Fair enough #line:7024949
+      <<set $k_name = "child">>
+      Glossy {$religion}: Glad to hear. #line:3012934
+    -> It's patronizing #line:8522012
+      <<set $k_name = "adult">>
+      Glossy {$religion}: Very well, I will respect your wishes. #line:14606435
+  Glossy {$religion}: Anyways, you did well. #line:2107112
+  -> Will you help me now? #line:4411852
+    Glossy {$religion}: Not yet, {$k_name}. #line:8981252
+    <<complete_objective "obj_3">>
+    <<set_value "teen" "is_edible" "true">>
+    <<set_value "teen" "interaction_text_override" "Consume">>
+    <<set_value "teen" "completes_subobjective" "obj_4">>
+    Glossy {$religion}: As part of your initiation, you need to consume one more thing. #line:2924679
+    -> But there's nothing here #line:1475546
+      Glossy {$religion}: There is, for those with eyes to see and mouths to feed. #line:14938249
+  <<elseif get_current_objective() == "obj_4">>
+    Glossy {$religion}: Consume them. #line:2270695
+<<endif>>
+===
+
+title: teen
+dir: karoline
+---
+  Rowdy Teen: Oy mate, you got a ciggie? #line:8885986
+  -> Sorry, there's no 3D model for that #line:9147147
+    Rowdy Teen: Pish #line:10184414
+  -> Is this your trash? <<if get_current_objective() == "obj_2">> #line:9230450
+    Rowdy Teen: What trash? #line:5149388
+    Rowdy Teen: You mean the artisanal plastique bagges? #line:15131461
+    Rowdy Teen: Don't you touch those. #line:12012983
+  -> I had to pick up all your stuff. Don't litter next time. <<if get_current_objective() == "obj_3">> #line:8171906
+    Rowdy Teen: You took them?! #line:16612270
+    Rowdy Teen: Do you have any idea how much those bags cost?! #line:181232
+    Rowdy Teen: Go to heck. #line:11845513
 ===
