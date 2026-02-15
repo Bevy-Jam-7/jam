@@ -4,7 +4,7 @@
 use bevy::prelude::*;
 
 mod preload_assets;
-mod shader_compilation;
+pub mod shader_compilation;
 mod spawn_level;
 
 use crate::screens::Screen;
