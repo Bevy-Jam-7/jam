@@ -78,7 +78,7 @@ impl From<MushroomDensitySetting> for DistributionDensity {
 			MushroomDensitySetting::Low => 60.into(),
 			MushroomDensitySetting::Medium => 80.into(),
 			MushroomDensitySetting::High => 100.into(),
-			MushroomDensitySetting::Ultra => 120.into(),
+			MushroomDensitySetting::Ultra => 140.into(),
 		}
 	}
 }
@@ -115,7 +115,7 @@ impl From<RockDensitySetting> for DistributionDensity {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Reflect, Default, PartialOrd, Ord)]
-pub enum VisibilityRangeQuality {
+pub enum RockVisibilityRangeQuality {
 	Low,
 	Medium,
 	#[default]
@@ -123,30 +123,108 @@ pub enum VisibilityRangeQuality {
 	Ultra,
 }
 
-impl From<QualitySetting> for VisibilityRangeQuality {
+impl From<QualitySetting> for RockVisibilityRangeQuality {
 	fn from(value: QualitySetting) -> Self {
 		match value {
-			QualitySetting::Low => VisibilityRangeQuality::Low,
-			QualitySetting::Medium => VisibilityRangeQuality::Medium,
-			QualitySetting::High => VisibilityRangeQuality::High,
-			QualitySetting::Ultra => VisibilityRangeQuality::Ultra,
+			QualitySetting::Low => RockVisibilityRangeQuality::Low,
+			QualitySetting::Medium => RockVisibilityRangeQuality::Medium,
+			QualitySetting::High => RockVisibilityRangeQuality::High,
+			QualitySetting::Ultra => RockVisibilityRangeQuality::Ultra,
 		}
 	}
 }
 
-impl From<VisibilityRangeQuality> for LodConfig {
-	fn from(quality: VisibilityRangeQuality) -> Self {
+impl From<RockVisibilityRangeQuality> for LodConfig {
+	fn from(quality: RockVisibilityRangeQuality) -> Self {
 		match quality {
-			VisibilityRangeQuality::Low => Self {
-				distance: vec![20.0.into(), default()],
+			RockVisibilityRangeQuality::Low => Self {
+				distance: vec![60.0.into()],
+				..Self::none()
+			},
+			RockVisibilityRangeQuality::Medium => Self {
+				distance: vec![180.0.into()],
+				..Self::none()
+			},
+			RockVisibilityRangeQuality::High | RockVisibilityRangeQuality::Ultra => Self {
+				distance: vec![default()],
+				..Self::none()
+			},
+		}
+	}
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Reflect, Default, PartialOrd, Ord)]
+pub enum MushroomVisibilityRangeQuality {
+	Low,
+	Medium,
+	#[default]
+	High,
+	Ultra,
+}
+
+impl From<QualitySetting> for MushroomVisibilityRangeQuality {
+	fn from(value: QualitySetting) -> Self {
+		match value {
+			QualitySetting::Low => MushroomVisibilityRangeQuality::Low,
+			QualitySetting::Medium => MushroomVisibilityRangeQuality::Medium,
+			QualitySetting::High => MushroomVisibilityRangeQuality::High,
+			QualitySetting::Ultra => MushroomVisibilityRangeQuality::Ultra,
+		}
+	}
+}
+
+impl From<MushroomVisibilityRangeQuality> for LodConfig {
+	fn from(quality: MushroomVisibilityRangeQuality) -> Self {
+		match quality {
+			MushroomVisibilityRangeQuality::Low => Self {
+				distance: vec![60.0.into()],
+				..Self::none()
+			},
+			MushroomVisibilityRangeQuality::Medium => Self {
+				distance: vec![180.0.into()],
+				..Self::none()
+			},
+			MushroomVisibilityRangeQuality::High | MushroomVisibilityRangeQuality::Ultra => Self {
+				distance: vec![default()],
+				..Self::none()
+			},
+		}
+	}
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Reflect, Default, PartialOrd, Ord)]
+pub enum GrassVisibilityRangeQuality {
+	Low,
+	Medium,
+	#[default]
+	High,
+	Ultra,
+}
+
+impl From<QualitySetting> for GrassVisibilityRangeQuality {
+	fn from(value: QualitySetting) -> Self {
+		match value {
+			QualitySetting::Low => GrassVisibilityRangeQuality::Low,
+			QualitySetting::Medium => GrassVisibilityRangeQuality::Medium,
+			QualitySetting::High => GrassVisibilityRangeQuality::High,
+			QualitySetting::Ultra => GrassVisibilityRangeQuality::Ultra,
+		}
+	}
+}
+
+impl From<GrassVisibilityRangeQuality> for LodConfig {
+	fn from(quality: GrassVisibilityRangeQuality) -> Self {
+		match quality {
+			GrassVisibilityRangeQuality::Low => Self {
+				distance: vec![30.0.into(), default()],
 				density: vec![1.0.into(), 0.3.into()],
 			},
-			VisibilityRangeQuality::Medium => Self {
+			GrassVisibilityRangeQuality::Medium => Self {
 				distance: vec![20.0.into(), 50.0.into(), default()],
 				density: vec![1.0.into(), 0.3.into(), 0.1.into()],
 			},
-			VisibilityRangeQuality::High => default(),
-			VisibilityRangeQuality::Ultra => Self {
+			GrassVisibilityRangeQuality::High => default(),
+			GrassVisibilityRangeQuality::Ultra => Self {
 				distance: vec![40.0.into(), 120.0.into(), 360.0.into(), default()],
 				density: vec![1.0.into(), 0.3.into(), 0.1.into(), default()],
 			},

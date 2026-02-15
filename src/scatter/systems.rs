@@ -72,6 +72,7 @@ pub fn toggle_rock_layer(
 		*current_level,
 		CurrentLevel::Commune | CurrentLevel::Shaders | CurrentLevel::Karoline
 	);
+
 	toggle::<ScatterLayerDisabled>(&mut cmd, q_layer.iter(), enabled);
 }
 

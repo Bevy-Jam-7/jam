@@ -42,7 +42,8 @@ pub(super) fn plugin(app: &mut App) {
 			update_fps_limiter_target_label,
 		)
 			.run_if(in_state(Menu::Settings)),
-	);
+	)
+	.add_observer(on_add_quality);
 }
 
 fn spawn_settings_menu(mut commands: Commands) {
@@ -107,11 +108,7 @@ fn spawn_settings_menu(mut commands: Commands) {
 							..default()
 						}
 					),
-					(widget::settings_button(
-						QualitySettingsLabel,
-						format!("{:?}", QualitySetting::default()),
-						change_quality
-					)),
+					(widget::settings_button(QualitySettingsLabel, "⟳", change_quality)),
 					// Camera Sensitivity
 					(
 						widget::label("Camera Sensitivity"),
@@ -440,17 +437,18 @@ fn go_back(screen: Res<State<Screen>>, mut next_menu: ResMut<NextState<Menu>>) {
 }
 
 fn change_quality(
-	on: On<Pointer<Click>>,
-	mut cmd: Commands,
-	mut label: Query<&mut Text, With<QualitySettingsLabel>>,
-	settings: ResMut<QualitySetting>,
+	_: On<Pointer<Click>>,
+	mut label: Single<&mut Text, With<QualitySettingsLabel>>,
+	mut settings: ResMut<QualitySetting>,
 ) {
-	let settings = settings.next();
-	println!("hellooo {settings:?}");
-	let Ok(mut label) = label.get_mut(on.entity) else {
-		return;
-	};
+	*settings = settings.next();
+	label.0 = format!("{:?}", *settings);
+}
 
-	cmd.insert_resource(settings);
-	label.0 = format!("{:?}", settings);
+fn on_add_quality(
+	_: On<Add, QualitySettingsLabel>,
+	mut label: Single<&mut Text, With<QualitySettingsLabel>>,
+	mut settings: ResMut<QualitySetting>,
+) {
+	label.0 = format!("{:?}", *settings);
 }

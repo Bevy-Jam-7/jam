@@ -1,5 +1,6 @@
 use crate::gameplay::level::EnvironmentAssets;
 use crate::props::effects::disable_shadow_casting_on_instance_ready;
+use crate::scatter::quality::*;
 use crate::third_party::avian3d::CollisionLayer;
 use crate::{RenderLayer, RenderLayers};
 
@@ -39,8 +40,9 @@ impl RockLayer {
 			.cloned()
 			.expect("Assets should be added!");
 
-		let mut cmd = world.commands();
-
+		let settings = world.resource::<QualitySetting>().clone();
+		let density_settings = RockDensitySetting::from(settings);
+		let visibility_settings = RockVisibilityRangeQuality::from(settings);
 		let collider_hierarchy =
 			ColliderConstructorHierarchy::new(ColliderConstructor::ConvexHullFromMesh)
 				.with_default_layers(CollisionLayers::new(
@@ -48,12 +50,12 @@ impl RockLayer {
 					LayerMask::ALL,
 				));
 
+		let mut cmd = world.commands();
+
 		cmd.entity(ctx.entity).insert((
 			DistributionPattern(rock_density_map),
-			LodConfig {
-				density: vec![100.0.into()],
-				..LodConfig::none()
-			},
+			DistributionDensity::from(density_settings),
+			LodConfig::from(visibility_settings),
 		));
 
 		cmd.spawn((ChildOf(ctx.entity), SceneRoot(rocks), collider_hierarchy))
@@ -81,7 +83,6 @@ impl RockLayer {
     Avoidance(0.02),
 	WindAffected,
 	SubsurfaceScattering,
-    DistributionDensity(100.)
 )]
 pub struct MushroomLayer;
 
@@ -96,19 +97,20 @@ impl MushroomLayer {
 			.cloned()
 			.expect("Assets should be added!");
 
+		let settings = world.resource::<QualitySetting>().clone();
+		let density_settings = MushroomDensitySetting::from(settings);
+		let visibility_settings = MushroomVisibilityRangeQuality::from(settings);
+		let collider_hierarchy =
+			ColliderConstructorHierarchy::new(ColliderConstructor::ConvexHullFromMesh)
+				.with_default_layers(CollisionLayers::new(CollisionLayer::Prop, LayerMask::ALL));
+
 		let mut cmd = world.commands();
 
 		cmd.entity(ctx.entity).insert((
 			DistributionPattern(mushroom_density_map),
-			LodConfig {
-				density: vec![100.0.into()],
-				..LodConfig::none()
-			},
+			DistributionDensity::from(density_settings),
+			LodConfig::from(visibility_settings),
 		));
-
-		let collider_hierarchy =
-			ColliderConstructorHierarchy::new(ColliderConstructor::ConvexHullFromMesh)
-				.with_default_layers(CollisionLayers::new(CollisionLayer::Prop, LayerMask::ALL));
 
 		cmd.spawn_batch([(
 			ChildOf(ctx.entity),
@@ -127,7 +129,6 @@ impl MushroomLayer {
 
     // Scatter options
 
-	DistributionDensity(150.0),
     InstanceJitter,
     InstanceScale,
     ScatterChunked,
@@ -165,39 +166,69 @@ impl GrassLayer {
 			grass_low,
 			grass_density_map,
 			..
-		} = world
-			.get_resource::<EnvironmentAssets>()
-			.cloned()
-			.expect("Assets should be added!");
+		} = world.resource::<EnvironmentAssets>().clone();
 
-		let mut cmd = world.commands();
-
-		cmd.entity(ctx.entity)
-			.insert((DistributionPattern(grass_density_map),));
-
-		// Just for collecting the asset, since we use avian anyway and the backend requires it when using the `avian` feature.
+		let settings = world.resource::<QualitySetting>().clone();
+		let density_settings = GrassDensitySetting::from(settings);
+		let visibility_settings = GrassVisibilityRangeQuality::from(settings);
 		let collider_hierarchy =
 			ColliderConstructorHierarchy::new(ColliderConstructor::ConvexHullFromMesh);
 
-		cmd.spawn_batch([
-			(
-				SceneRoot(grass),
-				ChildOf(ctx.entity),
-				LevelOfDetail(0),
-				collider_hierarchy.clone(),
-			),
-			(
-				SceneRoot(grass_med),
-				ChildOf(ctx.entity),
-				LevelOfDetail(1),
-				collider_hierarchy.clone(),
-			),
-			(
-				SceneRoot(grass_low),
-				ChildOf(ctx.entity),
-				LevelOfDetail(2),
-				collider_hierarchy,
-			),
-		]);
+		let mut cmd = world.commands();
+
+		cmd.entity(ctx.entity).insert((
+			DistributionPattern(grass_density_map),
+			DistributionDensity::from(density_settings),
+			LodConfig::from(visibility_settings),
+		));
+
+		match settings {
+			QualitySetting::Low => {
+				cmd.spawn_batch([(
+					SceneRoot(grass_low),
+					ChildOf(ctx.entity),
+					LevelOfDetail(0),
+					collider_hierarchy,
+				)]);
+			}
+			QualitySetting::Medium => {
+				cmd.spawn_batch([
+					(
+						SceneRoot(grass_med),
+						ChildOf(ctx.entity),
+						LevelOfDetail(0),
+						collider_hierarchy.clone(),
+					),
+					(
+						SceneRoot(grass_low),
+						ChildOf(ctx.entity),
+						LevelOfDetail(1),
+						collider_hierarchy,
+					),
+				]);
+			}
+			QualitySetting::High | QualitySetting::Ultra => {
+				cmd.spawn_batch([
+					(
+						SceneRoot(grass),
+						ChildOf(ctx.entity),
+						LevelOfDetail(0),
+						collider_hierarchy.clone(),
+					),
+					(
+						SceneRoot(grass_med),
+						ChildOf(ctx.entity),
+						LevelOfDetail(1),
+						collider_hierarchy.clone(),
+					),
+					(
+						SceneRoot(grass_low),
+						ChildOf(ctx.entity),
+						LevelOfDetail(2),
+						collider_hierarchy,
+					),
+				]);
+			}
+		}
 	}
 }
