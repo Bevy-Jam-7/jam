@@ -36,8 +36,7 @@ pub(super) fn plugin(app: &mut App) {
 		(|mut commands: Commands| {
 			commands.trigger(AdvanceLevel);
 		})
-		.run_if(input_just_pressed(KeyCode::F10))
-		.and(in_state(Screen::Gameplay)),
+		.run_if(input_just_pressed(KeyCode::F10).and(in_state(Screen::Gameplay))),
 	);
 
 	// This is a hack, a [`Screen:Shader`] stage could be added
