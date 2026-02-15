@@ -13,11 +13,7 @@ use input::PlayerInputContext;
 use navmesh_position::LastValidPlayerNavmeshPosition;
 
 use crate::gameplay::core::*;
-use crate::{
-	animation::AnimationState,
-	asset_tracking::LoadResource,
-	third_party::{avian3d::CollisionLayer, bevy_trenchbroom::GetTrenchbroomModelPath as _},
-};
+use crate::third_party::avian3d::CollisionLayer;
 
 pub(crate) mod assets;
 pub(crate) mod camera;
