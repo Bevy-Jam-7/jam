@@ -5,11 +5,11 @@ use bevy::{
 	scene::SceneInstanceReady,
 	window::{CursorGrabMode, CursorOptions},
 };
-use bevy_seedling::sample::{AudioSample, SamplePlayer};
+use bevy_seedling::sample::AudioSample;
 
 use crate::{
-	asset_tracking::LoadResource, audio::MusicPool, gameplay::npc::Npc, menus::Menu,
-	screens::Screen, theme::widget, third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _,
+	asset_tracking::LoadResource, gameplay::npc::Npc, menus::Menu, screens::Screen, theme::widget,
+	third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _,
 };
 
 pub(super) fn plugin(app: &mut App) {
@@ -18,11 +18,7 @@ pub(super) fn plugin(app: &mut App) {
 		.add_systems(Update, spawn_dancer.run_if(in_state(Menu::Main)));
 }
 
-fn spawn_main_menu(
-	mut commands: Commands,
-	mut cursor_options: Single<&mut CursorOptions>,
-	assets: Res<AssetServer>,
-) {
+fn spawn_main_menu(mut commands: Commands, mut cursor_options: Single<&mut CursorOptions>) {
 	cursor_options.grab_mode = CursorGrabMode::None;
 	commands.spawn((
 		DespawnOnExit(Menu::Main),
@@ -44,11 +40,6 @@ fn spawn_main_menu(
 		DespawnOnExit(Menu::Main),
 		crate::ui_layout::RootWidget,
 		widget::button("Exit", exit_app),
-	));
-	commands.spawn((
-		DespawnOnEnter(Screen::Gameplay),
-		SamplePlayer::new(assets.load("audio/music/gloopy.ogg")).looping(),
-		MusicPool,
 	));
 }
 
