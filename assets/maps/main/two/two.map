@@ -2373,6 +2373,9 @@
 "sfx_sample" "audio/sound_effects/machine_activation.ogg"
 "targetname" "generator_sfx"
 "screen_flash_duration" "0.4"
+"knockback_velocity" "10.0"
+"camera_shake_duration" "0.4"
+"camera_shake_indensity" "0.03"
 }
 // entity 19
 {
@@ -2509,6 +2512,9 @@
 "sfx_sample" "audio/sound_effects/machine_activation.ogg"
 "targetname" "turn_on_power"
 "screen_flash_duration" "0.4"
+"knockback_velocity" "10.0"
+"camera_shake_duration" "0.4"
+"camera_shake_indensity" "0.03"
 }
 // entity 40
 {
