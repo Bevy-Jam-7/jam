@@ -55,12 +55,8 @@ impl RockLayer {
 			},
 		));
 
-		cmd.spawn((
-			ChildOf(ctx.entity),
-			SceneRoot(rocks),
-			collider_hierarchy,
-		))
-		.observe(disable_shadow_casting_on_instance_ready);
+		cmd.spawn((ChildOf(ctx.entity), SceneRoot(rocks), collider_hierarchy))
+			.observe(disable_shadow_casting_on_instance_ready);
 	}
 }
 
