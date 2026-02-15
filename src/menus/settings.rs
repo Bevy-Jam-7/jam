@@ -5,7 +5,6 @@
 use bevy::ecs::query::QueryFilter;
 use bevy::window::PresentMode;
 use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::Val::*};
-use bevy_framepace::{FramepaceSettings, Limiter};
 use bevy_seedling::prelude::*;
 
 use crate::ui_layout::RootWidget;
@@ -19,7 +18,6 @@ use crate::{
 
 pub(super) fn plugin(app: &mut App) {
 	app.init_resource::<VsyncSetting>();
-	app.init_resource::<FpsLimiterSettings>();
 	app.add_systems(OnEnter(Menu::Settings), spawn_settings_menu);
 	app.add_systems(
 		Update,
@@ -36,9 +34,6 @@ pub(super) fn plugin(app: &mut App) {
 			update_camera_fov_label,
 			update_vsync.run_if(resource_exists_and_changed::<VsyncSetting>),
 			update_vsync_label,
-			update_fps_limiter.run_if(resource_exists_and_changed::<FpsLimiterSettings>),
-			update_fps_limiter_enabled_label,
-			update_fps_limiter_target_label,
 		)
 			.run_if(in_state(Menu::Settings)),
 	);
@@ -128,33 +123,6 @@ fn spawn_settings_menu(mut commands: Commands) {
 							justify_self: JustifySelf::End,
 							..default()
 						}
-					),
-					widget::plus_minus_bar(VsyncLabel, disable_vsync, enable_vsync),
-					// FPS Limiter (Enable/Disable)
-					(
-						widget::label("FPS Limiter"),
-						Node {
-							justify_self: JustifySelf::End,
-							..default()
-						}
-					),
-					widget::plus_minus_bar(
-						FpsLimiterEnabledLabel,
-						disable_fps_limiter,
-						enable_fps_limiter
-					),
-					// FPS Target
-					(
-						widget::label("FPS Target"),
-						Node {
-							justify_self: JustifySelf::End,
-							..default()
-						}
-					),
-					widget::plus_minus_bar(
-						FpsLimiterTargetLabel,
-						lower_fps_target,
-						raise_fps_target
 					),
 				],
 			),
@@ -299,7 +267,7 @@ struct VsyncSetting(bool);
 
 impl Default for VsyncSetting {
 	fn default() -> Self {
-		Self(true)
+		Self(false)
 	}
 }
 
@@ -307,103 +275,16 @@ impl Default for VsyncSetting {
 #[reflect(Component)]
 struct VsyncLabel;
 
-fn enable_vsync(_on: On<Pointer<Click>>, mut setting: ResMut<VsyncSetting>) {
-	setting.0 = true;
-}
-
-fn disable_vsync(_on: On<Pointer<Click>>, mut setting: ResMut<VsyncSetting>) {
-	setting.0 = false;
-}
-
 fn update_vsync(mut window: Single<&mut Window>, setting: Res<VsyncSetting>) {
 	window.present_mode = if setting.0 {
 		PresentMode::AutoVsync
 	} else {
-		PresentMode::AutoNoVsync
+		PresentMode::Mailbox
 	};
 }
 
 fn update_vsync_label(mut label: Single<&mut Text, With<VsyncLabel>>, setting: Res<VsyncSetting>) {
 	label.0 = if setting.0 { "On".into() } else { "Off".into() };
-}
-
-#[derive(Resource, Reflect, Debug)]
-struct FpsLimiterSettings {
-	enabled: bool,
-	target_fps: u32,
-}
-
-impl Default for FpsLimiterSettings {
-	fn default() -> Self {
-		Self {
-			enabled: false,
-			target_fps: 60,
-		}
-	}
-}
-
-#[derive(Component, Reflect)]
-#[reflect(Component)]
-struct FpsLimiterEnabledLabel;
-
-#[derive(Component, Reflect)]
-#[reflect(Component)]
-struct FpsLimiterTargetLabel;
-
-fn enable_fps_limiter(
-	_on: On<Pointer<Click>>,
-	mut settings: ResMut<FpsLimiterSettings>,
-	mut framepace: ResMut<FramepaceSettings>,
-) {
-	settings.enabled = true;
-	framepace.limiter = Limiter::from_framerate(settings.target_fps as f64);
-}
-
-fn disable_fps_limiter(
-	_on: On<Pointer<Click>>,
-	mut settings: ResMut<FpsLimiterSettings>,
-	mut framepace: ResMut<FramepaceSettings>,
-) {
-	settings.enabled = false;
-	framepace.limiter = Limiter::Off;
-}
-
-fn lower_fps_target(_on: On<Pointer<Click>>, mut settings: ResMut<FpsLimiterSettings>) {
-	let min_fps = 30;
-	let step = 5;
-	settings.target_fps = settings.target_fps.saturating_sub(step).max(min_fps);
-}
-
-fn raise_fps_target(_on: On<Pointer<Click>>, mut settings: ResMut<FpsLimiterSettings>) {
-	let max_fps = 360;
-	let step = 5;
-	settings.target_fps = (settings.target_fps + step).min(max_fps);
-}
-
-fn update_fps_limiter(mut framepace: ResMut<FramepaceSettings>, settings: Res<FpsLimiterSettings>) {
-	framepace.limiter = if settings.enabled {
-		Limiter::from_framerate(settings.target_fps as f64)
-	} else {
-		Limiter::Off
-	};
-}
-
-fn update_fps_limiter_enabled_label(
-	mut label: Single<&mut Text, With<FpsLimiterEnabledLabel>>,
-	settings: Res<FpsLimiterSettings>,
-) {
-	label.0 = if settings.enabled {
-		"On".into()
-	} else {
-		"Off".into()
-	};
-}
-
-fn update_fps_limiter_target_label(
-	mut label: Single<&mut Text, With<FpsLimiterTargetLabel>>,
-	settings: Res<FpsLimiterSettings>,
-) {
-	label.0 = format!("{}", settings.target_fps);
 }
 
 fn go_back_on_click(
