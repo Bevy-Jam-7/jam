@@ -1,6 +1,6 @@
 use crate::{
 	asset_tracking::LoadResource,
-	gameplay::TargetName,
+	gameplay::{TargetName, interaction::InteractEvent},
 	props::interactables::InteractableEntity,
 	third_party::{
 		avian3d::CollisionLayer,
@@ -28,13 +28,21 @@ pub(super) fn plugin(app: &mut App) {
 		.add_observer(setup_static_prop_with_convex_hull::<FenceBarsDecorativeSingle>)
 		.add_observer(setup_static_prop_with_convex_hull::<DoorStainedGlass>)
 		.add_observer(setup_static_prop_with_convex_hull::<FlowerPot>)
-		.add_observer(setup_static_prop_with_convex_hull::<PottedShroom>);
+		.add_observer(setup_static_prop_with_convex_hull::<PottedShroom>)
+		.add_observer(setup_static_prop_with_convex_hull::<Jesus>)
+		.add_observer(setup_static_prop_with_convex_hull::<Speaker>)
+		.add_observer(setup_static_prop_with_convex_hull::<Teeth>)
+		.add_observer(setup_static_prop_with_convex_hull::<StaticCctv>);
+
+	app.add_observer(setup_static_prop_with_trimesh::<Train>);
 
 	app.add_observer(setup_static_prop_with_convex_hull::<Keyboard>)
 		.add_observer(setup_static_prop_with_convex_hull::<Mouse>)
 		.add_observer(setup_dynamic_prop_with_convex_hull::<PackageMedium>)
 		.add_observer(setup_dynamic_prop_with_convex_hull::<PackageSmall>)
-		.add_observer(setup_dynamic_prop_with_convex_hull::<Rohlik>);
+		.add_observer(setup_dynamic_prop_with_convex_hull_heavy::<Cctv>)
+		.add_observer(setup_dynamic_prop_with_convex_hull::<Rohlik>)
+		.add_observer(setup_dynamic_prop_with_convex_hull::<Trash>);
 
 	app.add_observer(setup_nonphysical_prop::<IvyPart8>)
 		.add_observer(setup_nonphysical_prop::<SmallDoorSign1>)
@@ -59,7 +67,16 @@ pub(super) fn plugin(app: &mut App) {
 		.load_asset::<Gltf>(Rohlik::model_path())
 		.load_asset::<Gltf>(FlowerPot::model_path())
 		.load_asset::<Gltf>(PottedPlant::model_path())
-		.load_asset::<Gltf>(PottedShroom::model_path());
+		.load_asset::<Gltf>(PottedShroom::model_path())
+		.load_asset::<Gltf>(Train::model_path())
+		.load_asset::<Gltf>(Teeth::model_path())
+		.load_asset::<Gltf>(Speaker::model_path())
+		.load_asset::<Gltf>(Jesus::model_path())
+		.load_asset::<Gltf>(Jesus::model_path())
+		.load_asset::<Gltf>(Cctv::model_path())
+		.load_asset::<Gltf>(Trash::model_path());
+
+	app.add_observer(on_library_light_interaction);
 }
 
 // generic dynamic props
@@ -137,6 +154,18 @@ pub(crate) struct PackageMedium;
 )]
 pub(crate) struct PackageSmall;
 
+#[point_class(
+	base(TargetName, InteractableEntity, Transform, Visibility),
+	model("models/cctv/cctv.gltf")
+)]
+pub(crate) struct Cctv;
+
+#[point_class(
+	base(TargetName, InteractableEntity, Transform, Visibility),
+	model("models/cctv/cctv.gltf")
+)]
+pub(crate) struct StaticCctv;
+
 // generic static props
 #[point_class(
 	base(TargetName, InteractableEntity, Transform, Visibility),
@@ -207,7 +236,58 @@ pub(crate) struct IvyPart8;
 pub(crate) struct SmallDoorSign1;
 
 #[point_class(
-	base(InteractableEntity, Transform, Visibility, TargetName),
+	base(TargetName, InteractableEntity, Transform, Visibility),
 	model("models/rohlik/rohlik.gltf")
 )]
 pub(crate) struct Rohlik;
+
+#[point_class(
+	base(Transform, Visibility, TargetName),
+	model("models/train/train.gltf")
+)]
+pub(crate) struct Train;
+
+#[point_class(
+	base(InteractableEntity, Transform, Visibility, TargetName),
+	model("models/jc/jc.gltf")
+)]
+pub(crate) struct Jesus;
+
+#[point_class(
+	base(InteractableEntity, Transform, Visibility, TargetName),
+	model("models/teeth/teeth.gltf")
+)]
+pub(crate) struct Teeth;
+
+#[point_class(
+	base(InteractableEntity, Transform, Visibility, TargetName),
+	model("models/speaker/speaker.gltf")
+)]
+
+pub(crate) struct Speaker;
+#[point_class(
+	base(InteractableEntity, Transform, Visibility, TargetName),
+	model("models/trash/trash.gltf")
+)]
+pub(crate) struct Trash;
+
+#[point_class(base(SpotLight, TargetName))]
+pub(crate) struct LibraryLight {
+	light_multiplier: f32,
+}
+impl Default for LibraryLight {
+	fn default() -> Self {
+		Self {
+			light_multiplier: 1.0,
+		}
+	}
+}
+
+fn on_library_light_interaction(
+	trigger: On<InteractEvent>,
+	mut lib_lights: Query<(&LibraryLight, &mut SpotLight)>,
+) {
+	if let Ok((lib_light, mut light)) = lib_lights.get_mut(trigger.0) {
+		light.intensity *= lib_light.light_multiplier;
+	}
+}

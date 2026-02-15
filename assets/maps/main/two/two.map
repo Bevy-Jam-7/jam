@@ -2130,6 +2130,123 @@
 ( -3144 -96 96 ) ( -3128 -96 96 ) ( -3128 -96 224 ) darkmod/metal/detailed/panel_rivets_dirty02 [ -0.999999999999999 0 8.326672684688674e-17 -480 ] [ -8.326672684688674e-17 0 -0.999999999999999 480 ] 0 0.35 0.05
 ( -3152 -80 192 ) ( -3152 48 176 ) ( -3152 -80 176 ) darkmod/metal/detailed/panel_rivets_dirty02 [ 0 0.999999999999999 8.326672684688674e-17 0 ] [ 0 8.326672684688674e-17 -0.999999999999999 480 ] 0 0.35 0.05
 }
+// brush 236
+{
+( -592 1040.1006289308177 -160 ) ( -592 1040.1006289308177 -131 ) ( -592 1039.0943396226417 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 1.5980718831161465e-16 -0.03448275862068971 -5.5172405 ] [ 0 0.9937499999999932 5.545250516126341e-18 6.4000244 ] 270 0.01 0.1
+( 1968 1024 1696 ) ( 1968 1024 1725 ) ( 1978.6666666666663 1024 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0.09374999999999999 0 0 -8.5 ] [ 0 1.5980718831161465e-16 -0.03448275862068971 -5.5172405 ] 180 0.01 0.1
+( -592 1040.1006289308177 -160 ) ( -592 1039.0943396226417 -160 ) ( -581.3333333333335 1040.1006289308177 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0.09374999999999999 0 0 -8.5 ] [ 0 0.9937499999999932 5.545250516126341e-18 6.4000244 ] 180 0.01 0.1
+( 1968 1024 1696 ) ( 1978.6666666666663 1024 1696 ) ( 1968 1022.9937106918239 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ -0.09374999999999999 0 0 8.5 ] [ 0 0.9937499999999932 5.545250516126341e-18 6.4000244 ] 180 0.01 0.1
+( -592 1040.1006289308177 -160 ) ( -581.3333333333335 1040.1006289308177 -160 ) ( -592 1040.1006289308177 -131 ) darkmod/stone/cobblestones/blocks_smoky_large [ -0.09374999999999999 0 0 8.5 ] [ 0 1.5980718831161465e-16 -0.03448275862068971 -5.5172405 ] 180 0.01 0.1
+( 1968 1024 1696 ) ( 1968 1022.9937106918239 1696 ) ( 1968 1024 1725 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 -1.5980718831161465e-16 0.03448275862068971 5.5172405 ] [ 0 0.9937499999999932 5.545250516126341e-18 6.4000244 ] 90 0.01 0.1
+}
+// brush 237
+{
+( -591.8632478632478 -96 -160 ) ( -591.8632478632478 -95 -160 ) ( -591.8632478632478 -96 -44 ) darkmod/stone/cobblestones/blocks_smoky_large [ -0 4.371138994063005e-08 0.9999999999999989 0 ] [ 0 -0.008620689655172417 3.768223266556718e-10 30.62069 ] 0 0.1 0.01
+( -591.8632478632478 -96 -160 ) ( -591.8632478632478 -96 -44 ) ( -590.8717948717948 -96 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ -4.408821224473462e-08 -0 1.0086206896551746 4.965515 ] [ 0.008620689655172417 0 3.768223266556718e-10 30.62069 ] 0 0.1 0.01
+( -591.8632478632478 -96 -160 ) ( -590.8717948717948 -96 -160 ) ( -591.8632478632478 -95 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ 4.408821224473462e-08 1.0086206896551746 -0 -4.965515 ] [ -0.9999999999999989 4.371138994063005e-08 0 0 ] 0 0.1 0.01
+( -576 1024 1696 ) ( -576 1025 1696 ) ( -575.008547008547 1024 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ -4.408821224473462e-08 1.0086206896551746 0 4.965515 ] [ 0.9999999999999989 4.371138994063005e-08 0 0 ] 0 0.1 0.01
+( -576 1024 1696 ) ( -575.008547008547 1024 1696 ) ( -576 1024 1812 ) darkmod/stone/cobblestones/blocks_smoky_large [ 4.408821224473462e-08 0 1.0086206896551746 -4.965515 ] [ -0.008620689655172417 0 3.768223266556718e-10 30.62069 ] 0 0.1 0.01
+( -576 1024 1696 ) ( -576 1024 1812 ) ( -576 1025 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 -4.371138994063005e-08 0.9999999999999989 0 ] [ 0 0.008620689655172417 3.768223266556718e-10 30.62069 ] 0 0.1 0.01
+}
+// brush 238
+{
+( -576 -96 -160 ) ( -576 -95 -160 ) ( -576 -96 -44 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 -1 0 0 ] [ 0 0 -0.008620689655172412 -1.3793097 ] 180 0.01 0.01
+( -576 -96 -160 ) ( -576 -96 -44 ) ( -575 -96 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ 1 0 0 0 ] [ 0 0 -0.008620689655172412 -1.3793097 ] 180 0.01 0.01
+( -576 -96 -160 ) ( -575 -96 -160 ) ( -576 -95 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ -1 0 0 0 ] [ 0 -1 0 0 ] 180 0.01 0.01
+( -256 -80 1696 ) ( -256 -79 1696 ) ( -255 -80 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 1 0 0 0 ] [ 0 -1 0 0 ] 180 0.01 0.01
+( -256 -80 1696 ) ( -255 -80 1696 ) ( -256 -80 1812 ) darkmod/stone/cobblestones/blocks_smoky_large [ -1 0 0 0 ] [ 0 0 -0.008620689655172412 -1.3793097 ] 180 0.01 0.01
+( -256 -80 1696 ) ( -256 -80 1812 ) ( -256 -79 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 1 0 0 ] [ 0 0 -0.008620689655172412 -1.3793097 ] 180 0.01 0.01
+}
+// brush 239
+{
+( -576 -160 -160 ) ( -576 -159 -160 ) ( -576 -160 -44 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 -1 0 0 ] [ 0 0 -0.008620689655172407 -1.3793101 ] 90 1 1
+( -576 -160 -160 ) ( -576 -160 -44 ) ( -573.1428571428571 -160 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0.35000000000000003 0 0 -6.399994 ] [ 0 0 -0.008620689655172407 -1.3793101 ] 90 1 1
+( -576 -160 -160 ) ( -573.1428571428571 -160 -160 ) ( -576 -159 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ -0.35000000000000003 0 0 6.399994 ] [ 0 -1 0 0 ] 90 1 1
+( -256 -144 1696 ) ( -256 -143 1696 ) ( -253.14285714285717 -144 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0.35000000000000003 0 0 -6.399994 ] [ 0 -1 0 0 ] 90 1 1
+( -256 -144 1696 ) ( -253.14285714285717 -144 1696 ) ( -256 -144 1812 ) darkmod/stone/cobblestones/blocks_smoky_large [ -0.35000000000000003 0 0 6.399994 ] [ 0 0 -0.008620689655172407 -1.3793101 ] 90 1 1
+( -256 -144 1696 ) ( -256 -144 1812 ) ( -256 -143 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 1 0 0 ] [ 0 0 -0.008620689655172407 -1.3793101 ] 90 1 1
+}
+// brush 240
+{
+( -592 -2320 -160 ) ( -592 -2184 -160 ) ( -592 -2320 -44 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 -0.007352941176470587 0 14.941176 ] [ 0 0 -0.008620689655172412 30.62069 ] 270 0.01 0.001
+( -592 -2320 -160 ) ( -592 -2320 -44 ) ( -591 -2320 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ 1 0 0 16 ] [ 0 0 -0.008620689655172412 30.62069 ] 270 0.01 0.001
+( -592 -2320 -160 ) ( -591 -2320 -160 ) ( -592 -2184 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ -1 0 0 -16 ] [ 0 -0.007352941176470587 0 14.941176 ] 270 0.01 0.001
+( -576 -144 1696 ) ( -576 -8 1696 ) ( -575 -144 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 1 0 0 16 ] [ 0 -0.007352941176470587 0 14.941176 ] 270 0.01 0.001
+( -576 -144 1696 ) ( -575 -144 1696 ) ( -576 -144 1812 ) darkmod/stone/cobblestones/blocks_smoky_large [ -1 0 0 -16 ] [ 0 0 -0.008620689655172412 30.62069 ] 270 0.01 0.001
+( -576 -144 1696 ) ( -576 -144 1812 ) ( -576 -8 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 0.007352941176470587 0 -14.941176 ] [ 0 0 -0.008620689655172412 30.62069 ] 270 0.01 0.001
+}
+// brush 241
+{
+( -576 -2320 -160 ) ( -576 -2319 -160 ) ( -576 -2320 -44 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 -1 0 0 ] [ 0 0 -0.008620689655172412 30.62069 ] 180 0.1 0.001
+( -576 -2320 -160 ) ( -576 -2320 -44 ) ( -522.6666666666666 -2320 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0.018750000000000024 0 0 -21.199993 ] [ 0 0 -0.008620689655172412 30.62069 ] 180 0.1 0.001
+( -576 -2320 -160 ) ( -522.6666666666666 -2320 -160 ) ( -576 -2319 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ -0.018750000000000024 0 0 21.199993 ] [ 0 -1 0 0 ] 180 0.1 0.001
+( 1984 -2304 1696 ) ( 1984 -2303 1696 ) ( 2037.333333333333 -2304 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0.018750000000000024 0 0 -21.199993 ] [ 0 -1 0 0 ] 180 0.1 0.001
+( 1984 -2304 1696 ) ( 2037.333333333333 -2304 1696 ) ( 1984 -2304 1812 ) darkmod/stone/cobblestones/blocks_smoky_large [ -0.018750000000000024 0 0 21.199993 ] [ 0 0 -0.008620689655172412 30.62069 ] 180 0.1 0.001
+( 1984 -2304 1696 ) ( 1984 -2304 1812 ) ( 1984 -2303 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 1 0 0 ] [ 0 0 -0.008620689655172412 30.62069 ] 180 0.1 0.001
+}
+// brush 242
+{
+( 1968 -2304 -160 ) ( 1968 -2303 -160 ) ( 1968 -2304 -44 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 -1 0 0 ] [ 0 0 -0.008620689655172414 30.62069 ] 90 0.0001 0.0001
+( 1968 -2304 -160 ) ( 1968 -2304 -44 ) ( 1969 -2304 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ 1 0 0 0 ] [ 0 0 -0.008620689655172414 30.62069 ] 90 0.0001 0.0001
+( 1968 -2304 -160 ) ( 1969 -2304 -160 ) ( 1968 -2303 -160 ) darkmod/stone/cobblestones/blocks_smoky_large [ -1 0 0 0 ] [ 0 -1 0 0 ] 90 0.0001 0.0001
+( 1984 1040 1696 ) ( 1984 1041 1696 ) ( 1985 1040 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 1 0 0 0 ] [ 0 -1 0 0 ] 90 0.0001 0.0001
+( 1984 1040 1696 ) ( 1985 1040 1696 ) ( 1984 1040 1812 ) darkmod/stone/cobblestones/blocks_smoky_large [ -1 0 0 0 ] [ 0 0 -0.008620689655172414 30.62069 ] 90 0.0001 0.0001
+( 1984 1040 1696 ) ( 1984 1040 1812 ) ( 1984 1041 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 1 0 0 ] [ 0 0 -0.008620689655172414 30.62069 ] 90 0.0001 0.0001
+}
+// brush 243
+{
+( -576 -2304 720 ) ( -576 -2302.9920634920636 720 ) ( -576 -2304 721 ) cobble [ 0 -0.9921259842519685 0 2.1416016 ] [ 0 0 -1 0 ] 90 0.1 0.1
+( -576 -2304 720 ) ( -576 -2304 721 ) ( -575.2222222222222 -2304 720 ) cobble [ 1.2857142857142854 0 0 1645.7144 ] [ 0 0 -1 0 ] 90 0.1 0.1
+( -576 -2304 720 ) ( -575.2222222222222 -2304 720 ) ( -576 -2302.9920634920636 720 ) cobble [ -1.2857142857142854 0 0 -1645.7144 ] [ 0 -0.9921259842519685 0 2.1416016 ] 90 0.1 0.1
+( -128 -272 736 ) ( -128 -270.9920634920635 736 ) ( -127.22222222222221 -272 736 ) cobble [ 1.2857142857142854 0 0 1645.7144 ] [ 0 -0.9921259842519685 0 2.1416016 ] 90 0.1 0.1
+( -128 -272 736 ) ( -127.22222222222221 -272 736 ) ( -128 -272 737 ) cobble [ -1.2857142857142854 0 0 -1645.7144 ] [ 0 0 -1 0 ] 90 0.1 0.1
+( -128 -272 736 ) ( -128 -272 737 ) ( -128 -270.9920634920635 736 ) cobble [ 0 0.9921259842519685 0 -2.1416016 ] [ 0 0 -1 0 ] 90 0.1 0.1
+}
+// brush 244
+{
+( -576 -272 716.0615384615403 ) ( -576 -269.68571428571437 716.0615384615403 ) ( -576 -272 717.3076923076945 ) cobble [ 0 -0.4320987654320988 0 154.46913 ] [ 0 0 -0.8024691358025293 -145.38269 ] 0 0.1 0.1
+( -576 -272 716.0615384615403 ) ( -576 -272 717.3076923076945 ) ( -574.8846153846155 -272 716.0615384615403 ) cobble [ 0.8965517241379309 0 0 -11.586212 ] [ 0 0 -0.8024691358025293 -145.38269 ] 0 0.1 0.1
+( -576 -272 716.0615384615403 ) ( -574.8846153846155 -272 716.0615384615403 ) ( -576 -269.68571428571437 716.0615384615403 ) cobble [ -0.8965517241379309 0 0 11.586212 ] [ 0 -0.4320987654320988 0 154.46913 ] 0 0.1 0.1
+( -112 1024 736 ) ( -112 1026.3142857142852 736 ) ( -110.88461538461532 1024 736 ) cobble [ 0.8965517241379309 0 0 -11.586212 ] [ 0 -0.4320987654320988 0 154.46913 ] 0 0.1 0.1
+( -112 1024 736 ) ( -110.88461538461532 1024 736 ) ( -112 1024 737.2461538461539 ) cobble [ -0.8965517241379309 0 0 11.586212 ] [ 0 0 -0.8024691358025293 -145.38269 ] 0 0.1 0.1
+( -112 1024 736 ) ( -112 1024 737.2461538461539 ) ( -112 1026.3142857142852 736 ) cobble [ 0 0.4320987654320988 0 -154.46913 ] [ 0 0 -0.8024691358025293 -145.38269 ] 0 0.1 0.1
+}
+// brush 245
+{
+( -112 320 720 ) ( -112 320.9777777777778 720 ) ( -112 320 721 ) cobble [ 0 -1.0227272727272727 0 7.272705 ] [ 0 0 -1 0 ] 270 0.1 0.1
+( -112 320 720 ) ( -112 320 721 ) ( -111 320 720 ) cobble [ 1 0 0 0 ] [ 0 0 -1 0 ] 270 0.1 0.1
+( -112 320 720 ) ( -111 320 720 ) ( -112 320.9777777777778 720 ) cobble [ -1 0 0 0 ] [ 0 -1.0227272727272727 0 7.272705 ] 270 0.1 0.1
+( 0 1024 736 ) ( 0 1024.9777777777779 736 ) ( 1 1024 736 ) cobble [ 1 0 0 0 ] [ 0 -1.0227272727272727 0 7.272705 ] 270 0.1 0.1
+( 0 1024 736 ) ( 1 1024 736 ) ( 0 1024 737 ) cobble [ -1 0 0 0 ] [ 0 0 -1 0 ] 270 0.1 0.1
+( 0 1024 736 ) ( 0 1024 737 ) ( 0 1024.9777777777779 736 ) cobble [ 0 1.0227272727272727 0 -7.272705 ] [ 0 0 -1 0 ] 270 0.1 0.1
+}
+// brush 246
+{
+( -592 -144 240 ) ( -592 -143 240 ) ( -592 -144 331 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 -1.1924880360947299e-08 -0.9999999999999999 0 ] [ -0 0.010989010989010997 -1.3104264028063195e-10 -1677.3627 ] 0 0.1 0.01
+( -592 -144 240 ) ( -592 -144 331 ) ( -591.5681818181819 -144 240 ) darkmod/stone/cobblestones/blocks_smoky_large [ 2.7615512543377463e-08 0 -2.315789473684405 778.9474 ] [ -0.010989010989010997 -0 -1.3104264028063195e-10 -1677.3627 ] 0 0.1 0.01
+( -592 -144 240 ) ( -591.5681818181819 -144 240 ) ( -592 -143 240 ) darkmod/stone/cobblestones/blocks_smoky_large [ -2.7615512543377463e-08 -2.315789473684405 0 -778.9474 ] [ 0.9999999999999999 -1.1924880360947299e-08 -0 0 ] 0 0.1 0.01
+( -564.3636363636364 -96 1696 ) ( -564.3636363636364 -95 1696 ) ( -563.9318181818206 -96 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 2.7615512543377463e-08 -2.315789473684405 0 778.9474 ] [ -0.9999999999999999 -1.1924880360947299e-08 0 0 ] 0 0.1 0.01
+( -564.3636363636364 -96 1696 ) ( -563.9318181818206 -96 1696 ) ( -564.3636363636364 -96 1787 ) darkmod/stone/cobblestones/blocks_smoky_large [ -2.7615512543377463e-08 0 -2.315789473684405 -778.9474 ] [ 0.010989010989010997 0 -1.3104264028063195e-10 -1677.3627 ] 0 0.1 0.01
+( -564.3636363636364 -96 1696 ) ( -564.3636363636364 -96 1787 ) ( -564.3636363636364 -95 1696 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 1.1924880360947299e-08 -0.9999999999999999 0 ] [ 0 -0.010989010989010997 -1.3104264028063195e-10 -1677.3627 ] 0 0.1 0.01
+}
+// brush 247
+{
+( -272 -144 112 ) ( -272 -143 112 ) ( -272 -144 150 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 4.371139006309477e-08 0.973684210526315 870.7383 ] [ 0 -0.027027027027027015 1.1502997385937954e-09 -124.54054 ] 0 0.01 0.01
+( -272 -144 112 ) ( -272 -144 150 ) ( -271 -144 112 ) darkmod/stone/cobblestones/blocks_smoky_large [ -4.371139006309477e-08 0 0.973684210526315 870.7383 ] [ 0.027027027027027015 0 1.1502997385937954e-09 -124.54053 ] 0 0.01 0.01
+( -272 -144 112 ) ( -271 -144 112 ) ( -272 -143 112 ) darkmod/stone/cobblestones/blocks_smoky_large [ 4.371139006309477e-08 0.999999999999999 0 0 ] [ -0.999999999999999 4.371139006309477e-08 0 0 ] 0 0.01 0.01
+( -256 -96 720 ) ( -256 -95 720 ) ( -255 -96 720 ) darkmod/stone/cobblestones/blocks_smoky_large [ -4.371139006309477e-08 0.999999999999999 0 0 ] [ 0.999999999999999 4.371139006309477e-08 0 0 ] 0 0.01 0.01
+( -256 -96 720 ) ( -255 -96 720 ) ( -256 -96 758 ) darkmod/stone/cobblestones/blocks_smoky_large [ 4.371139006309477e-08 0 0.973684210526315 870.7383 ] [ -0.027027027027027015 0 1.1502997385937954e-09 -124.54053 ] 0 0.01 0.01
+( -256 -96 720 ) ( -256 -96 758 ) ( -256 -95 720 ) darkmod/stone/cobblestones/blocks_smoky_large [ 0 -4.371139006309477e-08 0.973684210526315 870.7344 ] [ 0 0.027027027027027015 1.1502997385937954e-09 -124.54053 ] 0 0.01 0.01
+}
+// brush 248
+{
+( -2972 -84 136 ) ( -2952 -160 266 ) ( -2952 -160 138 ) __TB_empty [ 0.2544932992796438 -0.9670745372626465 0 0 ] [ 0 0 -1 0 ] 90 1 1
+( -2928 -160 128 ) ( -2928 -160 129 ) ( -2927 -160 128 ) __TB_empty [ 1 0 0 -16 ] [ 0 0 -1 0 ] 270 1 1
+( -2928 -160 128 ) ( -2927 -160 128 ) ( -2928 -159 128 ) __TB_empty [ -1 0 0 16 ] [ 0 -1 0 0 ] 270 1 1
+( -2912 -80 136 ) ( -2912 -79 136 ) ( -2911 -80 136 ) __TB_empty [ 1 0 0 -16 ] [ 0 -1 0 0 ] 90 1 1
+( -2912 -80 144 ) ( -2911 -80 144 ) ( -2912 -80 145 ) __TB_empty [ -1 0 0 16 ] [ 0 0 -1 0 ] 270 1 1
+( -2880 -80 144 ) ( -2880 -80 145 ) ( -2880 -79 144 ) __TB_empty [ 0 1 0 0 ] [ 0 0 -1 0 ] 180 1 1
+}
 }
 // entity 1
 {
@@ -2321,7 +2438,6 @@
 {
 "classname" "generator2"
 "origin" "-1904 312 368"
-"completes_subobjective" "w1_turn_on"
 "angles" "0 -90 0"
 "interaction_text_override" "Turn on"
 "interaction_relay" "turn_on_power"
@@ -2439,15 +2555,6 @@
 ( 80 80 928 ) ( 80 81 928 ) ( 81 80 928 ) __TB_empty [ 1 0 0 -16 ] [ 0 -1 0 -16 ] 0 1 1
 ( 80 112 928 ) ( 81 112 928 ) ( 80 112 929 ) __TB_empty [ -1 0 0 16 ] [ 0 0 -1 0 ] 180 1 1
 ( 96 80 928 ) ( 96 80 929 ) ( 96 81 928 ) __TB_empty [ 0 1 0 16 ] [ 0 0 -1 0 ] 270 1 1
-}
-// brush 1
-{
-( 48 64 960 ) ( 48 65 960 ) ( 48 64 961 ) origin [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
-( 48 64 960 ) ( 48 64 961 ) ( 49 64 960 ) origin [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
-( 48 64 960 ) ( 49 64 960 ) ( 48 65 960 ) origin [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
-( 64 80 976 ) ( 64 81 976 ) ( 65 80 976 ) origin [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
-( 64 80 976 ) ( 65 80 976 ) ( 64 80 977 ) origin [ -1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
-( 64 80 976 ) ( 64 80 977 ) ( 64 81 976 ) origin [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
 }
 }
 // entity 44
@@ -2774,6 +2881,21 @@
 }
 // entity 92
 {
+"classname" "sensor_entity"
+"sensor_detect_props" "true"
+"sensor_on_collision_start" "turn_on_power"
+// brush 0
+{
+( -1952 288 368 ) ( -1952 289 368 ) ( -1952 288 369 ) __TB_empty [ 0 -1 0 0 ] [ 0 0 -1 0 ] 180 1 1
+( -1920 288 368 ) ( -1920 288 369 ) ( -1919 288 368 ) __TB_empty [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -1920 288 368 ) ( -1919 288 368 ) ( -1920 289 368 ) __TB_empty [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -1872 352 416 ) ( -1872 353 416 ) ( -1871 352 416 ) __TB_empty [ 1 0 0 0 ] [ 0 -1 0 0 ] 270 1 1
+( -1872 352 384 ) ( -1871 352 384 ) ( -1872 352 385 ) __TB_empty [ -1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -1856 352 384 ) ( -1856 352 385 ) ( -1856 353 384 ) __TB_empty [ 0 1 0 0 ] [ 0 0 -1 0 ] 180 1 1
+}
+}
+// entity 69
+{
 "classname" "func_group"
 "_tb_type" "_tb_layer"
 "_tb_name" "Outside"
@@ -3032,7 +3154,7 @@
 ( -592 -272 1824 ) ( -592 -272 1825 ) ( -592 -271 1824 ) cobble [ 0 1 0 0 ] [ 0 0 -1 1968 ] 0 2 2
 }
 }
-// entity 93
+// entity 70
 {
 "classname" "npc"
 "yarn_node" "IntroNpc12"
@@ -3040,19 +3162,19 @@
 "angles" "0 180 0"
 "_tb_layer" "2"
 }
-// entity 94
+// entity 71
 {
 "classname" "light_point"
 "origin" "760 216 1256"
 "_tb_layer" "2"
 }
-// entity 95
+// entity 72
 {
 "classname" "light_point"
 "origin" "-1208 216 1256"
 "_tb_layer" "2"
 }
-// entity 96
+// entity 73
 {
 "classname" "npc"
 "yarn_node" "IntroNpc12"
@@ -3060,7 +3182,7 @@
 "angles" "0 180 0"
 "_tb_layer" "2"
 }
-// entity 97
+// entity 74
 {
 "classname" "func_group"
 "_tb_type" "_tb_layer"
@@ -3095,7 +3217,7 @@
 ( -1632 -64 256 ) ( -1632 -64 257 ) ( -1632 -63 256 ) crate [ 0 1 0 0 ] [ 0 0 -1 -1728 ] 90 1 1
 }
 }
-// entity 98
+// entity 75
 {
 "classname" "light_point"
 "origin" "24 -120 216"
@@ -3103,7 +3225,7 @@
 "intensity" "100000.000000"
 "_tb_layer" "3"
 }
-// entity 99
+// entity 76
 {
 "classname" "light_point"
 "origin" "344 -120 232"
@@ -3111,7 +3233,7 @@
 "intensity" "100000.000000"
 "_tb_layer" "3"
 }
-// entity 100
+// entity 77
 {
 "classname" "func_group"
 "_tb_type" "_tb_layer"
@@ -3668,7 +3790,7 @@
 ( -2128 272 128 ) ( -2128 272 164.89103336663578 ) ( -2128 280 128 ) crate [ 2.220446049250313e-16 5.438524293787564e-32 1 -1919.9999 ] [ 2.4492935982947064e-16 -1 0 320 ] 90 0.05 0.05
 }
 }
-// entity 101
+// entity 78
 {
 "classname" "crt"
 "yarn_node" ""
@@ -3676,21 +3798,21 @@
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 102
+// entity 79
 {
 "classname" "keyboard"
 "origin" "-200 84 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 103
+// entity 80
 {
 "classname" "mouse"
 "origin" "-200 100 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 104
+// entity 81
 {
 "classname" "crt"
 "yarn_node" ""
@@ -3698,21 +3820,21 @@
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 105
+// entity 82
 {
 "classname" "keyboard"
 "origin" "-140 136 168"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 106
+// entity 83
 {
 "classname" "mouse"
 "origin" "-124 136 168"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 107
+// entity 84
 {
 "classname" "crt"
 "yarn_node" ""
@@ -3720,28 +3842,28 @@
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 108
+// entity 85
 {
 "classname" "keyboard"
 "origin" "-48 84 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 109
+// entity 86
 {
 "classname" "mouse"
 "origin" "-48 100 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 110
+// entity 87
 {
 "classname" "keyboard"
 "origin" "-20 136 168"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 111
+// entity 88
 {
 "classname" "crt"
 "yarn_node" ""
@@ -3749,28 +3871,28 @@
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 112
+// entity 89
 {
 "classname" "mouse"
 "origin" "-4 136 168"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 113
+// entity 90
 {
 "classname" "keyboard"
 "origin" "-12 192 168"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 114
+// entity 91
 {
 "classname" "mouse"
 "origin" "-28 192 168"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 115
+// entity 92
 {
 "classname" "crt"
 "yarn_node" ""
@@ -3778,21 +3900,21 @@
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 116
+// entity 93
 {
 "classname" "mouse"
 "origin" "-48 236 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 117
+// entity 94
 {
 "classname" "keyboard"
 "origin" "-48 220 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 118
+// entity 95
 {
 "classname" "crt"
 "yarn_node" ""
@@ -3800,14 +3922,14 @@
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 119
+// entity 96
 {
 "classname" "keyboard"
 "origin" "-124 192 168"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 120
+// entity 97
 {
 "classname" "crt"
 "yarn_node" ""
@@ -3815,14 +3937,190 @@
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 121
+// entity 98
 {
 "classname" "mouse"
 "origin" "-140 192 168"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
+// entity 99
+{
+"classname" "keyboard"
+"origin" "-200 212 168"
+"angles" "0 0 0"
+"_tb_layer" "4"
+}
+// entity 100
+{
+"classname" "crt"
+"yarn_node" ""
+"origin" "-216 216 168"
+"angles" "0 0 0"
+"_tb_layer" "4"
+}
+// entity 101
+{
+"classname" "mouse"
+"origin" "-200 228 168"
+"angles" "0 0 0"
+"_tb_layer" "4"
+}
+// entity 102
+{
+"classname" "mouse"
+"origin" "148 128 168"
+"angles" "0 -90 0"
+"_tb_layer" "4"
+}
+// entity 103
+{
+"classname" "keyboard"
+"origin" "132 128 168"
+"angles" "0 -90 0"
+"_tb_layer" "4"
+}
+// entity 104
+{
+"classname" "crt"
+"yarn_node" ""
+"origin" "136 144 168"
+"angles" "0 -90 0"
+"_tb_layer" "4"
+}
+// entity 105
+{
+"classname" "mouse"
+"origin" "168 68 168"
+"angles" "0 180 0"
+"_tb_layer" "4"
+}
+// entity 106
+{
+"classname" "keyboard"
+"origin" "168 84 168"
+"angles" "0 180 0"
+"_tb_layer" "4"
+}
+// entity 107
+{
+"classname" "crt"
+"yarn_node" ""
+"origin" "184 80 168"
+"angles" "0 180 0"
+"_tb_layer" "4"
+}
+// entity 108
+{
+"classname" "mouse"
+"origin" "204 128 168"
+"angles" "0 -90 0"
+"_tb_layer" "4"
+}
+// entity 109
+{
+"classname" "keyboard"
+"origin" "208 124 172"
+"angles" "0 -90 -30"
+"_tb_layer" "4"
+}
+// entity 110
+{
+"classname" "crt"
+"yarn_node" ""
+"origin" "216 144 140"
+"angles" "75 90 180"
+"_tb_layer" "4"
+}
+// entity 111
+{
+"classname" "mouse"
+"origin" "320 92 168"
+"angles" "0 -180 0"
+"_tb_layer" "4"
+}
+// entity 112
+{
+"classname" "keyboard"
+"origin" "320 108 168"
+"angles" "0 -180 0"
+"_tb_layer" "4"
+}
+// entity 113
+{
+"classname" "crt"
+"yarn_node" ""
+"origin" "336 104 168"
+"angles" "0 -180 0"
+"_tb_layer" "4"
+}
+// entity 114
+{
+"classname" "keyboard"
+"origin" "224 220 168"
+"angles" "0 0 0"
+"_tb_layer" "4"
+}
+// entity 115
+{
+"classname" "mouse"
+"origin" "224 236 168"
+"angles" "0 0 0"
+"_tb_layer" "4"
+}
+// entity 116
+{
+"classname" "crt"
+"yarn_node" ""
+"origin" "208 224 168"
+"angles" "0 0 0"
+"_tb_layer" "4"
+}
+// entity 117
+{
+"classname" "mouse"
+"origin" "284 184 168"
+"angles" "0 90 0"
+"_tb_layer" "4"
+}
+// entity 118
+{
+"classname" "keyboard"
+"origin" "300 184 168"
+"angles" "0 90 0"
+"_tb_layer" "4"
+}
+// entity 119
+{
+"classname" "crt"
+"yarn_node" ""
+"origin" "296 168 168"
+"angles" "0 90 0"
+"_tb_layer" "4"
+}
+// entity 120
+{
+"classname" "keyboard"
+"origin" "-124 192 168"
+"angles" "0 90 0"
+"_tb_layer" "4"
+}
+// entity 121
+{
+"classname" "crt"
+"yarn_node" ""
+"origin" "-128 176 168"
+"angles" "0 90 0"
+"_tb_layer" "4"
+}
 // entity 122
+{
+"classname" "mouse"
+"origin" "-140 192 168"
+"angles" "0 90 0"
+"_tb_layer" "4"
+}
+// entity 123
 {
 "classname" "keyboard"
 "origin" "-200 212 168"
@@ -4005,14 +4303,14 @@
 "angles" "0 180 0"
 "_tb_layer" "4"
 }
-// entity 147
+// entity 124
 {
 "classname" "keyboard"
 "origin" "168 228 168"
 "angles" "0 180 0"
 "_tb_layer" "4"
 }
-// entity 148
+// entity 125
 {
 "classname" "crt"
 "yarn_node" "IntroNpc6"
@@ -4020,7 +4318,7 @@
 "angles" "0 180 0"
 "_tb_layer" "4"
 }
-// entity 149
+// entity 126
 {
 "classname" "npc"
 "yarn_node" "D2Npc10"
@@ -4028,7 +4326,7 @@
 "angles" "0 180 0"
 "_tb_layer" "4"
 }
-// entity 150
+// entity 127
 {
 "classname" "npc"
 "yarn_node" "D2Npc3"
@@ -4036,7 +4334,7 @@
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 151
+// entity 128
 {
 "classname" "npc"
 "yarn_node" "D2Npc2"
@@ -4045,7 +4343,7 @@
 "animation_lock" "Typing"
 "_tb_layer" "4"
 }
-// entity 152
+// entity 129
 {
 "classname" "npc"
 "yarn_node" "D2Npc11"
@@ -4053,7 +4351,7 @@
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 153
+// entity 130
 {
 "classname" "npc"
 "yarn_node" "D2Npc6"
@@ -4062,7 +4360,7 @@
 "animation_lock" "Typing"
 "_tb_layer" "4"
 }
-// entity 154
+// entity 131
 {
 "classname" "crt"
 "yarn_node" ""
@@ -4070,112 +4368,113 @@
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 155
+// entity 132
 {
 "classname" "keyboard"
 "origin" "-2168 84 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 156
+// entity 133
 {
 "classname" "mouse"
 "origin" "-2168 100 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 157
+// entity 134
 {
 "classname" "keyboard"
 "origin" "-2148 136 168"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 158
+// entity 135
 {
 "classname" "mouse"
 "origin" "-2132 144 168"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 159
+// entity 136
 {
 "classname" "keyboard"
 "origin" "-2016 84 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 160
+// entity 137
 {
 "classname" "mouse"
 "origin" "-2016 100 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 161
+// entity 138
 {
 "classname" "keyboard"
 "origin" "-1988 152 128"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 162
+// entity 139
 {
 "classname" "mouse"
 "origin" "-1972 152 128"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 163
+// entity 140
 {
 "classname" "keyboard"
 "origin" "-1844 216 128"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 164
+// entity 141
 {
 "classname" "mouse"
 "origin" "-1868 192 128"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 165
+// entity 142
 {
-"classname" "mouse"
-"origin" "-1864 268 128"
-"angles" "0 0 0"
+"classname" "npc"
+"yarn_node" "IntroNpc5Day2"
+"origin" "-24 224 56"
+"angles" "0 -180 0"
 "_tb_layer" "4"
 }
-// entity 166
+// entity 143
 {
 "classname" "keyboard"
 "origin" "-1880 244 128"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 167
+// entity 144
 {
 "classname" "keyboard"
 "origin" "-2165.61 186 168"
 "angles" "0 60 0"
 "_tb_layer" "4"
 }
-// entity 168
+// entity 145
 {
 "classname" "mouse"
 "origin" "-2179.46 194 168"
 "angles" "0 60 0"
 "_tb_layer" "4"
 }
-// entity 169
+// entity 146
 {
 "classname" "keyboard"
 "origin" "-2168 212 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 170
+// entity 147
 {
 "classname" "crt"
 "yarn_node" ""
@@ -4183,42 +4482,51 @@
 "angles" "0 -150 0"
 "_tb_layer" "4"
 }
-// entity 171
+// entity 148
 {
 "classname" "mouse"
 "origin" "-2168 228 168"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 172
+// entity 149
 {
 "classname" "mouse"
 "origin" "-1820 128 128"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 173
+// entity 150
 {
 "classname" "keyboard"
 "origin" "-1836 128 128"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 174
+// entity 151
+{
+"classname" "npc"
+"yarn_node" "IntroNpc12Day2"
+"origin" "152 88 64"
+"animation_lock" "Typing"
+"angles" "0 0 0"
+"_tb_layer" "4"
+}
+// entity 152
 {
 "classname" "mouse"
 "origin" "-1800 68 168"
 "angles" "0 180 0"
 "_tb_layer" "4"
 }
-// entity 175
+// entity 153
 {
 "classname" "keyboard"
 "origin" "-1888 -12 128"
 "angles" "0 -150 0"
 "_tb_layer" "4"
 }
-// entity 176
+// entity 154
 {
 "classname" "crt"
 "yarn_node" ""
@@ -4226,21 +4534,21 @@
 "angles" "0 180 0"
 "_tb_layer" "4"
 }
-// entity 177
+// entity 155
 {
 "classname" "mouse"
 "origin" "-1716 128 168"
 "angles" "0 -90 0"
 "_tb_layer" "4"
 }
-// entity 178
+// entity 156
 {
 "classname" "keyboard"
 "origin" "-1760 124 132"
 "angles" "0 -90 -30"
 "_tb_layer" "4"
 }
-// entity 179
+// entity 157
 {
 "classname" "crt"
 "yarn_node" ""
@@ -4248,21 +4556,21 @@
 "angles" "75 90 180"
 "_tb_layer" "4"
 }
-// entity 180
+// entity 158
 {
 "classname" "mouse"
 "origin" "-1648 92 168"
 "angles" "0 -180 0"
 "_tb_layer" "4"
 }
-// entity 181
+// entity 159
 {
 "classname" "keyboard"
 "origin" "-1648 108 168"
 "angles" "0 -180 0"
 "_tb_layer" "4"
 }
-// entity 182
+// entity 160
 {
 "classname" "crt"
 "yarn_node" ""
@@ -4270,35 +4578,35 @@
 "angles" "0 -180 0"
 "_tb_layer" "4"
 }
-// entity 183
+// entity 161
 {
 "classname" "keyboard"
 "origin" "-1712 268 128"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 184
+// entity 162
 {
 "classname" "mouse"
 "origin" "-1720 228 128"
 "angles" "0 0 0"
 "_tb_layer" "4"
 }
-// entity 185
+// entity 163
 {
 "classname" "mouse"
 "origin" "-1684 184 168"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 186
+// entity 164
 {
 "classname" "keyboard"
 "origin" "-1668 184 168"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 187
+// entity 165
 {
 "classname" "crt"
 "yarn_node" ""
@@ -4306,35 +4614,35 @@
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 188
+// entity 166
 {
 "classname" "keyboard"
 "origin" "-1828 184 128"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 189
+// entity 167
 {
 "classname" "mouse"
 "origin" "-1812 184 128"
 "angles" "0 90 0"
 "_tb_layer" "4"
 }
-// entity 190
+// entity 168
 {
 "classname" "mouse"
 "origin" "-1712 212 128"
 "angles" "0 180 0"
 "_tb_layer" "4"
 }
-// entity 191
+// entity 169
 {
 "classname" "keyboard"
 "origin" "-1800 228 128"
 "angles" "0 180 0"
 "_tb_layer" "4"
 }
-// entity 192
+// entity 170
 {
 "classname" "npc"
 "yarn_node" "D2NpcHint"
@@ -4342,7 +4650,7 @@
 "angles" "0 15 0"
 "_tb_layer" "4"
 }
-// entity 193
+// entity 171
 {
 "classname" "crt"
 "yarn_node" ""
@@ -4350,87 +4658,93 @@
 "angles" "-90 0 90"
 "_tb_layer" "4"
 }
-// entity 194
+// entity 172
 {
-"classname" "crt"
-"yarn_node" ""
-"origin" "-1928 280 152"
-"angles" "-90 0 90"
-"_tb_layer" "4"
-}
-// entity 195
-{
-"classname" "crt"
-"yarn_node" ""
-"origin" "-1928 328 152"
-"angles" "-90 0 90"
-"_tb_layer" "4"
-}
-// entity 196
-{
-"classname" "crt"
-"yarn_node" ""
-"origin" "-1928 328 136"
+"classname" "npc"
+"yarn_node" "IntroNpc4Day2"
+"origin" "304 104 56"
+"animation_lock" "Typing"
 "angles" "-90 0 90"
 "_tb_layer" "4"
 }
 // entity 197
 {
-"classname" "crt"
-"yarn_node" ""
-"origin" "-1952 328 152"
-"angles" "-90 0 90"
+"classname" "npc"
+"yarn_node" "IntroNpc10Day2"
+"origin" "248 232 56"
+"angles" "0 180 0"
 "_tb_layer" "4"
 }
 // entity 198
 {
-"classname" "crt"
-"yarn_node" ""
-"origin" "-1928 280 136"
-"angles" "-90 0 90"
+"classname" "npc"
+"yarn_node" "IntroNpc3Day2"
+"origin" "136 200 56"
+"angles" "0 -90 0"
 "_tb_layer" "4"
 }
 // entity 199
 {
-"classname" "crt"
-"yarn_node" ""
-"origin" "-1952 304 136"
-"angles" "-90 0 90"
+"classname" "npc"
+"yarn_node" "IntroNpc2Day2"
+"origin" "-16 112 64"
+"angles" "0 90 0"
+"animation_lock" "Typing"
 "_tb_layer" "4"
 }
 // entity 200
 {
-"classname" "crt"
-"yarn_node" ""
-"origin" "-1928 304 136"
-"angles" "-90 0 90"
+"classname" "npc"
+"yarn_node" "IntroNpc1Day2"
+"origin" "-24 80 72"
+"angles" "0 180 0"
+"animation_lock" "Typing"
 "_tb_layer" "4"
 }
 // entity 201
 {
-"classname" "crt"
-"yarn_node" ""
-"origin" "-1952 304 152"
-"angles" "-90 0 90"
+"classname" "npc"
+"yarn_node" "IntroNpc7Day2"
+"origin" "-144 112 56"
+"angles" "0 90 0"
 "_tb_layer" "4"
 }
 // entity 202
 {
-"classname" "crt"
-"yarn_node" ""
-"origin" "-1928 304 152"
-"angles" "-90 0 90"
+"classname" "npc"
+"yarn_node" "IntroNpc8Day2"
+"origin" "-168 216 64"
+"angles" "0 165 0"
+"animation_lock" "Standing"
 "_tb_layer" "4"
 }
 // entity 203
 {
 "classname" "npc"
-"yarn_node" "D2Npc4"
-"origin" "304 104 152"
+"yarn_node" "IntroNpc9Day2"
+"origin" "248 104 64"
+"angles" "0 90 0"
 "animation_lock" "Typing"
 "_tb_layer" "4"
 }
 // entity 204
+{
+"classname" "npc"
+"yarn_node" "IntroNpc11Day2"
+"origin" "296 200 64"
+"angles" "0 -90 0"
+"_tb_layer" "4"
+}
+// entity 181
+{
+"classname" "npc"
+"yarn_node" "IntroNpc6Day2"
+"origin" "-128 216 64"
+"angles" "0 -90 0"
+"animation_lock" "Typing"
+"_tb_layer" "4"
+}
+// entity 182
 {
 "classname" "npc"
 "yarn_node" "D2Npc5"

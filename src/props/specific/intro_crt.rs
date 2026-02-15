@@ -127,6 +127,11 @@ fn update_intro_crt_emotes(
 			let texture = textures.get(&first.emote_name);
 			// Paste the texture or clear it
 			material.base_color_texture = texture.cloned();
+			if texture.is_some() {
+				material.base_color = Color::WHITE;
+			} else {
+				material.base_color = Color::BLACK;
+			}
 			commands.pop_front();
 		}
 	} else {
@@ -147,6 +152,7 @@ fn clear_intro_crt_emote(
 		&& let Some(material) = materials.get_mut(&**handle)
 	{
 		material.base_color_texture = None;
+		material.base_color = Color::BLACK;
 		commands.clear();
 	}
 }

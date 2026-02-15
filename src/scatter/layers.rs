@@ -1,4 +1,5 @@
 use crate::gameplay::level::EnvironmentAssets;
+use crate::props::effects::disable_shadow_casting_on_instance_ready;
 use crate::third_party::avian3d::CollisionLayer;
 use crate::{RenderLayer, RenderLayers};
 use avian3d::prelude::*;
@@ -50,29 +51,29 @@ impl RockLayer {
 		cmd.entity(ctx.entity)
 			.insert((DistributionPattern(rock_density_map),));
 
-		cmd.spawn_batch([
-			(
-				LevelOfDetail(0),
-				ChildOf(ctx.entity),
-				SceneRoot(rocks),
-				collider_hierarchy.clone(),
-				RigidBody::Static,
-			),
-			(
-				LevelOfDetail(1),
-				ChildOf(ctx.entity),
-				SceneRoot(rocks_med),
-				collider_hierarchy.clone(),
-				RigidBody::Static,
-			),
-			(
-				LevelOfDetail(2),
-				ChildOf(ctx.entity),
-				SceneRoot(rocks_low),
-				collider_hierarchy,
-				RigidBody::Static,
-			),
-		]);
+		cmd.spawn((
+			LevelOfDetail(0),
+			ChildOf(ctx.entity),
+			SceneRoot(rocks),
+			collider_hierarchy.clone(),
+		))
+		.observe(disable_shadow_casting_on_instance_ready);
+
+		cmd.spawn((
+			LevelOfDetail(1),
+			ChildOf(ctx.entity),
+			SceneRoot(rocks_med),
+			collider_hierarchy.clone(),
+		))
+		.observe(disable_shadow_casting_on_instance_ready);
+
+		cmd.spawn((
+			LevelOfDetail(2),
+			ChildOf(ctx.entity),
+			SceneRoot(rocks_low),
+			collider_hierarchy,
+		))
+		.observe(disable_shadow_casting_on_instance_ready);
 	}
 }
 

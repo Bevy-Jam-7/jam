@@ -3,27 +3,26 @@
 
 use bevy::prelude::*;
 
-use crate::{
-	shader_compilation::{LoadedPipelineCount, all_pipelines_loaded, spawn_shader_compilation_map},
-	theme::{palette::SCREEN_BACKGROUND, prelude::*},
-};
-
 use super::LoadingScreen;
+use crate::font::VARIABLE_FONT;
+use crate::gameplay::level::AdvanceLevel;
+use crate::theme::palette::HEADER_TEXT;
+use crate::{
+	shader_compilation::{LoadedPipelineCount, all_pipelines_loaded},
+	theme::prelude::*,
+};
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_systems(
 		OnEnter(LoadingScreen::Shaders),
-		(
-			spawn_or_skip_shader_compilation_loading_screen,
-			spawn_shader_compilation_map,
-		),
+		spawn_or_skip_shader_compilation_loading_screen,
 	);
 
 	app.add_systems(
 		Update,
 		(
 			update_loading_shaders_label,
-			enter_spawn_level_screen.run_if(all_pipelines_loaded),
+			exit_shader_level.run_if(all_pipelines_loaded),
 		)
 			.chain()
 			.run_if(in_state(LoadingScreen::Shaders)),
@@ -41,14 +40,24 @@ fn spawn_or_skip_shader_compilation_loading_screen(
 	}
 	commands.spawn((
 		widget::ui_root("Loading Screen"),
-		BackgroundColor(SCREEN_BACKGROUND),
 		DespawnOnExit(LoadingScreen::Shaders),
-		children![(widget::label("Compiling shaders..."), LoadingShadersLabel)],
+		children![(
+			Name::new("Compiling shaders text"),
+			Text("Compiling Shaders".into()),
+			TextFont {
+				font: VARIABLE_FONT,
+				font_size: 24.0,
+				weight: FontWeight(800),
+				..default()
+			},
+			TextColor(HEADER_TEXT),
+			LoadingShadersLabel
+		)],
 	));
 }
 
-fn enter_spawn_level_screen(mut next_screen: ResMut<NextState<LoadingScreen>>) {
-	next_screen.set(LoadingScreen::Level);
+fn exit_shader_level(mut cmd: Commands) {
+	cmd.trigger(AdvanceLevel);
 }
 
 #[derive(Component, Reflect)]

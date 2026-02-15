@@ -21,7 +21,6 @@ use crate::{
 	},
 	props::interactables::InteractableEntity,
 	reflection::ReflAppExt,
-	screens::Screen,
 	third_party::avian3d::CollisionLayer,
 };
 
@@ -33,6 +32,7 @@ pub(super) fn plugin(app: &mut App) {
 		.register_dynamic_component::<YarnSetter>()
 		.register_dynamic_component::<LogicToggler>()
 		.register_dynamic_component::<LogicDespawn>()
+		.register_dynamic_component::<SpotLight>()
 		.add_observer(interact_timers)
 		.add_observer(uninitialise_objectives)
 		.add_observer(talk_ify_yarnnode)
@@ -87,7 +87,6 @@ struct UnitialisedObjective;
 /// An entity describing the identity of an objective
 /// Activates (completes) on [`InteractEvent`]
 #[point_class(base(TargetName, Objective))]
-#[require(DespawnOnExit::<Screen>(Screen::Gameplay))]
 #[derive(Default)]
 pub(crate) struct ObjectiveEntity {
 	/// The objective, if any, that this is a subobjective of

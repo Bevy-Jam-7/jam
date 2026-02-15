@@ -1,19 +1,17 @@
 use bevy::prelude::*;
 
-/// #ddd369
-pub(crate) const LABEL_TEXT: Color = Color::srgb(0.867, 0.827, 0.412);
-
-/// #fcfbcc
-pub(crate) const HEADER_TEXT: Color = Color::srgb(0.988, 0.984, 0.800);
-
+/// #e0d185
+pub(crate) const LABEL_TEXT: Color = Color::hsl(50.0, 0.6, 0.7);
+/// #d6855c
+pub(crate) const HEADER_TEXT: Color = Color::hsl(20.0, 0.6, 0.6);
 /// #ececec
-pub(crate) const BUTTON_TEXT: Color = Color::srgb(0.925, 0.925, 0.925);
-/// #4666bf
-pub(crate) const BUTTON_BACKGROUND: Color = Color::srgb(0.275, 0.400, 0.750);
-/// #6299d1
-pub(crate) const BUTTON_HOVERED_BACKGROUND: Color = Color::srgb(0.384, 0.600, 0.820);
-// #3d4999
-pub(crate) const BUTTON_PRESSED_BACKGROUND: Color = Color::srgb(0.239, 0.286, 0.600);
+pub(crate) const BUTTON_TEXT: Color = Color::hsl(0.0, 0.1, 0.92);
+/// #732633
+pub(crate) const BUTTON_BACKGROUND: Color = Color::hsl(0.0, 0.6, 0.1);
+/// #993366
+pub(crate) const BUTTON_HOVERED_BACKGROUND: Color = Color::hsl(30.0, 0.7, 0.15);
+// #4d2219
+pub(crate) const BUTTON_PRESSED_BACKGROUND: Color = Color::hsl(60.0, 0.7, 0.05);
 
-/// #2b2c2f, taken from the Bevy website
-pub(crate) const SCREEN_BACKGROUND: Color = Color::srgb(0.16862746, 0.17254902, 0.18431373);
+/// #101618
+pub(crate) const SCREEN_BACKGROUND: Color = Color::hsl(195.0, 0.2, 0.08);

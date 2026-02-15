@@ -1,11 +1,10 @@
-#[cfg(feature = "dev")]
-use bevy::input::common_conditions::input_just_pressed;
 use bevy::{
 	ecs::{lifecycle::HookContext, world::DeferredWorld},
 	prelude::*,
 };
 use bevy_trenchbroom::prelude::*;
 
+use crate::gameplay::level::AdvanceLevel;
 use crate::{
 	gameplay::{TargetName, TargetnameEntityIndex, interaction::InteractEvent},
 	props::logic_entity::ObjectiveEntity,
@@ -24,14 +23,6 @@ pub(super) fn plugin(app: &mut App) {
 	);
 	app.add_observer(watch_for_completions);
 	app.add_systems(PostUpdate, complete_parent_objectives);
-	#[cfg(feature = "dev")]
-	app.add_systems(
-		Update,
-		(|mut commands: Commands| {
-			commands.trigger(AllObjectivesDone);
-		})
-		.run_if(input_just_pressed(KeyCode::F10)),
-	);
 }
 
 #[derive(Resource, Reflect, Debug, Deref, Default, PartialEq)]
@@ -42,7 +33,6 @@ pub struct CurrentObjective(Option<Entity>);
 #[derive(Default)]
 #[base_class]
 #[component(on_add=Objective::on_add)]
-#[require(DespawnOnExit::<Screen>(Screen::Gameplay))]
 pub struct Objective {
 	/// The description of the objective.
 	pub description: String,
@@ -166,6 +156,7 @@ fn trigger_all_objectives_done(
 ) {
 	if not_done_objectives.is_empty() && !done_objectives.is_empty() {
 		commands.trigger(AllObjectivesDone);
+		commands.trigger(AdvanceLevel);
 	}
 }
 
