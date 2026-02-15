@@ -27,6 +27,7 @@ use bevy::gltf::convert_coordinates::GltfConvertCoordinates;
 use bevy::log::LogPlugin;
 use bevy::log::tracing_subscriber::field::MakeExt;
 use bevy::pbr::DefaultOpaqueRendererMethod;
+use bevy::window::PresentMode;
 use bevy::{camera::visibility::RenderLayers, ecs::error::error};
 use bevy_seedling::SeedlingPlugin;
 use bitflags::bitflags;
@@ -70,6 +71,7 @@ fn main() -> AppExit {
 			primary_window: Window {
 				title: "Jam".to_string(),
 				fit_canvas_to_parent: true,
+				present_mode: PresentMode::Mailbox,
 				#[cfg(feature = "web")]
 				prevent_default_event_handling: true,
 				..default()
