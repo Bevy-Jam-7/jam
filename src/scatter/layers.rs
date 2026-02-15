@@ -15,7 +15,6 @@ use bevy_feronia::prelude::*;
 #[require(
     Name::new("Rock Layer"),
     ScatterLayerType::<StandardMaterial>,
-	LodConfig::none(),
     InstanceRotationYaw,
     InstanceScale,
     InstanceScaleRange{
@@ -52,7 +51,7 @@ impl RockLayer {
 			DistributionPattern(rock_density_map),
 			LodConfig {
 				density: vec![100.0.into()],
-				..default()
+				..LodConfig::none()
 			},
 		));
 
@@ -106,7 +105,7 @@ impl MushroomLayer {
 			DistributionPattern(mushroom_density_map),
 			LodConfig {
 				density: vec![100.0.into()],
-				..default()
+				..LodConfig::none()
 			},
 		));
 
