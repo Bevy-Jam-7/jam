@@ -2,6 +2,7 @@ use crate::gameplay::level::EnvironmentAssets;
 use crate::props::effects::disable_shadow_casting_on_instance_ready;
 use crate::third_party::avian3d::CollisionLayer;
 use crate::{RenderLayer, RenderLayers};
+
 use avian3d::prelude::*;
 use bevy::ecs::lifecycle::HookContext;
 use bevy::ecs::world::DeferredWorld;
@@ -21,8 +22,8 @@ use bevy_feronia::prelude::*;
 	    max: 16.
 	},
     InstanceJitter,
-    DistributionDensity(25.),
     Avoidance(1.6),
+    DistributionDensity(25.),
 )]
 pub(crate) struct RockLayer;
 
@@ -30,8 +31,6 @@ impl RockLayer {
 	fn on_add(mut world: DeferredWorld, ctx: HookContext) {
 		let EnvironmentAssets {
 			rocks,
-			rocks_med,
-			rocks_low,
 			rock_density_map,
 			..
 		} = world
@@ -48,32 +47,16 @@ impl RockLayer {
 					LayerMask::ALL,
 				));
 
-		cmd.entity(ctx.entity)
-			.insert((DistributionPattern(rock_density_map),));
+		cmd.entity(ctx.entity).insert((
+			DistributionPattern(rock_density_map),
+			LodConfig {
+				density: vec![100.0.into()],
+				..LodConfig::none()
+			},
+		));
 
-		cmd.spawn((
-			LevelOfDetail(0),
-			ChildOf(ctx.entity),
-			SceneRoot(rocks),
-			collider_hierarchy.clone(),
-		))
-		.observe(disable_shadow_casting_on_instance_ready);
-
-		cmd.spawn((
-			LevelOfDetail(1),
-			ChildOf(ctx.entity),
-			SceneRoot(rocks_med),
-			collider_hierarchy.clone(),
-		))
-		.observe(disable_shadow_casting_on_instance_ready);
-
-		cmd.spawn((
-			LevelOfDetail(2),
-			ChildOf(ctx.entity),
-			SceneRoot(rocks_low),
-			collider_hierarchy,
-		))
-		.observe(disable_shadow_casting_on_instance_ready);
+		cmd.spawn((ChildOf(ctx.entity), SceneRoot(rocks), collider_hierarchy))
+			.observe(disable_shadow_casting_on_instance_ready);
 	}
 }
 
@@ -83,6 +66,7 @@ impl RockLayer {
     Name::new("Mushroom Layer"),
     ScatterLayerType::<ExtendedWindAffectedMaterial>,
     InstanceRotationYaw,
+	ScatterPhysicsBody(true),
     InstanceScale,
 	InstanceScaleRange {
        min: 4.,
@@ -93,10 +77,10 @@ impl RockLayer {
 	MicroStrength(0.1),
 	SCurveStrength(0.1),
 	BopStrength(0.2),
-    DistributionDensity(100.),
     Avoidance(0.02),
 	WindAffected,
 	SubsurfaceScattering,
+    DistributionDensity(100.)
 )]
 pub struct MushroomLayer;
 
@@ -113,36 +97,24 @@ impl MushroomLayer {
 
 		let mut cmd = world.commands();
 
+		cmd.entity(ctx.entity).insert((
+			DistributionPattern(mushroom_density_map),
+			LodConfig {
+				density: vec![100.0.into()],
+				..LodConfig::none()
+			},
+		));
+
 		let collider_hierarchy =
 			ColliderConstructorHierarchy::new(ColliderConstructor::ConvexHullFromMesh)
 				.with_default_layers(CollisionLayers::new(CollisionLayer::Prop, LayerMask::ALL));
 
-		cmd.entity(ctx.entity)
-			.insert((DistributionPattern(mushroom_density_map),));
-
-		cmd.spawn_batch([
-			(
-				ChildOf(ctx.entity),
-				SceneRoot(mushroom.clone()),
-				LevelOfDetail(0),
-				RigidBody::Static,
-				collider_hierarchy.clone(),
-			),
-			(
-				ChildOf(ctx.entity),
-				SceneRoot(mushroom.clone()),
-				LevelOfDetail(1),
-				RigidBody::Static,
-				collider_hierarchy.clone(),
-			),
-			(
-				ChildOf(ctx.entity),
-				SceneRoot(mushroom),
-				LevelOfDetail(2),
-				RigidBody::Static,
-				collider_hierarchy,
-			),
-		]);
+		cmd.spawn_batch([(
+			ChildOf(ctx.entity),
+			SceneRoot(mushroom),
+			RigidBody::Static,
+			collider_hierarchy,
+		)]);
 	}
 }
 
@@ -181,6 +153,7 @@ impl MushroomLayer {
 	MicroStrength(1.2),
 	GpuCullCompute,
 	RenderLayers::from(RenderLayer::GRASS),
+    ScatterLayerEnabled(false),
 )]
 pub(crate) struct GrassLayer;
 

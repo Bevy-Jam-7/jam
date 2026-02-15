@@ -217,6 +217,10 @@ struct MusicVolumeLabel;
 #[reflect(Component)]
 struct SfxVolumeLabel;
 
+#[derive(Component, Reflect)]
+#[reflect(Component)]
+struct QualitySettingsLabel;
+
 fn lower_volume<F: QueryFilter>(_on: On<Pointer<Click>>, mut volume: Single<&mut VolumeNode, F>) {
 	let mut ticks = VolumeTicks::from(volume.volume);
 	ticks.decrement();
