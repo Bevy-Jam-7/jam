@@ -7,7 +7,7 @@ use crate::props::setup::{setup_static_prop_with_convex_hull, static_bundle};
 use crate::scatter::layers::MushroomLayer;
 use crate::third_party::bevy_trenchbroom::GetTrenchbroomModelPath;
 
-use avian3d::prelude::{ColliderConstructor, RigidBody};
+use avian3d::prelude::ColliderConstructor;
 use bevy::prelude::*;
 use bevy_feronia::prelude::ScatteredInstance;
 use bevy_trenchbroom::prelude::ReflectQuakeClass;

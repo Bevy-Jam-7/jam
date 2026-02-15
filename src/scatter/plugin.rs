@@ -2,7 +2,6 @@ use crate::gameplay::level::EnvironmentAssets;
 use crate::scatter::observers::*;
 use crate::scatter::systems::*;
 use crate::screens::Screen;
-use crate::screens::loading::LoadingScreen;
 use bevy::app::prelude::*;
 use bevy::prelude::*;
 use bevy_eidolon::prelude::*;
