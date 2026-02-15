@@ -31,7 +31,6 @@ use bevy_eidolon::prepass::CullComputeCamera;
 pub const INTERACTION_DISTANCE: f32 = 3.0;
 
 pub(super) fn plugin(app: &mut App) {
-	app.init_resource::<CameraSensitivity>();
 	app.init_resource::<WorldModelFov>();
 
 	app.add_observer(spawn_view_model);
@@ -234,14 +233,4 @@ fn update_world_model_fov(
 		return;
 	};
 	perspective.fov = fov.to_radians();
-}
-
-#[derive(Resource, Reflect, Debug, Deref, DerefMut)]
-#[reflect(Resource)]
-pub(crate) struct CameraSensitivity(pub(crate) Vec2);
-
-impl Default for CameraSensitivity {
-	fn default() -> Self {
-		Self(Vec2::splat(1.0))
-	}
 }

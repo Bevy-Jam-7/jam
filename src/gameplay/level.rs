@@ -397,8 +397,8 @@ impl FromWorld for LevelKarolineAssets {
 			level: assets.load("maps/main/karoline/karoline.map#Scene"),
 			// You can regenerate the navmesh by using `bevy_rerecast_editor`
 			navmesh: assets.load("maps/main/karoline/karoline.nav"),
-			music_1: assets.load("audio/music/station.mp3"),
-			music_2: assets.load("audio/music/station.mp3"),
+			music_1: assets.load("audio/music/station.ogg"),
+			music_2: assets.load("audio/music/station.ogg"),
 		}
 	}
 }
