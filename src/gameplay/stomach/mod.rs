@@ -11,6 +11,7 @@ use bevy::{
 	picking::Pickable,
 	prelude::*,
 	render::{render_resource::TextureFormat, view::Hdr},
+	window::PrimaryWindow,
 };
 
 use crate::{
@@ -22,6 +23,7 @@ use crate::{
 	},
 	screens::Screen,
 	third_party::avian3d::CollisionLayer,
+	ui_layout::{RootWidgetPosition, RootWidgetPositionInterpolated},
 };
 
 pub(crate) mod eat;
@@ -62,6 +64,9 @@ pub struct StomachUi;
 
 /// The offscreen position of the stomach.
 const STOMACH_POSITION: Vec3 = Vec3::new(2000.0, 2000.0, 2000.0);
+
+/// The width of the stomach UI in viewport width units (vw).
+const STOMACH_WIDTH_VW: f32 = 15.0;
 
 fn spawn_stomach(mut commands: Commands, assets: Res<AssetServer>) {
 	let stomach = Stomach::default();
@@ -133,6 +138,7 @@ fn spawn_stomach_ui_and_render(
 	mut commands: Commands,
 	mut images: ResMut<Assets<Image>>,
 	stomach: Single<(Entity, &Stomach)>,
+	asset_server: Res<AssetServer>,
 ) {
 	let (stomach_entity, stomach) = *stomach;
 	// We'll render the stomach and its contents to a texture.
@@ -179,6 +185,7 @@ fn spawn_stomach_ui_and_render(
 		StomachUi,
 		Node {
 			flex_direction: FlexDirection::Column,
+			position_type: PositionType::Absolute,
 			..default()
 		},
 		crate::ui_layout::RootWidget,
@@ -186,30 +193,55 @@ fn spawn_stomach_ui_and_render(
 		children![
 			(
 				Node {
-					width: Val::Vw(15.0),
+					width: Val::Vw(STOMACH_WIDTH_VW),
 					max_width: Val::Px(300.0),
 					max_height: Val::Px(300.0 / aspect_ratio),
 					justify_content: JustifyContent::Center,
+					align_items: AlignItems::Center,
+					column_gap: Val::Px(4.0),
 					..default()
 				},
 				BackgroundColor(Color::srgba(1.0, 1.0, 1.0, 0.9)),
-				children![(
-					// TODO: add red recording circle instead of ().
-					Name::new("Stomach label"),
-					Text("LIVE () STOMACH REACTION".into()),
-					TextFont {
-						font: VARIABLE_FONT,
-						font_size: 18.0,
-						weight: FontWeight(800),
-						..default()
-					},
-					TextColor(Color::BLACK),
-				)]
+				children![
+					(
+						Name::new("Live label"),
+						Text("LIVE".into()),
+						TextFont {
+							font: VARIABLE_FONT,
+							font_size: 18.0,
+							weight: FontWeight(800),
+							..default()
+						},
+						TextColor(Color::BLACK),
+					),
+					(
+						Node {
+							width: Val::Px(14.0),
+							height: Val::Px(14.0),
+							..default()
+						},
+						ImageNode {
+							image: asset_server.load("ui/recording_indicator.png"),
+							..default()
+						}
+					),
+					(
+						Name::new("Stomach reaction label"),
+						Text("STOMACH REACTION".into()),
+						TextFont {
+							font: VARIABLE_FONT,
+							font_size: 18.0,
+							weight: FontWeight(800),
+							..default()
+						},
+						TextColor(Color::BLACK),
+					),
+				]
 			),
 			(
 				Node {
-					width: Val::Vw(15.0),
-					height: Val::Vw(15.0 / aspect_ratio),
+					width: Val::Vw(STOMACH_WIDTH_VW),
+					height: Val::Vw(STOMACH_WIDTH_VW / aspect_ratio),
 					max_width: Val::Px(300.0),
 					max_height: Val::Px(300.0 / aspect_ratio),
 					..default()
@@ -225,7 +257,7 @@ fn spawn_stomach_ui_and_render(
 	// Spawn a light to illuminate the stomach.
 	commands.spawn((
 		DirectionalLight {
-			illuminance: 1e4,
+			illuminance: 5000.0,
 			shadows_enabled: false,
 			..default()
 		},
@@ -249,9 +281,19 @@ fn move_stomach(
 /// Updates the visibility of the stomach UI based on whether the stomach has any contents.
 fn update_stomach_ui_visibility(
 	stomach: Single<&Stomach>,
-	mut node: Single<&mut Node, With<StomachUi>>,
+	node: Single<
+		(
+			&mut Node,
+			&mut RootWidgetPosition,
+			&mut RootWidgetPositionInterpolated,
+		),
+		With<StomachUi>,
+	>,
+	window: Single<&Window, With<PrimaryWindow>>,
 	current_level: Res<CurrentLevel>,
 ) {
+	let (mut node, mut position, mut interpolated) = node.into_inner();
+
 	// Hide the stomach UI if the stomach is empty, or if we are
 	// on the first level.
 	let new_display = if stomach.contents.is_empty() || *current_level == CurrentLevel::DayOne {
@@ -262,5 +304,14 @@ fn update_stomach_ui_visibility(
 
 	if node.display != new_display {
 		node.display = new_display;
+
+		// On the right edge of the screen, with the left edge of the UI
+		// flush with the edge of the screen, and vertically centered.
+		let window_size = window.size();
+		position.0 = Vec2::new(
+			window_size.x * (0.5 + STOMACH_WIDTH_VW * 0.005),
+			window_size.y * 0.5,
+		);
+		interpolated.0 = position.0;
 	}
 }
