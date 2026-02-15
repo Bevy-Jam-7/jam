@@ -22,8 +22,8 @@ use bevy_feronia::prelude::*;
 	    max: 16.
 	},
     InstanceJitter,
-    DistributionDensity(25.),
     Avoidance(1.6),
+    DistributionDensity(25.),
 )]
 pub(crate) struct RockLayer;
 
@@ -84,6 +84,7 @@ impl RockLayer {
     Avoidance(0.02),
 	WindAffected,
 	SubsurfaceScattering,
+    DistributionDensity(100.)
 )]
 pub struct MushroomLayer;
 
