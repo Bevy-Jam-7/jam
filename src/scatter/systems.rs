@@ -49,13 +49,9 @@ pub fn advance_to_setup(
 
 pub fn scatter(
 	mut cmd: Commands,
-	mut mw_clear_root: MessageWriter<ClearScatterRoot>,
 	root: Single<Entity, With<ScatterRoot>>,
 	current_level: Res<CurrentLevel>,
-	scatter_root: Single<Entity, With<ScatterRoot>>,
 ) {
-	mw_clear_root.write((*scatter_root).into());
-
 	match *current_level {
 		CurrentLevel::Commune | CurrentLevel::Shaders => {
 			debug!("Scattering...");
