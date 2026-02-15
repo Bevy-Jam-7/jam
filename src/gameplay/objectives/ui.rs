@@ -62,7 +62,16 @@ pub fn spawn_objective_ui(
 		},
 		MaterialNode(materials.add(TexturedUiMaterial::new(
 			Color::hsl(340.0, 0.5, 0.05),
-			asset_server.load("textures/carpet/carpet_ambientOcclusion.png"),
+			{
+				#[cfg(feature = "dev")]
+				{
+					asset_server.load("textures/carpet/carpet_ambientOcclusion.png")
+				}
+				#[cfg(feature = "release")]
+				{
+					asset_server.load("textures/carpet/carpet_ambientOcclusion.ktx2")
+				}
+			},
 			0.01,
 		))),
 		children![
