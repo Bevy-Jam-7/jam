@@ -15,6 +15,7 @@ use bevy_feronia::prelude::*;
 #[require(
     Name::new("Rock Layer"),
     ScatterLayerType::<StandardMaterial>,
+	LodConfig::none(),
     InstanceRotationYaw,
     InstanceScale,
     InstanceScaleRange{
@@ -56,7 +57,6 @@ impl RockLayer {
 		));
 
 		cmd.spawn((
-			LevelOfDetail(0),
 			ChildOf(ctx.entity),
 			SceneRoot(rocks),
 			collider_hierarchy.clone(),
@@ -70,7 +70,9 @@ impl RockLayer {
 #[require(
     Name::new("Mushroom Layer"),
     ScatterLayerType::<ExtendedWindAffectedMaterial>,
+	LodConfig::none(),
     InstanceRotationYaw,
+	ScatterPhysicsBody(true),
     InstanceScale,
 	InstanceScaleRange {
        min: 4.,
@@ -81,7 +83,6 @@ impl RockLayer {
 	MicroStrength(0.1),
 	SCurveStrength(0.1),
 	BopStrength(0.2),
-    DistributionDensity(100.),
     Avoidance(0.02),
 	WindAffected,
 	SubsurfaceScattering,

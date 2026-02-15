@@ -19,7 +19,7 @@ impl Plugin for ScatterPlugin {
 	fn build(&self, app: &mut App) {
 		app.insert_resource(GlobalWind {
 			current: Wind {
-				noise_scale: 0.005,
+				noise_scale: 0.01,
 				..WindPreset::Normal.into()
 			},
 			..default()
