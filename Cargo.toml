@@ -97,7 +97,7 @@ rand = "0.9"
 # Compile low-severity logs out of web builds for performance.
 tracing = { version = "0.1", features = [
     "max_level_debug",
-    "release_max_level_debug",
+    "release_max_level_warn",
 ] }
 getrandom = { version = "0.3", default-features = false, features = [
     "wasm_js",
