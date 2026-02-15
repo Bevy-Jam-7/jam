@@ -92,6 +92,12 @@ fn load_resource_assets(world: &mut World) {
 				})
 				.collect();
 
+			debug!(
+				"Processing {} loaded assets out of {} waiting",
+				resource_ids.len(),
+				resource_handles.waiting.len()
+			);
+
 			for id in resource_ids.into_iter() {
 				let Some((handle, insert_fn)) = resource_handles.waiting.remove(&id) else {
 					continue;

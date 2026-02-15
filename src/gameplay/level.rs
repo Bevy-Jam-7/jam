@@ -495,7 +495,7 @@ fn advance_level_command<T: Asset + Resource + Clone + FromWorld>() -> impl Comm
 		let id = handle.id();
 
 		let mut handles = world.resource_mut::<ResourceHandles>();
-		handles.clear();
+		handles.finished.clear();
 		handles.waiting.insert(
 			id.into(),
 			(handle.untyped(), move |world, handle| {
