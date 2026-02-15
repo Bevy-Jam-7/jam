@@ -5,7 +5,7 @@ use avian3d::{dynamics::solver::joint_graph::JointGraph, prelude::*};
 use bevy::{prelude::*, scene::SceneInstanceReady};
 
 use bevy_seedling::{
-	prelude::AudioEvents,
+	prelude::*,
 	sample::{PlaybackSettings, RandomPitch, SamplePlayer},
 	time::{Audio, AudioTime},
 };
@@ -38,6 +38,9 @@ pub(super) fn plugin(app: &mut App) {
 
 	app.load_asset::<Gltf>(Door::model_path());
 	app.register_dynamic_component::<Door>();
+	app.load_asset::<AudioSample>("audio/sound_effects/door-locked.ogg")
+		.load_asset::<AudioSample>("audio/sound_effects/door-open.ogg")
+		.load_asset::<AudioSample>("audio/sound_effects/door-close.ogg");
 }
 
 #[derive(Component)]

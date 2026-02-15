@@ -15,6 +15,7 @@ use crate::{
 	gameplay::{
 		TargetName, TargetnameEntityIndex,
 		interaction::InteractEvent,
+		npc::Npc,
 		objectives::{Objective, SubObjectiveOf},
 		player::Player,
 		scripting::ReflectionSystems,
@@ -33,6 +34,10 @@ pub(super) fn plugin(app: &mut App) {
 		.register_dynamic_component::<LogicToggler>()
 		.register_dynamic_component::<LogicDespawn>()
 		.register_dynamic_component::<SpotLight>()
+		.register_dynamic_component::<SensorEntity>()
+		.register_dynamic_component::<SolidTarget>()
+		.register_dynamic_component::<SolidInteractable>()
+		.register_dynamic_component::<Npc>()
 		.add_observer(interact_timers)
 		.add_observer(uninitialise_objectives)
 		.add_observer(talk_ify_yarnnode)
@@ -212,6 +217,16 @@ pub(crate) struct SensorEntity {
 	/// Whether the sensor is disabled and will not respond to events
 	sensor_disabled: bool,
 }
+
+#[solid_class(base(TargetName, Transform, Visibility))]
+#[component(immutable)]
+#[derive(Default)]
+pub(crate) struct SolidTarget;
+
+#[solid_class(base(TargetName, Transform, Visibility, InteractableEntity))]
+#[component(immutable)]
+#[derive(Default)]
+pub(crate) struct SolidInteractable;
 
 impl SensorEntity {
 	pub fn on_insert(mut world: DeferredWorld, ctx: HookContext) {

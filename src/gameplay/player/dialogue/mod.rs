@@ -5,7 +5,9 @@ use bevy::prelude::*;
 use bevy_yarnspinner::prelude::*;
 
 use crate::{
-	PostPhysicsAppSystems, gameplay::interaction::InteractEvent, props::logic_entity::YarnNode,
+	PostPhysicsAppSystems,
+	gameplay::interaction::InteractEvent,
+	props::{interactables::InteractableEntity, logic_entity::YarnNode},
 	screens::Screen,
 };
 
@@ -45,11 +47,14 @@ pub(crate) struct DialogueSpeaker(pub(crate) Option<Entity>);
 
 fn interact_with_dialogue(
 	trigger: On<InteractEvent>,
-	q_yarn_node: Query<&YarnNode>,
+	q_yarn_node: Query<(&YarnNode, Option<&InteractableEntity>)>,
 	mut dialogue_runner: Single<&mut DialogueRunner>,
 	mut speaker: ResMut<DialogueSpeaker>,
 ) {
-	if let Ok(node) = q_yarn_node.get(trigger.0) {
+	if let Ok((node, interactable)) = q_yarn_node.get(trigger.0) {
+		if interactable.is_some_and(|i| i.is_edible) {
+			return;
+		}
 		if dialogue_runner.try_start_node(&node.yarn_node).is_ok() {
 			speaker.0 = Some(trigger.0);
 		}

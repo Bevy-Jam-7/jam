@@ -81,7 +81,6 @@ fn spawn_view_model(
 		CurrentLevel::DayOne => (12., 0.4),
 		CurrentLevel::DayTwo => (12., 0.2),
 		CurrentLevel::Commune => (12., 0.2),
-		CurrentLevel::Train => (12., 0.4),
 		CurrentLevel::Karoline => (12., 0.4),
 	};
 

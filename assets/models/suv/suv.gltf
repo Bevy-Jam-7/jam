@@ -355,8 +355,6 @@
 						"NORMAL":1,
 						"TEXCOORD_0":2,
 						"TEXCOORD_1":3,
-						"TEXCOORD_2":4,
-						"TEXCOORD_3":5,
 						"TANGENT":6
 					},
 					"indices":7,
@@ -368,8 +366,6 @@
 						"NORMAL":9,
 						"TEXCOORD_0":10,
 						"TEXCOORD_1":11,
-						"TEXCOORD_2":12,
-						"TEXCOORD_3":13,
 						"TANGENT":14
 					},
 					"indices":15,
@@ -381,8 +377,6 @@
 						"NORMAL":17,
 						"TEXCOORD_0":18,
 						"TEXCOORD_1":19,
-						"TEXCOORD_2":20,
-						"TEXCOORD_3":21,
 						"TANGENT":22
 					},
 					"indices":23,
