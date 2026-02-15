@@ -25,17 +25,67 @@ pub fn clear_scatter_root(
 	mw_clear_root.write((*scatter_root).into());
 }
 
-pub fn toggle_layers(
+pub fn toggle_chunk_root(
 	mut cmd: Commands,
-	q_layer: Query<Entity, With<ScatterLayer>>,
+	q_chunk_root: Query<Entity, With<ChunkRoot>>,
 	current_level: Res<CurrentLevel>,
 ) {
 	let enabled = matches!(
 		*current_level,
 		CurrentLevel::Commune | CurrentLevel::Shaders
 	);
-	for layer in q_layer.iter() {
-		cmd.entity(layer).insert(ScatterLayerEnabled(enabled));
+	toggle::<ChunkRootDisabled>(&mut cmd, q_chunk_root.iter(), enabled);
+}
+
+pub fn toggle_grass_layer(
+	mut cmd: Commands,
+	q_layer: Query<Entity, With<GrassLayer>>,
+	current_level: Res<CurrentLevel>,
+) {
+	let enabled = matches!(
+		*current_level,
+		CurrentLevel::Commune | CurrentLevel::Shaders
+	);
+
+	toggle::<ScatterLayerDisabled>(&mut cmd, q_layer.iter(), enabled);
+}
+
+pub fn toggle_mushroom_layer(
+	mut cmd: Commands,
+	q_layer: Query<Entity, With<MushroomLayer>>,
+	current_level: Res<CurrentLevel>,
+) {
+	let enabled = matches!(
+		*current_level,
+		CurrentLevel::Commune | CurrentLevel::Shaders
+	);
+
+	toggle::<ScatterLayerDisabled>(&mut cmd, q_layer.iter(), enabled);
+}
+
+pub fn toggle_rock_layer(
+	mut cmd: Commands,
+	q_layer: Query<Entity, With<RockLayer>>,
+	current_level: Res<CurrentLevel>,
+) {
+	let enabled = matches!(
+		*current_level,
+		CurrentLevel::Commune | CurrentLevel::Shaders | CurrentLevel::Karoline
+	);
+	toggle::<ScatterLayerDisabled>(&mut cmd, q_layer.iter(), enabled);
+}
+
+fn toggle<T: Default + Component>(
+	cmd: &mut Commands,
+	mut iter: impl Iterator<Item = Entity>,
+	enabled: bool,
+) {
+	while let Some(e) = iter.next() {
+		if enabled {
+			cmd.entity(e).remove::<T>();
+		} else {
+			cmd.entity(e).insert(T::default());
+		}
 	}
 }
 

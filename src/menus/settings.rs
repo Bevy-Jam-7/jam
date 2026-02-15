@@ -8,6 +8,7 @@ use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::Val::*}
 use bevy_framepace::{FramepaceSettings, Limiter};
 use bevy_seedling::prelude::*;
 
+use crate::scatter::quality::QualitySetting;
 use crate::ui_layout::RootWidget;
 use crate::{
 	audio::{MusicPool, perceptual::PerceptualVolumeConverter},
@@ -16,7 +17,6 @@ use crate::{
 	screens::Screen,
 	theme::prelude::*,
 };
-use crate::scatter::quality::QualitySetting;
 
 pub(super) fn plugin(app: &mut App) {
 	app.init_resource::<VsyncSetting>();

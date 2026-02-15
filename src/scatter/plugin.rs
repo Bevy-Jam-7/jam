@@ -1,5 +1,6 @@
 use crate::gameplay::level::EnvironmentAssets;
 use crate::scatter::observers::*;
+use crate::scatter::quality::QualitySetting;
 use crate::scatter::systems::*;
 use crate::screens::Screen;
 use bevy::app::prelude::*;
@@ -16,21 +17,22 @@ pub struct ScatterPlugin;
 
 impl Plugin for ScatterPlugin {
 	fn build(&self, app: &mut App) {
-		app.insert_resource(GlobalWind {
-			current: Wind {
-				noise_scale: 0.01,
-				..WindPreset::Normal.into()
-			},
-			..default()
-		})
-		.add_plugins((
-			SceneAssetBackendPlugin,
-			StandardScatterPlugin,
-			InstancedWindAffectedScatterPlugin,
-			ExtendedWindAffectedScatterPlugin,
-			GpuComputeCullCorePlugin,
-			GpuCullComputePlugin::<InstancedWindAffectedMaterial>::default(),
-		));
+		app.init_resource::<QualitySetting>()
+			.insert_resource(GlobalWind {
+				current: Wind {
+					noise_scale: 0.01,
+					..WindPreset::Normal.into()
+				},
+				..default()
+			})
+			.add_plugins((
+				SceneAssetBackendPlugin,
+				StandardScatterPlugin,
+				InstancedWindAffectedScatterPlugin,
+				ExtendedWindAffectedScatterPlugin,
+				GpuComputeCullCorePlugin,
+				GpuCullComputePlugin::<InstancedWindAffectedMaterial>::default(),
+			));
 
 		app.add_systems(OnEnter(ScatterState::Ready), scatter)
 			.add_systems(Startup, spawn_scatter_root)
@@ -40,7 +42,13 @@ impl Plugin for ScatterPlugin {
 			)
 			.add_systems(
 				OnEnter(ScatterState::Loading),
-				(advance_to_setup, toggle_layers),
+				(
+					advance_to_setup,
+					toggle_chunk_root,
+					toggle_mushroom_layer,
+					toggle_rock_layer,
+					toggle_grass_layer,
+				),
 			)
 			.add_systems(OnExit(Screen::Gameplay), clear_scatter_root)
 			.add_systems(

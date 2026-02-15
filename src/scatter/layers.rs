@@ -24,6 +24,7 @@ use bevy_feronia::prelude::*;
     InstanceJitter,
     Avoidance(1.6),
     DistributionDensity(25.),
+    ScatterPhysicsBody
 )]
 pub(crate) struct RockLayer;
 
@@ -66,7 +67,7 @@ impl RockLayer {
     Name::new("Mushroom Layer"),
     ScatterLayerType::<ExtendedWindAffectedMaterial>,
     InstanceRotationYaw,
-	ScatterPhysicsBody(true),
+	ScatterPhysicsBody,
     InstanceScale,
 	InstanceScaleRange {
        min: 4.,
@@ -153,7 +154,6 @@ impl MushroomLayer {
 	MicroStrength(1.2),
 	GpuCullCompute,
 	RenderLayers::from(RenderLayer::GRASS),
-    ScatterLayerEnabled(false),
 )]
 pub(crate) struct GrassLayer;
 
