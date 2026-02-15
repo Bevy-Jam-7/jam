@@ -69,7 +69,6 @@ impl RockLayer {
 #[require(
     Name::new("Mushroom Layer"),
     ScatterLayerType::<ExtendedWindAffectedMaterial>,
-	LodConfig::none(),
     InstanceRotationYaw,
 	ScatterPhysicsBody(true),
     InstanceScale,
