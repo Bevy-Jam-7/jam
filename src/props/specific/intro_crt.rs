@@ -1,8 +1,8 @@
 //! Handles the animated expressions for the intro CRT
 
 use crate::{
-	gameplay::dialogue_view::typewriter::Typewriter, props::generic::Crt,
-	third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _,
+	asset_tracking::LoadResource as _, gameplay::dialogue_view::typewriter::Typewriter,
+	props::generic::Crt, third_party::bevy_trenchbroom::GetTrenchbroomModelPath as _,
 };
 use bevy::{platform::collections::HashMap, prelude::*};
 use bevy_yarnspinner::prelude::DialogueRunner;
@@ -22,6 +22,46 @@ pub(super) fn plugin(app: &mut App) {
 				}),
 			),
 		);
+	#[cfg(feature = "dev")]
+	{
+		app.load_asset::<Image>("models/office/crt/boot.png")
+			.load_asset::<Image>("models/office/crt/smile.png")
+			.load_asset::<Image>("models/office/crt/smile2.png")
+			.load_asset::<Image>("models/office/crt/stonks.png")
+			.load_asset::<Image>("models/office/crt/sideways.png")
+			.load_asset::<Image>("models/office/crt/point.png")
+			.load_asset::<Image>("models/office/crt/glitch.png")
+			.load_asset::<Image>("models/office/crt/shocked.png")
+			.load_asset::<Image>("models/office/crt/nod.png")
+			.load_asset::<Image>("models/office/crt/shake.png")
+			.load_asset::<Image>("models/office/crt/blank.png")
+			.load_asset::<Image>("models/office/crt/x.png")
+			.load_asset::<Image>("models/office/crt/annoyed.png")
+			.load_asset::<Image>("models/office/crt/away.png")
+			.load_asset::<Image>("models/office/crt/upside.png")
+			.load_asset::<Image>("models/office/crt/leftside.png")
+			.load_asset::<Image>("models/office/crt/rightside.png");
+	}
+	#[cfg(feature = "release")]
+	{
+		app.load_asset::<Image>("models/office/crt/boot.ktx2")
+			.load_asset::<Image>("models/office/crt/smile.ktx2")
+			.load_asset::<Image>("models/office/crt/smile2.ktx2")
+			.load_asset::<Image>("models/office/crt/stonks.ktx2")
+			.load_asset::<Image>("models/office/crt/sideways.ktx2")
+			.load_asset::<Image>("models/office/crt/point.ktx2")
+			.load_asset::<Image>("models/office/crt/glitch.ktx2")
+			.load_asset::<Image>("models/office/crt/shocked.ktx2")
+			.load_asset::<Image>("models/office/crt/nod.ktx2")
+			.load_asset::<Image>("models/office/crt/shake.ktx2")
+			.load_asset::<Image>("models/office/crt/blank.ktx2")
+			.load_asset::<Image>("models/office/crt/x.ktx2")
+			.load_asset::<Image>("models/office/crt/annoyed.ktx2")
+			.load_asset::<Image>("models/office/crt/away.ktx2")
+			.load_asset::<Image>("models/office/crt/upside.ktx2")
+			.load_asset::<Image>("models/office/crt/leftside.ktx2")
+			.load_asset::<Image>("models/office/crt/rightside.ktx2");
+	}
 }
 
 /// Call this system from yarnspinner to change the emote
@@ -53,40 +93,92 @@ impl FromWorld for CrtScreenTextures {
 	fn from_world(world: &mut World) -> Self {
 		let assets = world.resource::<AssetServer>();
 
-		Self(HashMap::from_iter([
-			("boot".into(), assets.load("models/office/crt/boot.png")),
-			("smile".into(), assets.load("models/office/crt/smile.png")),
-			("smile2".into(), assets.load("models/office/crt/smile2.png")),
-			("stonks".into(), assets.load("models/office/crt/stonks.png")),
-			(
-				"sideways".into(),
-				assets.load("models/office/crt/sideways.png"),
-			),
-			("point".into(), assets.load("models/office/crt/point.png")),
-			("glitch".into(), assets.load("models/office/crt/glitch.png")),
-			(
-				"shocked".into(),
-				assets.load("models/office/crt/shocked.png"),
-			),
-			("nod".into(), assets.load("models/office/crt/nod.png")),
-			("shake".into(), assets.load("models/office/crt/shake.png")),
-			("blank".into(), assets.load("models/office/crt/blank.png")),
-			("x".into(), assets.load("models/office/crt/x.png")),
-			(
-				"annoyed".into(),
-				assets.load("models/office/crt/annoyed.png"),
-			),
-			("away".into(), assets.load("models/office/crt/away.png")),
-			("upside".into(), assets.load("models/office/crt/upside.png")),
-			(
-				"leftside".into(),
-				assets.load("models/office/crt/leftside.png"),
-			),
-			(
-				"rightside".into(),
-				assets.load("models/office/crt/rightside.png"),
-			),
-		]))
+		#[cfg(feature = "dev")]
+		{
+			Self(HashMap::from_iter([
+				("boot".into(), assets.load("models/office/crt/boot.png")),
+				("smile".into(), assets.load("models/office/crt/smile.png")),
+				("smile2".into(), assets.load("models/office/crt/smile2.png")),
+				("stonks".into(), assets.load("models/office/crt/stonks.png")),
+				(
+					"sideways".into(),
+					assets.load("models/office/crt/sideways.png"),
+				),
+				("point".into(), assets.load("models/office/crt/point.png")),
+				("glitch".into(), assets.load("models/office/crt/glitch.png")),
+				(
+					"shocked".into(),
+					assets.load("models/office/crt/shocked.png"),
+				),
+				("nod".into(), assets.load("models/office/crt/nod.png")),
+				("shake".into(), assets.load("models/office/crt/shake.png")),
+				("blank".into(), assets.load("models/office/crt/blank.png")),
+				("x".into(), assets.load("models/office/crt/x.png")),
+				(
+					"annoyed".into(),
+					assets.load("models/office/crt/annoyed.png"),
+				),
+				("away".into(), assets.load("models/office/crt/away.png")),
+				("upside".into(), assets.load("models/office/crt/upside.png")),
+				(
+					"leftside".into(),
+					assets.load("models/office/crt/leftside.png"),
+				),
+				(
+					"rightside".into(),
+					assets.load("models/office/crt/rightside.png"),
+				),
+			]))
+		}
+		#[cfg(feature = "release")]
+		{
+			Self(HashMap::from_iter([
+				("boot".into(), assets.load("models/office/crt/boot.ktx2")),
+				("smile".into(), assets.load("models/office/crt/smile.ktx2")),
+				(
+					"smile2".into(),
+					assets.load("models/office/crt/smile2.ktx2"),
+				),
+				(
+					"stonks".into(),
+					assets.load("models/office/crt/stonks.ktx2"),
+				),
+				(
+					"sideways".into(),
+					assets.load("models/office/crt/sideways.ktx2"),
+				),
+				("point".into(), assets.load("models/office/crt/point.ktx2")),
+				(
+					"glitch".into(),
+					assets.load("models/office/crt/glitch.ktx2"),
+				),
+				(
+					"shocked".into(),
+					assets.load("models/office/crt/shocked.ktx2"),
+				),
+				("nod".into(), assets.load("models/office/crt/nod.ktx2")),
+				("shake".into(), assets.load("models/office/crt/shake.ktx2")),
+				("blank".into(), assets.load("models/office/crt/blank.ktx2")),
+				("x".into(), assets.load("models/office/crt/x.ktx2")),
+				(
+					"annoyed".into(),
+					assets.load("models/office/crt/annoyed.ktx2"),
+				),
+				("away".into(), assets.load("models/office/crt/away.ktx2")),
+				(
+					"upside".into(),
+					assets.load("models/office/crt/upside.ktx2"),
+				),
+				(
+					"leftside".into(),
+					assets.load("models/office/crt/leftside.ktx2"),
+				),
+				(
+					"rightside".into(),
+					assets.load("models/office/crt/rightside.ktx2"),
+				),
+			]))
+		}
 	}
 }
 

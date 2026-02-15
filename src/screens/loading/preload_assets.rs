@@ -89,11 +89,11 @@ fn update_loading_assets_label(
 			.and_then(|(handle, _)| {
 				let path = asset_server.get_path(handle)?;
 				let disp = path.path().display();
-				format!("{disp}").into()
+				format!("> {disp}").into()
 			})
-			.unwrap_or_else(|| "Done".to_string());
+			.unwrap_or_else(|| "> Starting Shader Compilation".to_string());
 		text.0 = format!(
-			"Loading Assets: {} / {} \n{waiting}\nThis may take a little while, sit back and relax <3",
+			"Loading Assets: {} / {} \n{waiting}\n(This may take a little while, sit back and relax <3)",
 			resource_handles.finished_count(),
 			resource_handles.total_count()
 		);
