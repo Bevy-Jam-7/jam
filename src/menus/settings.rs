@@ -129,6 +129,7 @@ fn spawn_settings_menu(mut commands: Commands) {
 							..default()
 						}
 					),
+									widget::plus_minus_bar(VsyncLabel, disable_vsync, enable_vsync),
 					(
 						widget::label("Quality"),
 						Node {
@@ -311,6 +312,14 @@ struct VsyncSetting(bool);
 #[derive(Component, Reflect)]
 #[reflect(Component)]
 struct VsyncLabel;
+
+fn enable_vsync(_on: On<Pointer<Click>>, mut setting: ResMut<VsyncSetting>) {
+	setting.0 = true;
+}
+
+fn disable_vsync(_on: On<Pointer<Click>>, mut setting: ResMut<VsyncSetting>) {
+	setting.0 = false;
+}
 
 fn update_vsync(mut window: Single<&mut Window>, setting: Res<VsyncSetting>) {
 	window.present_mode = if setting.0 {
