@@ -45,7 +45,7 @@
 					"ior":1000
 				}
 			},
-			"name":"cctvcamera",
+			"name":"cctvcamera.003",
 			"normalTexture":{
 				"index":1
 			},
@@ -62,7 +62,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Object_0",
+			"name":"Object_0.003",
 			"primitives":[
 				{
 					"attributes":{
@@ -77,7 +77,7 @@
 			]
 		},
 		{
-			"name":"Object_1",
+			"name":"Object_1.003",
 			"primitives":[
 				{
 					"attributes":{
@@ -128,7 +128,7 @@
 		},
 		{
 			"mimeType":"image/png",
-			"name":"Image_1",
+			"name":"Image_1-1",
 			"uri":"Image_1-1.png"
 		}
 	],
@@ -176,7 +176,7 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":1806,
+			"count":2516,
 			"max":[
 				0.1257735788822174,
 				0.48652851581573486,
@@ -192,19 +192,19 @@
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":1806,
+			"count":2516,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":7,
 			"componentType":5126,
-			"count":1806,
+			"count":2516,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":8,
 			"componentType":5126,
-			"count":1806,
+			"count":2516,
 			"type":"VEC4"
 		},
 		{
@@ -247,32 +247,32 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":21672,
+			"byteLength":30192,
 			"byteOffset":204,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":21672,
-			"byteOffset":21876,
+			"byteLength":30192,
+			"byteOffset":30396,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":14448,
-			"byteOffset":43548,
+			"byteLength":20128,
+			"byteOffset":60588,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":28896,
-			"byteOffset":57996,
+			"byteLength":40256,
+			"byteOffset":80716,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":7998,
-			"byteOffset":86892,
+			"byteOffset":120972,
 			"target":34963
 		}
 	],
@@ -284,7 +284,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":94892,
+			"byteLength":128972,
 			"uri":"cctv.bin"
 		}
 	]
