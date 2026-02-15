@@ -40,7 +40,7 @@ impl Plugin for ScatterPlugin {
 			)
 			.add_systems(
 				OnEnter(ScatterState::Loading),
-				(clear_scatter_root, toggle_layers),
+				(clear_scatter_root, advance_to_setup),
 			)
 			.add_systems(
 				Update,

@@ -25,7 +25,7 @@ pub fn clear_scatter_root(
 	mw_clear_root.write((*scatter_root).into());
 }
 
-pub fn toggle_layers(
+pub fn advance_to_setup(
 	mut cmd: Commands,
 	mut ns_scatter: ResMut<NextState<ScatterState>>,
 	q_layer: Query<Entity, With<ScatterLayer>>,
