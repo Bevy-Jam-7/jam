@@ -20,7 +20,10 @@ pub(super) fn plugin(app: &mut App) {
 		OnEnter(LoadingScreen::Shaders),
 		(spawn_landscape, spawn_level),
 	)
-	.add_systems(OnExit(Screen::Gameplay), reset_scatter_state)
+	.add_systems(
+		OnExit(Screen::Gameplay),
+		(reset_scatter_state, remove_ready_to_advance),
+	)
 	.add_systems(OnEnter(Screen::Title), reset_current_level);
 
 	app.add_systems(
@@ -65,13 +68,11 @@ struct ScatterReadyToAdvance;
 
 fn advance_to_gameplay_screen(
 	mut next_screen: ResMut<NextState<Screen>>,
-	mut cmd: Commands,
 	scene_spawner: Res<SceneSpawner>,
 	scene_instances: Query<&SceneInstance>,
 	just_added_scenes: Query<(), (With<SceneRoot>, Without<SceneInstance>)>,
 	just_added_meshes: Query<(), Added<Mesh3d>>,
 	nav_mesh_events: MessageReader<AssetEvent<NavMesh<ThreeD>>>,
-	scatter_root: Single<Entity, (With<ScatterRoot>, With<ScatterReadyToAdvance>)>,
 ) {
 	if !(just_added_meshes.is_empty() && just_added_scenes.is_empty()) {
 		return;
@@ -87,6 +88,12 @@ fn advance_to_gameplay_screen(
 	}
 
 	next_screen.set(Screen::Gameplay);
+}
+
+fn remove_ready_to_advance(
+	mut cmd: Commands,
+	scatter_root: Single<Entity, (With<ScatterRoot>, With<ScatterReadyToAdvance>)>,
+) {
 	cmd.entity(*scatter_root).remove::<ScatterReadyToAdvance>();
 }
 

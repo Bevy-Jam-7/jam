@@ -40,8 +40,9 @@ impl Plugin for ScatterPlugin {
 			)
 			.add_systems(
 				OnEnter(ScatterState::Loading),
-				(clear_scatter_root, advance_to_setup, toggle_layers),
+				(advance_to_setup, toggle_layers),
 			)
+			.add_systems(OnExit(Screen::Gameplay), clear_scatter_root)
 			.add_systems(
 				Update,
 				(
