@@ -413,9 +413,8 @@ fn advance_level(
 		CurrentLevel::DayOne => commands.queue(advance_level_command::<LevelTwoAssets>()),
 		CurrentLevel::DayTwo => commands.queue(advance_level_command::<LevelKarolineAssets>()),
 		CurrentLevel::Karoline => commands.queue(advance_level_command::<LevelCommuneAssets>()),
-		CurrentLevel::Commune | CurrentLevel::Shaders => {
-			commands.queue(advance_level_command::<LevelOneAssets>())
-		}
+		CurrentLevel::Shaders => commands.queue(advance_level_command::<LevelOneAssets>()),
+		CurrentLevel::Commune => commands.insert_resource(CurrentLevel::default()),
 	};
 }
 
