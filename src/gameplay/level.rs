@@ -36,7 +36,7 @@ pub(super) fn plugin(app: &mut App) {
 		(|mut commands: Commands| {
 			commands.trigger(AdvanceLevel);
 		})
-		.run_if(input_just_pressed(KeyCode::F10)),
+		.run_if(input_just_pressed(KeyCode::F10).and(in_state(Screen::Gameplay))),
 	);
 
 	// This is a hack, a [`Screen:Shader`] stage could be added
@@ -408,14 +408,14 @@ fn advance_level(
 	_done: On<AdvanceLevel>,
 	mut commands: Commands,
 	current_level: Res<CurrentLevel>,
+	mut ns_loading_screen: ResMut<NextState<Screen>>,
 ) {
 	match *current_level {
 		CurrentLevel::DayOne => commands.queue(advance_level_command::<LevelTwoAssets>()),
 		CurrentLevel::DayTwo => commands.queue(advance_level_command::<LevelKarolineAssets>()),
 		CurrentLevel::Karoline => commands.queue(advance_level_command::<LevelCommuneAssets>()),
-		CurrentLevel::Commune | CurrentLevel::Shaders => {
-			commands.queue(advance_level_command::<LevelOneAssets>())
-		}
+		CurrentLevel::Shaders => commands.queue(advance_level_command::<LevelOneAssets>()),
+		CurrentLevel::Commune => ns_loading_screen.set(Screen::Title),
 	};
 }
 
