@@ -5,12 +5,13 @@
 use bevy::ecs::query::QueryFilter;
 use bevy::window::PresentMode;
 use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::Val::*};
+use bevy_ahoy::camera::CharacterControllerCameraOf;
 use bevy_seedling::prelude::*;
 
 use crate::ui_layout::RootWidget;
 use crate::{
 	audio::{MusicPool, perceptual::PerceptualVolumeConverter},
-	gameplay::player::camera::{CameraSensitivity, WorldModelFov},
+	gameplay::player::camera::WorldModelFov,
 	menus::Menu,
 	screens::Screen,
 	theme::prelude::*,
@@ -216,29 +217,37 @@ struct CameraSensitivityLabel;
 
 fn lower_camera_sensitivity(
 	_on: On<Pointer<Click>>,
-	mut camera_sensitivity: ResMut<CameraSensitivity>,
+	cam: Single<(Entity, &CharacterControllerCameraOf)>,
+	mut command: Commands,
 ) {
-	camera_sensitivity.0 -= 0.1;
+	let (entity, cam) = cam.into_inner();
+	let mut cam = cam.clone();
+	cam.mult -= 0.1;
 	const MIN_SENSITIVITY: f32 = 0.1;
-	camera_sensitivity.x = camera_sensitivity.x.max(MIN_SENSITIVITY);
-	camera_sensitivity.y = camera_sensitivity.y.max(MIN_SENSITIVITY);
+	cam.mult.x = cam.mult.x.max(MIN_SENSITIVITY);
+	cam.mult.y = cam.mult.y.max(MIN_SENSITIVITY);
+	command.entity(entity).insert(cam);
 }
 
 fn raise_camera_sensitivity(
 	_on: On<Pointer<Click>>,
-	mut camera_sensitivity: ResMut<CameraSensitivity>,
+	cam: Single<(Entity, &CharacterControllerCameraOf)>,
+	mut command: Commands,
 ) {
-	camera_sensitivity.0 += 0.1;
+	let (entity, cam) = cam.into_inner();
+	let mut cam = cam.clone();
+	cam.mult += 0.1;
 	const MAX_SENSITIVITY: f32 = 20.0;
-	camera_sensitivity.x = camera_sensitivity.x.min(MAX_SENSITIVITY);
-	camera_sensitivity.y = camera_sensitivity.y.min(MAX_SENSITIVITY);
+	cam.mult.x = cam.mult.x.min(MAX_SENSITIVITY);
+	cam.mult.y = cam.mult.y.min(MAX_SENSITIVITY);
+	command.entity(entity).insert(cam);
 }
 
 fn update_camera_sensitivity_label(
 	mut label: Single<&mut Text, With<CameraSensitivityLabel>>,
-	camera_sensitivity: Res<CameraSensitivity>,
+	camera_sensitivity: Single<&CharacterControllerCameraOf>,
 ) {
-	label.0 = format!("{:.1}", camera_sensitivity.x);
+	label.0 = format!("{:.1}", camera_sensitivity.mult.x);
 }
 
 #[derive(Component, Reflect)]
