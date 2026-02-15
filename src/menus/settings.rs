@@ -129,7 +129,7 @@ fn spawn_settings_menu(mut commands: Commands) {
 							..default()
 						}
 					),
-									widget::plus_minus_bar(VsyncLabel, disable_vsync, enable_vsync),
+					widget::plus_minus_bar(VsyncLabel, disable_vsync, enable_vsync),
 					(
 						widget::label("Quality"),
 						Node {
