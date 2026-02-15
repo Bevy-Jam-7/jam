@@ -182,53 +182,25 @@ impl GrassLayer {
 			LodConfig::from(visibility_settings),
 		));
 
-		match settings {
-			QualitySetting::Low => {
-				cmd.spawn_batch([(
-					SceneRoot(grass_low),
-					ChildOf(ctx.entity),
-					LevelOfDetail(0),
-					collider_hierarchy,
-				)]);
-			}
-			QualitySetting::Medium => {
-				cmd.spawn_batch([
-					(
-						SceneRoot(grass_med),
-						ChildOf(ctx.entity),
-						LevelOfDetail(0),
-						collider_hierarchy.clone(),
-					),
-					(
-						SceneRoot(grass_low),
-						ChildOf(ctx.entity),
-						LevelOfDetail(1),
-						collider_hierarchy,
-					),
-				]);
-			}
-			QualitySetting::High | QualitySetting::Ultra => {
-				cmd.spawn_batch([
-					(
-						SceneRoot(grass),
-						ChildOf(ctx.entity),
-						LevelOfDetail(0),
-						collider_hierarchy.clone(),
-					),
-					(
-						SceneRoot(grass_med),
-						ChildOf(ctx.entity),
-						LevelOfDetail(1),
-						collider_hierarchy.clone(),
-					),
-					(
-						SceneRoot(grass_low),
-						ChildOf(ctx.entity),
-						LevelOfDetail(2),
-						collider_hierarchy,
-					),
-				]);
-			}
-		}
+		cmd.spawn_batch([
+			(
+				SceneRoot(grass),
+				ChildOf(ctx.entity),
+				LevelOfDetail(0),
+				collider_hierarchy.clone(),
+			),
+			(
+				SceneRoot(grass_med),
+				ChildOf(ctx.entity),
+				LevelOfDetail(1),
+				collider_hierarchy.clone(),
+			),
+			(
+				SceneRoot(grass_low),
+				ChildOf(ctx.entity),
+				LevelOfDetail(2),
+				collider_hierarchy,
+			),
+		]);
 	}
 }
