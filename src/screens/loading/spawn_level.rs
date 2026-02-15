@@ -101,7 +101,9 @@ fn remove_ready_to_advance(
 fn on_scatter_done(
 	_: On<ScatterDone>,
 	mut cmd: Commands,
-	scatter_root: Single<Entity, With<ScatterRoot>>,
+	q_scatter_root: Query<Entity, With<ScatterRoot>>,
 ) {
-	cmd.entity(*scatter_root).insert(ScatterReadyToAdvance);
+	for root in &q_scatter_root {
+		cmd.entity(root).insert(ScatterReadyToAdvance);
+	}
 }

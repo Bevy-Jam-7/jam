@@ -202,16 +202,7 @@ where
 			..default()
 		},
 		children![
-			button_base(
-				text,
-				action,
-				Node {
-					height: Px(30.0),
-					align_items: AlignItems::Center,
-					justify_content: JustifyContent::Center,
-					..default()
-				},
-			),
+			button_small(text, action,),
 			(
 				Node {
 					padding: UiRect::horizontal(Px(10.0)),

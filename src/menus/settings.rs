@@ -2,12 +2,15 @@
 //! We can add all manner of settings and accessibility options here.
 //! For 3D, we'd also place the camera sensitivity and FOV here.
 
+use bevy::ecs::lifecycle::HookContext;
 use bevy::ecs::query::QueryFilter;
+use bevy::ecs::world::DeferredWorld;
 use bevy::window::PresentMode;
 use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::Val::*};
 use bevy_ahoy::camera::CharacterControllerCameraOf;
 use bevy_seedling::prelude::*;
 
+use crate::scatter::quality::QualitySetting;
 use crate::ui_layout::RootWidget;
 use crate::{
 	audio::{MusicPool, perceptual::PerceptualVolumeConverter},
@@ -37,7 +40,8 @@ pub(super) fn plugin(app: &mut App) {
 			update_vsync_label,
 		)
 			.run_if(in_state(Menu::Settings)),
-	);
+	)
+	.add_observer(on_add_quality);
 }
 
 fn spawn_settings_menu(mut commands: Commands) {
@@ -125,11 +129,42 @@ fn spawn_settings_menu(mut commands: Commands) {
 							..default()
 						}
 					),
+					widget::plus_minus_bar(VsyncLabel, disable_vsync, enable_vsync),
+					(
+						widget::label("Quality"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					QualitySettingsButton
 				],
 			),
 			widget::button("Back", go_back_on_click),
 		],
 	));
+}
+
+#[derive(Component)]
+#[component(on_add = Self::on_add)]
+struct QualitySettingsButton;
+
+impl QualitySettingsButton {
+	fn on_add(mut world: DeferredWorld, ctx: HookContext) {
+		let screen = *(*world.resource::<State<Screen>>());
+		let mut cmd = world.commands();
+		if screen != Screen::Gameplay {
+			cmd.entity(ctx.entity).insert((widget::settings_button(
+				QualitySettingsLabel,
+				"+",
+				change_quality,
+			),));
+		} else {
+			cmd.entity(ctx.entity).insert(widget::label(
+				"Please change Quality settings in the Main menu.",
+			));
+		}
+	}
 }
 
 #[derive(Resource, Reflect, Debug)]
@@ -278,6 +313,14 @@ struct VsyncSetting(bool);
 #[reflect(Component)]
 struct VsyncLabel;
 
+fn enable_vsync(_on: On<Pointer<Click>>, mut setting: ResMut<VsyncSetting>) {
+	setting.0 = true;
+}
+
+fn disable_vsync(_on: On<Pointer<Click>>, mut setting: ResMut<VsyncSetting>) {
+	setting.0 = false;
+}
+
 fn update_vsync(mut window: Single<&mut Window>, setting: Res<VsyncSetting>) {
 	window.present_mode = if setting.0 {
 		PresentMode::AutoVsync
@@ -308,4 +351,21 @@ fn go_back(screen: Res<State<Screen>>, mut next_menu: ResMut<NextState<Menu>>) {
 	} else {
 		Menu::Pause
 	});
+}
+
+fn change_quality(
+	_: On<Pointer<Click>>,
+	mut label: Single<&mut Text, With<QualitySettingsLabel>>,
+	mut settings: ResMut<QualitySetting>,
+) {
+	*settings = settings.next();
+	label.0 = format!("{:?}", *settings);
+}
+
+fn on_add_quality(
+	_: On<Add, QualitySettingsLabel>,
+	mut label: Single<&mut Text, With<QualitySettingsLabel>>,
+	settings: ResMut<QualitySetting>,
+) {
+	label.0 = format!("{:?}", *settings);
 }

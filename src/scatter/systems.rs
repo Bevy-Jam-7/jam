@@ -1,6 +1,7 @@
 use crate::gameplay::level::{CurrentLevel, EnvironmentAssets};
 use crate::scatter::{components::*, layers::*};
 
+use crate::scatter::quality::*;
 use bevy::asset::{AssetEvent, Assets};
 use bevy::image::Image;
 use bevy::pbr::StandardMaterial;
@@ -8,34 +9,137 @@ use bevy::prelude::*;
 use bevy_feronia::prelude::*;
 use tracing::debug;
 
-pub fn spawn_scatter_layers(mut cmd: Commands, landscape: Single<Entity, With<ScatterRoot>>) {
-	let landscape = landscape.into_inner();
-	debug!("Spawning scatter layers...");
+pub fn spawn_scatter_layers(mut cmd: Commands, q_scatter_root: Query<Entity, With<ScatterRoot>>) {
+	for root in &q_scatter_root {
+		debug!("Spawning scatter layers...");
 
-	cmd.spawn((RockLayer, ChildOf(landscape)));
-	cmd.spawn((MushroomLayer, ChildOf(landscape)));
-	cmd.spawn((GrassLayer, ChildOf(landscape)));
+		cmd.spawn((RockLayer, ChildOf(root)));
+		cmd.spawn((MushroomLayer, ChildOf(root)));
+		cmd.spawn((GrassLayer, ChildOf(root)));
+	}
+}
+
+pub fn update_rock_layers(
+	mut cmd: Commands,
+	settings: ResMut<QualitySetting>,
+	q_rock_layer: Query<Entity, With<RockLayer>>,
+) {
+	let rock_density_settings = RockDensitySetting::from(*settings);
+	let rock_visibility_settings = RockVisibilityRangeQuality::from(*settings);
+
+	for layer in &q_rock_layer {
+		cmd.entity(layer).insert((
+			DistributionDensity::from(rock_density_settings),
+			LodConfig::from(rock_visibility_settings),
+		));
+	}
+}
+
+pub fn update_mushroom_layers(
+	mut cmd: Commands,
+	settings: ResMut<QualitySetting>,
+	q_mushroom_layer: Query<Entity, With<MushroomLayer>>,
+) {
+	let mushroom_density_settings = MushroomDensitySetting::from(*settings);
+	let mushroom_visibility_settings = MushroomVisibilityRangeQuality::from(*settings);
+
+	for layer in &q_mushroom_layer {
+		cmd.entity(layer).insert((
+			DistributionDensity::from(mushroom_density_settings),
+			LodConfig::from(mushroom_visibility_settings),
+		));
+	}
+}
+
+pub fn update_grass_layers(
+	mut cmd: Commands,
+	settings: ResMut<QualitySetting>,
+	q_grass_layer: Query<Entity, With<GrassLayer>>,
+) {
+	let grass_density_settings = GrassDensitySetting::from(*settings);
+	let grass_visibility_settings = GrassVisibilityRangeQuality::from(*settings);
+
+	for layer in &q_grass_layer {
+		cmd.entity(layer).insert((
+			DistributionDensity::from(grass_density_settings),
+			LodConfig::from(grass_visibility_settings),
+		));
+	}
 }
 
 pub fn clear_scatter_root(
 	mut mw_clear_root: MessageWriter<ClearScatterRoot>,
-	scatter_root: Single<Entity, With<ScatterRoot>>,
+	q_scatter_root: Query<Entity, With<ScatterRoot>>,
 ) {
-	debug!("Clearing scatter root...");
-	mw_clear_root.write((*scatter_root).into());
+	debug!("Clearing scatter roots...");
+	for root in &q_scatter_root {
+		mw_clear_root.write(root.into());
+	}
 }
 
-pub fn toggle_layers(
+pub fn toggle_chunk_root(
 	mut cmd: Commands,
-	q_layer: Query<Entity, With<ScatterLayer>>,
+	q_chunk_root: Query<Entity, With<ChunkRoot>>,
 	current_level: Res<CurrentLevel>,
 ) {
 	let enabled = matches!(
 		*current_level,
 		CurrentLevel::Commune | CurrentLevel::Shaders
 	);
-	for layer in q_layer.iter() {
-		cmd.entity(layer).insert(ScatterLayerEnabled(enabled));
+
+	toggle::<ChunkRootDisabled>(&mut cmd, q_chunk_root.iter(), enabled);
+}
+
+pub fn toggle_grass_layer(
+	mut cmd: Commands,
+	q_layer: Query<Entity, With<GrassLayer>>,
+	current_level: Res<CurrentLevel>,
+) {
+	let enabled = matches!(
+		*current_level,
+		CurrentLevel::Commune | CurrentLevel::Shaders
+	);
+
+	toggle::<ScatterLayerDisabled>(&mut cmd, q_layer.iter(), enabled);
+}
+
+pub fn toggle_mushroom_layer(
+	mut cmd: Commands,
+	q_layer: Query<Entity, With<MushroomLayer>>,
+	current_level: Res<CurrentLevel>,
+) {
+	let enabled = matches!(
+		*current_level,
+		CurrentLevel::Commune | CurrentLevel::Shaders
+	);
+
+	toggle::<ScatterLayerDisabled>(&mut cmd, q_layer.iter(), enabled);
+}
+
+pub fn toggle_rock_layer(
+	mut cmd: Commands,
+	q_layer: Query<Entity, With<RockLayer>>,
+	current_level: Res<CurrentLevel>,
+) {
+	let enabled = matches!(
+		*current_level,
+		CurrentLevel::Commune | CurrentLevel::Shaders | CurrentLevel::Karoline
+	);
+
+	toggle::<ScatterLayerDisabled>(&mut cmd, q_layer.iter(), enabled);
+}
+
+fn toggle<T: Default + Component>(
+	cmd: &mut Commands,
+	iter: impl Iterator<Item = Entity>,
+	enabled: bool,
+) {
+	for e in iter {
+		if enabled {
+			cmd.entity(e).remove::<T>();
+		} else {
+			cmd.entity(e).insert(T::default());
+		}
 	}
 }
 
@@ -49,16 +153,18 @@ pub fn advance_to_setup(
 
 pub fn scatter(
 	mut cmd: Commands,
-	root: Single<Entity, With<ScatterRoot>>,
+	q_root: Query<Entity, With<ScatterRoot>>,
 	current_level: Res<CurrentLevel>,
 ) {
-	match *current_level {
-		CurrentLevel::Commune | CurrentLevel::Shaders => {
-			debug!("Scattering...");
-			cmd.trigger(Scatter::<StandardMaterial>::new(*root));
-		}
-		_ => {
-			cmd.trigger(ScatterDone);
+	for root in &q_root {
+		match *current_level {
+			CurrentLevel::Commune | CurrentLevel::Shaders => {
+				debug!("Scattering...");
+				cmd.trigger(Scatter::<StandardMaterial>::new(root));
+			}
+			_ => {
+				cmd.trigger(ScatterDone);
+			}
 		}
 	}
 }

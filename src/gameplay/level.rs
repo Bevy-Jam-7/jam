@@ -85,9 +85,11 @@ impl CurrentLevel {
 	}
 }
 
-pub(crate) fn spawn_landscape(mut cmd: Commands, scatter_root: Single<Entity, With<ScatterRoot>>) {
-	debug!("Spawning landscape...");
-	cmd.spawn((Landscape, ChildOf(*scatter_root)));
+pub(crate) fn spawn_landscape(mut cmd: Commands, q_scatter_root: Query<Entity, With<ScatterRoot>>) {
+	debug!("Spawning landscapes...");
+	for root in &q_scatter_root {
+		cmd.spawn((Landscape, ChildOf(root)));
+	}
 }
 
 /// A system that spawns the main level.
