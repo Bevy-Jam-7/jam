@@ -1,4 +1,5 @@
 title: karoline_bookshelf
+dir: karoline
 ---
 <<declare $k_ate_camera = false>>
 <<if bool($k_ate_camera)>>
@@ -91,6 +92,7 @@ title: karoline_bookshelf
 ===
 
 title: karoline_cultist_1
+dir: karoline
 ---
 <<if not $k_introduced >>
   Cultist: ... #line:987459865
@@ -118,6 +120,7 @@ title: karoline_cultist_1
 ===
 
 title: karoline_cultist_2
+dir: karoline
 ---
 <<if not $k_introduced >>
   Novice: U-Uh... g-go speak to the other guy, I-I'm not qualified. #line:465594
@@ -140,6 +143,7 @@ title: karoline_cultist_2
 ===
 
 title: beep
+dir: karoline
 ---
 <<declare $beeps = 0>>
 <<if $beeps == 0>>
@@ -164,6 +168,7 @@ title: beep
 ===
 
 title: guardian
+dir: karoline
 ---
 <<declare $figure_name = "Jesus">>
 <<if get_current_objective() == "obj_1">>
