@@ -77,7 +77,16 @@ fn setup(
 					},
 					MaterialNode(materials.add(TexturedUiMaterial::new(
 						Color::hsl(195.0, 0.2, 0.1),
-						asset_server.load("textures/carpet/carpet_ambientOcclusion.png"),
+						{
+							#[cfg(feature = "dev")]
+							{
+								asset_server.load("textures/carpet/carpet_ambientOcclusion.png")
+							}
+							#[cfg(feature = "release")]
+							{
+								asset_server.load("textures/carpet/carpet_ambientOcclusion.ktx2")
+							}
+						},
 						0.01,
 					))),
 				))

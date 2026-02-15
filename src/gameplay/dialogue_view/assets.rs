@@ -14,10 +14,20 @@ pub(crate) fn ui_assets_plugin(app: &mut App) {
 
 fn load_image(bytes: &[u8], _path: String) -> Image {
 	const IS_SRGB: bool = true;
+	let format = {
+		#[cfg(feature = "dev")]
+		{
+			ImageFormat::Png
+		}
+		#[cfg(feature = "release")]
+		{
+			ImageFormat::Ktx2
+		}
+	};
 	Image::from_buffer(
 		bytes,
-		ImageType::Extension("png"),
-		CompressedImageFormats::NONE,
+		ImageType::Format(format),
+		CompressedImageFormats::BC,
 		IS_SRGB,
 		ImageSampler::Default,
 		RenderAssetUsages::RENDER_WORLD,

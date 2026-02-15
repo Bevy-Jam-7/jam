@@ -54,7 +54,7 @@ impl LoadedPipelineCount {
 			}
 			#[cfg(feature = "web")]
 			{
-				100
+				73
 			}
 		};
 		#[cfg(feature = "dev")]
