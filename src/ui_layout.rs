@@ -38,10 +38,10 @@ pub struct RootWidget;
 pub struct UiCanvas;
 
 #[derive(Component, Default)]
-struct RootWidgetPosition(Vec2);
+pub struct RootWidgetPosition(pub Vec2);
 
 #[derive(Component, Default)]
-struct RootWidgetPositionInterpolated(Vec2);
+pub struct RootWidgetPositionInterpolated(pub Vec2);
 
 #[derive(Component, Default)]
 struct RootWidgetSize(Vec2);

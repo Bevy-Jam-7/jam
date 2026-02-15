@@ -78,7 +78,7 @@ pub struct DoorHingeAngle {
 
 impl DoorHingeAngle {
 	/// Threshold in radians below which the door is considered closed.
-	pub const DOOR_CLOSED_THRESHOLD: f32 = 0.225;
+	pub const DOOR_CLOSED_THRESHOLD: f32 = 0.235;
 
 	/// Returns true if the door is considered closed based on the current hinge angle.
 	pub fn is_closed(&self) -> bool {
@@ -87,7 +87,7 @@ impl DoorHingeAngle {
 
 	/// Returns true if the door is currently closing (hinge angle decreasing in magnitude).
 	pub fn is_closing(&self) -> bool {
-		(self.previous.abs() - self.current.abs()) > 0.035
+		(self.previous.abs() - self.current.abs()) > 0.04
 	}
 
 	/// Computes the current hinge angle in radians based on the rotations

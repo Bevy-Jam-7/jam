@@ -538,12 +538,30 @@
 }
 // brush 59
 {
-( -3024 -336 -16 ) ( -3024 -335 -16 ) ( -3024 -336 -15 ) __TB_empty [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 1 1
-( -3024 -336 -16 ) ( -3024 -336 -15 ) ( -3023 -336 -16 ) __TB_empty [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
-( -3024 -336 -16 ) ( -3023 -336 -16 ) ( -3024 -335 -16 ) __TB_empty [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
-( -3008 480 1120 ) ( -3008 481 1120 ) ( -3007 480 1120 ) __TB_empty [ 1 0 0 0 ] [ 0 -1 0 0 ] 270 1 1
-( -3008 480 0 ) ( -3007 480 0 ) ( -3008 480 1 ) __TB_empty [ -1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
-( -3008 480 0 ) ( -3008 480 1 ) ( -3008 481 0 ) __TB_empty [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3984 320 48 ) ( -3984 321 48 ) ( -3984 320 49 ) __TB_empty [ 0 -1 0 -16 ] [ 0 0 -1 0 ] 270 1 1
+( -3984 -368 48 ) ( -3984 -368 49 ) ( -3983 -368 48 ) __TB_empty [ 1 0 0 -16 ] [ 0 0 -1 0 ] 180 1 1
+( -3984 320 -32 ) ( -3983 320 -32 ) ( -3984 321 -32 ) __TB_empty [ -1 0 0 16 ] [ 0 -1 0 -16 ] 180 1 1
+( -3968 544 1104 ) ( -3968 545 1104 ) ( -3967 544 1104 ) __TB_empty [ 1 0 0 -16 ] [ 0 -1 0 -16 ] 90 1 1
+( -3968 -128 64 ) ( -3967 -128 64 ) ( -3968 -128 65 ) __TB_empty [ -1 0 0 16 ] [ 0 0 -1 0 ] 90 1 1
+( -3968 544 64 ) ( -3968 544 65 ) ( -3968 545 64 ) __TB_empty [ 0 1 0 16 ] [ 0 0 -1 0 ] 270 1 1
+}
+// brush 60
+{
+( -3984 640 48 ) ( -3984 641 48 ) ( -3984 640 49 ) __TB_empty [ 0 -1 0 -16 ] [ 0 0 -1 0 ] 0 1 1
+( -3984 -128 48 ) ( -3984 -128 49 ) ( -3983 -128 48 ) __TB_empty [ 1 0 0 16 ] [ 0 0 -1 0 ] 180 1 1
+( -3984 640 256 ) ( -3983 640 256 ) ( -3984 641 256 ) __TB_empty [ -1 0 0 -16 ] [ 0 -1 0 -16 ] 270 1 1
+( -3968 864 1104 ) ( -3968 865 1104 ) ( -3967 864 1104 ) __TB_empty [ 1 0 0 16 ] [ 0 -1 0 -16 ] 180 1 1
+( -3968 272 64 ) ( -3967 272 64 ) ( -3968 272 65 ) __TB_empty [ -1 0 0 -16 ] [ 0 0 -1 0 ] 270 1 1
+( -3968 864 64 ) ( -3968 864 65 ) ( -3968 865 64 ) __TB_empty [ 0 1 0 16 ] [ 0 0 -1 0 ] 0 1 1
+}
+// brush 61
+{
+( -3984 960 48 ) ( -3984 961 48 ) ( -3984 960 49 ) __TB_empty [ 0 -1 0 -16 ] [ 0 0 -1 0 ] 0 1 1
+( -3984 272 48 ) ( -3984 272 49 ) ( -3983 272 48 ) __TB_empty [ 1 0 0 -16 ] [ 0 0 -1 0 ] 270 1 1
+( -3984 960 -32 ) ( -3983 960 -32 ) ( -3984 961 -32 ) __TB_empty [ -1 0 0 16 ] [ 0 -1 0 -16 ] 270 1 1
+( -3968 1184 1104 ) ( -3968 1185 1104 ) ( -3967 1184 1104 ) __TB_empty [ 1 0 0 -16 ] [ 0 -1 0 -16 ] 180 1 1
+( -3968 480 64 ) ( -3967 480 64 ) ( -3968 480 65 ) __TB_empty [ -1 0 0 16 ] [ 0 0 -1 0 ] 90 1 1
+( -3968 1184 64 ) ( -3968 1184 65 ) ( -3968 1185 64 ) __TB_empty [ 0 1 0 16 ] [ 0 0 -1 0 ] 0 1 1
 }
 }
 // entity 1
@@ -785,7 +803,7 @@
 "classname" "objective_entity"
 "origin" "-4736 752 88"
 "targetname" "obj_5"
-"description" "Consume"
+"description" "Get on the train"
 "objective_order" "5"
 }
 // entity 33
@@ -974,4 +992,195 @@
 "interaction_relay" "bookshelf_A"
 "completes_subobjective" "bookshelf_B"
 "targetname" ""
+}
+// entity 50
+{
+"classname" "teleport_node"
+"origin" "-5248 0 100"
+"targetname" "teen_swap"
+"teleport_target" "teen_edible"
+}
+// entity 51
+{
+"classname" "teleport_node"
+"origin" "-5360 0 100"
+"targetname" "teen_swap"
+"teleport_target" "teen"
+}
+// entity 52
+{
+"classname" "npc"
+"origin" "-5344 0 88"
+"angles" "0 90 0"
+"yarn_node" "teen"
+"completes_subobjective" "obj_4"
+"targetname" "teen_edible"
+"is_edible" "true"
+"interaction_text_override" "Consume"
+"interaction_relay" "tp_gate"
+}
+// entity 53
+{
+"classname" "solid_target"
+// brush 0
+{
+( -3984 -96 64 ) ( -3984 -95 64 ) ( -3984 -96 65 ) darkmod/metal/grate/fence_iron_01 [ 0 -1 0 -160 ] [ 0 0 -1 656 ] 180 0.1 0.1
+( -3984 -128 64 ) ( -3984 -128 65 ) ( -3983 -128 64 ) darkmod/metal/grate/fence_iron_01 [ 1 0 0 -128 ] [ 0 0 -1 656 ] 0 0.1 0.1
+( -3984 -96 64 ) ( -3983 -96 64 ) ( -3984 -95 64 ) darkmod/metal/grate/fence_iron_01 [ -1 0 0 128 ] [ 0 -1 0 496 ] 180 0.1 0.1
+( -3968 192 256 ) ( -3968 193 256 ) ( -3967 192 256 ) darkmod/metal/grate/fence_iron_01 [ 1 0 0 -128 ] [ 0 -1 0 496 ] 0 0.1 0.1
+( -3968 272 80 ) ( -3967 272 80 ) ( -3968 272 81 ) darkmod/metal/grate/fence_iron_01 [ -1 0 0 128 ] [ 0 0 -1 656 ] 270 0.1 0.1
+( -3976 192 80 ) ( -3976 192 81 ) ( -3976 193 80 ) darkmod/metal/grate/fence_iron_01 [ 0 1 0 160 ] [ 0 0 -1 656 ] 90 0.1 0.1
+}
+}
+// entity 54
+{
+"classname" "train"
+"origin" "-3496 -224 2"
+"angles" "0 180 0"
+}
+// entity 55
+{
+"classname" "train"
+"origin" "-2552 -254 2"
+}
+// entity 56
+{
+"classname" "sensor_entity"
+"sensor_detect_player" "true"
+"sensor_detect_character" "true"
+"sensor_on_collision_start" "start_track_alarm"
+"sensor_on_collision_end" "end_track_alarm"
+// brush 0
+{
+( -5264 272 48 ) ( -5264 464 0 ) ( -5264 464 48 ) __TB_empty [ 0 -1 0 0 ] [ 0 0 -1 0 ] 180 1 1
+( -4416 -336 48 ) ( -4976 -336 0 ) ( -4976 -336 48 ) __TB_empty [ 1 0 0 0 ] [ 0 0 -1 0 ] 180 1 1
+( -4416 464 0 ) ( -4976 272 0 ) ( -4416 272 0 ) __TB_empty [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -4416 464 48 ) ( -4976 272 48 ) ( -4976 464 48 ) __TB_empty [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -4416 480 48 ) ( -4976 480 0 ) ( -4416 480 0 ) __TB_empty [ -1 0 0 0 ] [ 0 0 -1 0 ] 270 1 1
+( -3968 464 48 ) ( -3968 272 0 ) ( -3968 272 48 ) __TB_empty [ 0 1 0 0 ] [ 0 0 -1 0 ] 180 1 1
+}
+}
+// entity 57
+{
+"classname" "special_effects_node"
+"origin" "-4280 -184 264"
+"sfx_sample" "audio/sound_effects/mental_health_alarm.ogg"
+"targetname" "track_alarm"
+}
+// entity 58
+{
+"classname" "timer_entity"
+"origin" "-4328 8 264"
+"targetname" "track_alarm_timer"
+"timer_length" "3.0"
+"timer_repeating" "true"
+"timer_active" "false"
+"timer_on_finish" "track_alarm"
+"timer_elapsed" "2.9"
+}
+// entity 59
+{
+"classname" "logic_setter"
+"origin" "-4344 8 264"
+"targetname" "end_track_alarm"
+"logic_setter_target" "track_alarm_timer"
+"logic_value_to_set" "false"
+"logic_field_to_set" "timer_active"
+}
+// entity 60
+{
+"classname" "logic_setter"
+"origin" "-4312 8 264"
+"targetname" "start_track_alarm"
+"logic_setter_target" "track_alarm_timer"
+"logic_value_to_set" "true"
+"logic_field_to_set" "timer_active"
+}
+// entity 61
+{
+"classname" "logic_setter"
+"origin" "-4296 8 264"
+"targetname" "start_track_alarm"
+"logic_setter_target" "track_alarm_timer"
+"logic_value_to_set" "2.9"
+"logic_field_to_set" "timer_elapsed"
+}
+// entity 62
+{
+"classname" "special_effects_node"
+"origin" "-4968 -184 264"
+"sfx_sample" "audio/sound_effects/mental_health_alarm.ogg"
+"targetname" "track_alarm"
+}
+// entity 63
+{
+"classname" "special_effects_node"
+"origin" "-4984 360 264"
+"sfx_sample" "audio/sound_effects/mental_health_alarm.ogg"
+"targetname" "track_alarm"
+}
+// entity 64
+{
+"classname" "timer_entity"
+"origin" "-4896 752 16"
+"timer_on_finish" "complete_train_objectives"
+"targetname" "player_escaped"
+}
+// entity 65
+{
+"classname" "timer_entity"
+"origin" "-4832 752 16"
+"targetname" "complete_train_objectives"
+"timer_on_finish" "obj_2"
+}
+// entity 66
+{
+"classname" "sensor_entity"
+"targetname" "player_train_escape_sensor"
+"sensor_detect_player" "true"
+"sensor_on_collision_end" "player_escaped"
+// brush 0
+{
+( -5264 -48 144 ) ( -5264 144 64 ) ( -5264 144 144 ) __TB_empty [ 0 -1 0 0 ] [ 0 0 -1 0 ] 270 1 1
+( -4624 -128 144 ) ( -4736 -128 64 ) ( -4736 -128 144 ) __TB_empty [ 1 0 0 0 ] [ 0 0 -1 0 ] 270 1 1
+( -4624 144 64 ) ( -4736 -48 64 ) ( -4624 -48 64 ) __TB_empty [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -4624 144 272 ) ( -4736 -48 272 ) ( -4736 144 272 ) __TB_empty [ 1 0 0 0 ] [ 0 -1 0 0 ] 270 1 1
+( -4624 272 144 ) ( -4736 272 64 ) ( -4624 272 64 ) __TB_empty [ -1 0 0 0 ] [ 0 0 -1 0 ] 270 1 1
+( -4560 144 144 ) ( -4560 -48 64 ) ( -4560 -48 144 ) __TB_empty [ 0 1 0 0 ] [ 0 0 -1 0 ] 90 1 1
+}
+}
+// entity 67
+{
+"classname" "timer_entity"
+"origin" "-4864 752 16"
+"targetname" "complete_train_objectives"
+"timer_on_finish" "obj_1"
+}
+// entity 68
+{
+"classname" "timer_entity"
+"origin" "-4800 752 16"
+"targetname" "complete_train_objectives"
+"timer_on_finish" "obj_3"
+}
+// entity 69
+{
+"classname" "timer_entity"
+"origin" "-4768 752 16"
+"targetname" "complete_train_objectives"
+"timer_on_finish" "obj_4"
+}
+// entity 70
+{
+"classname" "timer_entity"
+"origin" "-4736 752 48"
+"timer_on_finish" "obj_5"
+"targetname" "go_in"
+}
+// entity 71
+{
+"classname" "special_effects_node"
+"origin" "-4504 360 264"
+"sfx_sample" "audio/sound_effects/mental_health_alarm.ogg"
+"targetname" "track_alarm"
 }
