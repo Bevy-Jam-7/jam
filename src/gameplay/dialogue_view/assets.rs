@@ -14,16 +14,7 @@ pub(crate) fn ui_assets_plugin(app: &mut App) {
 
 fn load_image(bytes: &[u8], _path: String) -> Image {
 	const IS_SRGB: bool = true;
-	let format = {
-		#[cfg(feature = "dev")]
-		{
-			ImageFormat::Png
-		}
-		#[cfg(feature = "release")]
-		{
-			ImageFormat::Ktx2
-		}
-	};
+	let format = ImageFormat::Png;
 	Image::from_buffer(
 		bytes,
 		ImageType::Format(format),
