@@ -35,10 +35,7 @@ impl RockLayer {
 			rocks,
 			rock_density_map,
 			..
-		} = world
-			.get_resource::<EnvironmentAssets>()
-			.cloned()
-			.expect("Assets should be added!");
+		} = world.resource::<EnvironmentAssets>().clone();
 
 		let settings = *world.resource::<QualitySetting>();
 		let density_settings = RockDensitySetting::from(settings);
@@ -92,10 +89,7 @@ impl MushroomLayer {
 			mushroom,
 			mushroom_density_map,
 			..
-		} = world
-			.get_resource::<EnvironmentAssets>()
-			.cloned()
-			.expect("Assets should be added!");
+		} = world.resource::<EnvironmentAssets>().clone();
 
 		let settings = *world.resource::<QualitySetting>();
 		let density_settings = MushroomDensitySetting::from(settings);
