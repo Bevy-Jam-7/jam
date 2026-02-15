@@ -65,12 +65,13 @@ struct ScatterReadyToAdvance;
 
 fn advance_to_gameplay_screen(
 	mut next_screen: ResMut<NextState<Screen>>,
+	mut cmd: Commands,
 	scene_spawner: Res<SceneSpawner>,
 	scene_instances: Query<&SceneInstance>,
 	just_added_scenes: Query<(), (With<SceneRoot>, Without<SceneInstance>)>,
 	just_added_meshes: Query<(), Added<Mesh3d>>,
 	nav_mesh_events: MessageReader<AssetEvent<NavMesh<ThreeD>>>,
-	_: Single<(), With<ScatterReadyToAdvance>>,
+	scatter_root: Single<Entity, (With<ScatterRoot>, With<ScatterReadyToAdvance>)>,
 ) {
 	if !(just_added_meshes.is_empty() && just_added_scenes.is_empty()) {
 		return;
@@ -86,6 +87,7 @@ fn advance_to_gameplay_screen(
 	}
 
 	next_screen.set(Screen::Gameplay);
+	cmd.entity(*scatter_root).remove::<ScatterReadyToAdvance>();
 }
 
 fn on_scatter_done(

@@ -32,28 +32,31 @@ impl Plugin for ScatterPlugin {
 			GpuCullComputePlugin::<InstancedWindAffectedMaterial>::default(),
 		));
 
-		app.add_systems(OnEnter(Screen::Gameplay), scatter.run_if(in_state(ScatterState::Ready)))
-			.add_systems(Startup, spawn_scatter_root)
-			.add_systems(
-				Update,
-				spawn_scatter_layers.run_if(resource_added::<EnvironmentAssets>),
-			)
-			.add_systems(
-				OnEnter(ScatterState::Loading),
-				(clear_scatter_root, advance_to_setup, toggle_layers),
-			)
-			.add_systems(
-				Update,
-				(
-					scatter.run_if(
-						resource_exists_and_changed::<EnvironmentAssets>
-							.and(in_state(Screen::Gameplay))
-							.and(in_state(ScatterState::Ready)),
-					),
-					update_density_map.run_if(resource_exists::<EnvironmentAssets>),
+		app.add_systems(
+			OnEnter(Screen::Gameplay),
+			scatter.run_if(in_state(ScatterState::Ready)),
+		)
+		.add_systems(Startup, spawn_scatter_root)
+		.add_systems(
+			Update,
+			spawn_scatter_layers.run_if(resource_added::<EnvironmentAssets>),
+		)
+		.add_systems(
+			OnEnter(ScatterState::Loading),
+			(clear_scatter_root, advance_to_setup, toggle_layers),
+		)
+		.add_systems(
+			Update,
+			(
+				scatter.run_if(
+					resource_exists_and_changed::<EnvironmentAssets>
+						.and(in_state(Screen::Gameplay))
+						.and(in_state(ScatterState::Ready)),
 				),
-			)
-			.add_observer(scatter_extended)
-			.add_observer(scatter_instanced);
+				update_density_map.run_if(resource_exists::<EnvironmentAssets>),
+			),
+		)
+		.add_observer(scatter_extended)
+		.add_observer(scatter_instanced);
 	}
 }
