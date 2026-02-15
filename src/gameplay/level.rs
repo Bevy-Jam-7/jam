@@ -80,7 +80,7 @@ impl CurrentLevel {
 			CurrentLevel::Shaders => CurrentLevel::DayOne,
 			CurrentLevel::DayOne => CurrentLevel::DayTwo,
 			CurrentLevel::DayTwo => CurrentLevel::Commune,
-			CurrentLevel::Commune => CurrentLevel::Train,
+			CurrentLevel::Commune => CurrentLevel::Karoline,
 			CurrentLevel::Train => CurrentLevel::Karoline,
 			CurrentLevel::Karoline => CurrentLevel::DayOne,
 		}
@@ -463,7 +463,7 @@ impl FromWorld for LevelKarolineAssets {
 			level: assets.load("maps/main/karoline/karoline.map#Scene"),
 			// You can regenerate the navmesh by using `bevy_rerecast_editor`
 			navmesh: assets.load("maps/main/karoline/karoline.nav"),
-			music: assets.load("audio/music/corpo slop to eat your computer to.ogg"),
+			music: assets.load("audio/music/station.mp3"),
 		}
 	}
 }
@@ -479,7 +479,7 @@ fn advance_level(
 	match *current_level {
 		CurrentLevel::DayOne => commands.queue(advance_level_command::<LevelTwoAssets>()),
 		CurrentLevel::DayTwo => commands.queue(advance_level_command::<LevelThreeAssets>()),
-		CurrentLevel::Commune => commands.queue(advance_level_command::<LevelTrainAssets>()),
+		CurrentLevel::Commune => commands.queue(advance_level_command::<LevelKarolineAssets>()),
 		CurrentLevel::Train => commands.queue(advance_level_command::<LevelKarolineAssets>()),
 		CurrentLevel::Karoline | CurrentLevel::Shaders => {
 			commands.queue(advance_level_command::<LevelOneAssets>())

@@ -15,6 +15,7 @@ use crate::{
 	gameplay::{
 		TargetName, TargetnameEntityIndex,
 		interaction::InteractEvent,
+		npc::Npc,
 		objectives::{Objective, SubObjectiveOf},
 		player::Player,
 		scripting::ReflectionSystems,
@@ -33,6 +34,7 @@ pub(super) fn plugin(app: &mut App) {
 		.register_dynamic_component::<LogicToggler>()
 		.register_dynamic_component::<LogicDespawn>()
 		.register_dynamic_component::<SpotLight>()
+		.register_dynamic_component::<Npc>()
 		.add_observer(interact_timers)
 		.add_observer(uninitialise_objectives)
 		.add_observer(talk_ify_yarnnode)

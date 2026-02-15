@@ -86,7 +86,7 @@ bevy_shuffle_bag = "0.4.0"
 bevy-inspector-egui = { version = "0.36", optional = true }
 bevy_fix_cursor_unlock_web = "0.3.0"
 bevy_framepace = "0.21"
-bevy_seedling = "0.7.0"
+bevy_seedling = { version = "0.7.0", features = ["mp3"]}
 bevy_feronia = { version = "0.8.1", features = ["avian"] }
 bevy_eidolon = { version = "0.3.0" }
 firewheel = { version = "0.10.0", features = ["svf_node"] }
