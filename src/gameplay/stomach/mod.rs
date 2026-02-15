@@ -13,9 +13,12 @@ use bevy::{
 	render::{render_resource::TextureFormat, view::Hdr},
 	window::PrimaryWindow,
 };
+use bevy_seedling::sample::{AudioSample, PlaybackSettings, SamplePlayer};
 
 use crate::{
 	CameraOrder, RenderLayer,
+	asset_tracking::LoadResource,
+	audio::MusicPool,
 	font::VARIABLE_FONT,
 	gameplay::{
 		level::CurrentLevel,
@@ -30,6 +33,8 @@ pub(crate) mod eat;
 pub(crate) mod vomit;
 
 pub(super) fn plugin(app: &mut App) {
+	app.load_asset::<AudioSample>("audio/music/stomach.ogg");
+	app.load_asset::<Gltf>("models/stomach/stomach.gltf");
 	app.add_plugins((eat::plugin, vomit::plugin));
 	app.add_systems(
 		OnEnter(Screen::Gameplay),
@@ -182,6 +187,9 @@ fn spawn_stomach_ui_and_render(
 	// Spawn stomach UI at the top right corner of the screen.
 	commands.spawn((
 		Name::new("Stomach UI"),
+		SamplePlayer::new(asset_server.load("audio/music/stomach.ogg")).looping(),
+		PlaybackSettings::default(),
+		MusicPool,
 		StomachUi,
 		Node {
 			flex_direction: FlexDirection::Column,
@@ -283,6 +291,7 @@ fn update_stomach_ui_visibility(
 	stomach: Single<&Stomach>,
 	node: Single<
 		(
+			&mut PlaybackSettings,
 			&mut Node,
 			&mut RootWidgetPosition,
 			&mut RootWidgetPositionInterpolated,
@@ -292,7 +301,7 @@ fn update_stomach_ui_visibility(
 	window: Single<&Window, With<PrimaryWindow>>,
 	current_level: Res<CurrentLevel>,
 ) {
-	let (mut node, mut position, mut interpolated) = node.into_inner();
+	let (mut playback, mut node, mut position, mut interpolated) = node.into_inner();
 
 	// Hide the stomach UI if the stomach is empty, or if we are
 	// on the first level.
@@ -304,6 +313,10 @@ fn update_stomach_ui_visibility(
 
 	if node.display != new_display {
 		node.display = new_display;
+		match new_display {
+			Display::None => playback.pause(),
+			_ => playback.play(),
+		};
 
 		// On the right edge of the screen, with the left edge of the UI
 		// flush with the edge of the screen.
