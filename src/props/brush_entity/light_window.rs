@@ -1,14 +1,14 @@
 use bevy::prelude::*;
-
 use bevy_trenchbroom::prelude::*;
 
+use crate::gameplay::TargetName;
 use crate::props::effects::disable_shadow_casting;
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_observer(setup_light_window_brush_entity);
 }
 
-#[solid_class(base(Transform, Visibility))]
+#[solid_class(base(TargetName, Transform, Visibility))]
 pub(crate) struct LightWindow;
 
 fn setup_light_window_brush_entity(add: On<Add, LightWindow>, mut commands: Commands) {

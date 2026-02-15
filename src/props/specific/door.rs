@@ -4,10 +4,17 @@ use avian_rerecast::ExcludeColliderFromNavmesh;
 use avian3d::{dynamics::solver::joint_graph::JointGraph, prelude::*};
 use bevy::{prelude::*, scene::SceneInstanceReady};
 
+use bevy_seedling::{
+	prelude::AudioEvents,
+	sample::{PlaybackSettings, RandomPitch, SamplePlayer},
+	time::{Audio, AudioTime},
+};
 use bevy_trenchbroom::prelude::*;
+use firewheel::{Volume, clock::DurationSeconds};
 
 use crate::{
 	asset_tracking::LoadResource as _,
+	audio::SpatialPool,
 	gameplay::{TargetName, interaction::InteractEvent, player::camera::PlayerCameraParent},
 	props::interactables::InteractableEntity,
 	reflection::ReflAppExt,
@@ -199,6 +206,9 @@ fn interact_with_door(
 	mut forces_query: Query<Forces>,
 	joint_graph: Res<JointGraph>,
 	mut joints: Query<(&mut RevoluteJoint, &DoorHingeAngle)>,
+	time: Res<Time<Audio>>,
+	server: Res<AssetServer>,
+	mut commands: Commands,
 ) {
 	let entity = trigger.0;
 
@@ -222,14 +232,16 @@ fn interact_with_door(
 		return;
 	};
 
-	/*
 	if door.locked {
-		return;
-	}
-
-	 */
-
-	if hinge_angle.is_closed() {
+		commands.spawn((
+			ChildOf(entity),
+			Transform::default(),
+			SamplePlayer::new(server.load("audio/sound_effects/door-locked.ogg"))
+				.with_volume(Volume::Decibels(-2.0)),
+			RandomPitch::new(0.07),
+			SpatialPool,
+		));
+	} else if hinge_angle.is_closed() {
 		// Door is closed: disable motor, apply impulse away from player.
 		joint.motor.enabled = false;
 
@@ -240,6 +252,15 @@ fn interact_with_door(
 		if let Ok(mut forces) = forces_query.get_mut(entity) {
 			forces.apply_angular_impulse(Vec3::Y * torque_sign * 4000.0);
 		}
+
+		commands.spawn((
+			ChildOf(entity),
+			Transform::default(),
+			SamplePlayer::new(server.load("audio/sound_effects/door-open.ogg"))
+				.with_volume(Volume::Decibels(-3.0)),
+			RandomPitch::new(0.07),
+			SpatialPool,
+		));
 	} else {
 		// Door is open: enable spring motor and apply closing impulse.
 		joint.motor.enabled = true;
@@ -248,7 +269,23 @@ fn interact_with_door(
 		if let Ok(mut forces) = forces_query.get_mut(entity) {
 			forces.apply_angular_impulse(Vec3::Y * torque_sign * 4000.0);
 		}
-	}
+
+		// delay playback for a moment so it lines up with door close
+		let mut events = AudioEvents::new(&time);
+		let settings = PlaybackSettings::default().with_playback(false);
+		settings.play_at(None, time.delay(DurationSeconds(0.3)), &mut events);
+
+		commands.spawn((
+			ChildOf(entity),
+			Transform::default(),
+			SamplePlayer::new(server.load("audio/sound_effects/door-close.ogg"))
+				.with_volume(Volume::Decibels(3.0)),
+			events,
+			settings,
+			RandomPitch::new(0.07),
+			SpatialPool,
+		));
+	};
 }
 
 fn update_door_hinge_angle(
