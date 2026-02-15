@@ -1,10 +1,7 @@
 use crate::gameplay::level::{CurrentLevel, EnvironmentAssets};
 use crate::scatter::{components::*, layers::*};
 
-use crate::scatter::quality::{
-	GrassDensitySetting, GrassVisibilityRangeQuality, MushroomDensitySetting,
-	MushroomVisibilityRangeQuality, QualitySetting, RockDensitySetting, RockVisibilityRangeQuality,
-};
+use crate::scatter::quality::*;
 use bevy::asset::{AssetEvent, Assets};
 use bevy::image::Image;
 use bevy::pbr::StandardMaterial;
