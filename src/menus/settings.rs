@@ -271,10 +271,8 @@ fn update_camera_fov_label(
 	label.0 = format!("{:.1}", camera_fov.0);
 }
 
-#[derive(Resource, Reflect, Debug)]
-#[derive(Default)]
+#[derive(Resource, Reflect, Debug, Default)]
 struct VsyncSetting(bool);
-
 
 #[derive(Component, Reflect)]
 #[reflect(Component)]
