@@ -126,13 +126,11 @@ fn update_intro_crt_emotes(
 		{
 			let texture = textures.get(&first.emote_name);
 			// Paste the texture or clear it
-			material.emissive = Color::WHITE.to_linear() * 20.0;
 			material.emissive_texture = texture.cloned();
 			if texture.is_some() {
-				// material.base_color = (Color::WHITE.to_linear() * 0.2).into();
-				material.base_color = Color::BLACK;
+				material.emissive = Color::WHITE.to_linear() * 20.0;
 			} else {
-				material.base_color = Color::BLACK;
+				material.emissive = Color::BLACK.into();
 			}
 			commands.pop_front();
 		}
@@ -155,7 +153,6 @@ fn clear_intro_crt_emote(
 	{
 		material.emissive = Color::BLACK.into();
 		material.emissive_texture = None;
-		material.base_color = Color::BLACK;
 		commands.clear();
 	}
 }
