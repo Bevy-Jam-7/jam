@@ -50,8 +50,6 @@ fn spawn_main_menu(
 		SamplePlayer::new(assets.load("audio/music/gloopy.ogg")).looping(),
 		MusicPool,
 	));
-	commands.spawn((DespawnOnExit(Menu::Main), Camera3d::default()));
-	commands.spawn((DespawnOnExit(Menu::Main), DirectionalLight::default()));
 }
 
 #[derive(Component, Reflect, Debug)]

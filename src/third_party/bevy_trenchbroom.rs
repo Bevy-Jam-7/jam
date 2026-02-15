@@ -34,17 +34,12 @@ fn to_string_vec(slice: &[&str]) -> Vec<String> {
 }
 
 pub(crate) trait GetTrenchbroomModelPath: QuakeClass {
+	#[track_caller]
 	fn model_path() -> String {
 		Self::CLASS_INFO.model_path().unwrap().to_string()
 	}
 	fn scene_path() -> String {
 		format!("{file_path}#Scene0", file_path = Self::model_path())
-	}
-	fn animation_path(index: u32) -> String {
-		format!(
-			"{file_path}#Animation{index}",
-			file_path = Self::model_path()
-		)
 	}
 }
 

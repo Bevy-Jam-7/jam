@@ -794,7 +794,7 @@
 // entity 31
 {
 "classname" "light_point"
-"origin" "-5296 192 152"
+"origin" "-5280 112 152"
 "intensity" "50000.000000"
 "range" "10"
 }

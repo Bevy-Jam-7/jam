@@ -4,6 +4,7 @@ use bevy::render::render_resource::{CachedPipelineState, PipelineCache};
 use bevy::render::{MainWorld, RenderApp};
 
 use crate::asset_tracking::LoadResource as _;
+use crate::screens::loading::shader_compilation::ShaderTimeout;
 
 pub(super) fn plugin(app: &mut App) {
 	app.load_resource::<CompileShadersAssets>();
@@ -49,7 +50,7 @@ impl LoadedPipelineCount {
 		let count = {
 			#[cfg(feature = "native")]
 			{
-				99
+				88
 			}
 			#[cfg(feature = "web")]
 			{
@@ -82,6 +83,9 @@ fn update_loaded_pipeline_count(mut main_world: ResMut<MainWorld>, cache: Res<Pi
 	}
 }
 
-pub(crate) fn all_pipelines_loaded(loaded_pipeline_count: Res<LoadedPipelineCount>) -> bool {
-	loaded_pipeline_count.is_done()
+pub(crate) fn all_pipelines_loaded(
+	loaded_pipeline_count: Res<LoadedPipelineCount>,
+	timeout: Option<Res<ShaderTimeout>>,
+) -> bool {
+	loaded_pipeline_count.is_done() || timeout.is_some_and(|timeout| timeout.is_finished())
 }
