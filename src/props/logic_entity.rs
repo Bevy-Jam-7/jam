@@ -36,6 +36,7 @@ pub(super) fn plugin(app: &mut App) {
 		.register_dynamic_component::<SpotLight>()
 		.register_dynamic_component::<SensorEntity>()
 		.register_dynamic_component::<SolidTarget>()
+		.register_dynamic_component::<SolidInteractable>()
 		.register_dynamic_component::<Npc>()
 		.add_observer(interact_timers)
 		.add_observer(uninitialise_objectives)
@@ -221,6 +222,11 @@ pub(crate) struct SensorEntity {
 #[component(immutable)]
 #[derive(Default)]
 pub(crate) struct SolidTarget;
+
+#[solid_class(base(TargetName, Transform, Visibility, InteractableEntity))]
+#[component(immutable)]
+#[derive(Default)]
+pub(crate) struct SolidInteractable;
 
 impl SensorEntity {
 	pub fn on_insert(mut world: DeferredWorld, ctx: HookContext) {
