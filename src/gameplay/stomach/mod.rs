@@ -306,7 +306,7 @@ fn update_stomach_ui_visibility(
 		node.display = new_display;
 
 		// On the right edge of the screen, with the left edge of the UI
-		// flush with the edge of the screen, and vertically centered.
+		// flush with the edge of the screen.
 		let window_size = window.size();
 		position.0 = Vec2::new(
 			window_size.x * (0.5 + STOMACH_WIDTH_VW * 0.005),
