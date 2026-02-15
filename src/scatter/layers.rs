@@ -1,6 +1,5 @@
 use crate::gameplay::level::EnvironmentAssets;
 use crate::props::effects::disable_shadow_casting_on_instance_ready;
-use crate::scatter::quality::{GrassDensitySetting, MushroomDensitySetting, QualitySetting};
 use crate::third_party::avian3d::CollisionLayer;
 use crate::{RenderLayer, RenderLayers};
 
@@ -100,17 +99,10 @@ impl MushroomLayer {
 			.cloned()
 			.expect("Assets should be added!");
 
-		let density: MushroomDensitySetting = world
-			.get_resource::<QualitySetting>()
-			.cloned()
-			.map(|s| s.into())
-			.expect("Quality setting should be added!");
-
 		let mut cmd = world.commands();
 
 		cmd.entity(ctx.entity).insert((
 			DistributionPattern(mushroom_density_map),
-			DistributionDensity::from(density),
 			LodConfig {
 				density: vec![100.0.into()],
 				..default()
@@ -138,7 +130,7 @@ impl MushroomLayer {
 
     // Scatter options
 
-	DistributionDensity(250.0),
+	DistributionDensity(150.0),
     InstanceJitter,
     InstanceScale,
     ScatterChunked,
@@ -182,18 +174,10 @@ impl GrassLayer {
 			.cloned()
 			.expect("Assets should be added!");
 
-		let density: GrassDensitySetting = world
-			.get_resource::<QualitySetting>()
-			.cloned()
-			.map(|s| s.into())
-			.expect("Quality setting should be added!");
-
 		let mut cmd = world.commands();
 
-		cmd.entity(ctx.entity).insert((
-			DistributionPattern(grass_density_map),
-			DistributionDensity::from(density),
-		));
+		cmd.entity(ctx.entity)
+			.insert((DistributionPattern(grass_density_map),));
 
 		// Just for collecting the asset, since we use avian anyway and the backend requires it when using the `avian` feature.
 		let collider_hierarchy =

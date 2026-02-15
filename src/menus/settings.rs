@@ -8,7 +8,6 @@ use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::Val::*}
 use bevy_framepace::{FramepaceSettings, Limiter};
 use bevy_seedling::prelude::*;
 
-use crate::scatter::quality::QualitySetting;
 use crate::ui_layout::RootWidget;
 use crate::{
 	Pause,
@@ -20,7 +19,6 @@ use crate::{
 };
 
 pub(super) fn plugin(app: &mut App) {
-	app.init_resource::<QualitySetting>();
 	app.init_resource::<VsyncSetting>();
 	app.init_resource::<FpsLimiterSettings>();
 	app.add_systems(OnEnter(Menu::Settings), spawn_settings_menu);
@@ -102,18 +100,6 @@ fn spawn_settings_menu(mut commands: Commands, paused: Res<State<Pause>>) {
 						lower_volume::<With<SoundEffectsBus>>,
 						raise_volume::<With<SoundEffectsBus>>
 					),
-					(
-						widget::label("Quality"),
-						Node {
-							justify_self: JustifySelf::End,
-							..default()
-						}
-					),
-					(widget::settings_button(
-						QualitySettingsLabel,
-						format!("{:?}", QualitySetting::default()),
-						change_quality
-					)),
 					// Camera Sensitivity
 					(
 						widget::label("Camera Sensitivity"),
@@ -442,19 +428,4 @@ fn go_back(screen: Res<State<Screen>>, mut next_menu: ResMut<NextState<Menu>>) {
 	} else {
 		Menu::Pause
 	});
-}
-
-fn change_quality(
-	on: On<Pointer<Click>>,
-	mut cmd: Commands,
-	mut label: Query<&mut Text, With<QualitySettingsLabel>>,
-	settings: ResMut<QualitySetting>,
-) {
-	let settings = settings.next();
-	let Ok(mut label) = label.get_mut(on.entity) else {
-		return;
-	};
-
-	cmd.insert_resource(settings);
-	label.0 = format!("{:?}", settings);
 }
