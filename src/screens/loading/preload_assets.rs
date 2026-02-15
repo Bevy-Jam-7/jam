@@ -7,10 +7,7 @@ use super::LoadingScreen;
 use crate::font::VARIABLE_FONT;
 use crate::gameplay::level::{AdvanceLevel, CurrentLevel};
 use crate::theme::palette::HEADER_TEXT;
-use crate::{
-	asset_tracking::ResourceHandles,
-	theme::{palette::SCREEN_BACKGROUND, prelude::*},
-};
+use crate::{asset_tracking::ResourceHandles, theme::prelude::*};
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_systems(
@@ -55,14 +52,13 @@ fn spawn_or_skip_asset_loading_screen(
 	}
 	cmd.spawn((
 		widget::ui_root("Loading Screen"),
-		BackgroundColor(SCREEN_BACKGROUND),
 		DespawnOnExit(LoadingScreen::Assets),
 		children![(
 			Name::new("Loading assets text"),
 			Text("Loading Assets".into()),
 			TextFont {
 				font: VARIABLE_FONT,
-				font_size: 22.0,
+				font_size: 24.0,
 				weight: FontWeight(800),
 				..default()
 			},
@@ -83,10 +79,21 @@ struct LoadingAssetsLabel;
 fn update_loading_assets_label(
 	mut query: Query<&mut Text, With<LoadingAssetsLabel>>,
 	resource_handles: Res<ResourceHandles>,
+	asset_server: Res<AssetServer>,
 ) {
 	for mut text in query.iter_mut() {
+		let waiting = resource_handles
+			.waiting
+			.iter()
+			.next()
+			.and_then(|(handle, _)| {
+				let path = asset_server.get_path(handle)?;
+				let disp = path.path().display();
+				format!("{disp}").into()
+			})
+			.unwrap_or_else(|| "Done".to_string());
 		text.0 = format!(
-			"Loading Assets: {} / {}",
+			"Loading Assets: {} / {} \n{waiting}",
 			resource_handles.finished_count(),
 			resource_handles.total_count()
 		);
