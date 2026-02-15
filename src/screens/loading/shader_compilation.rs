@@ -9,7 +9,7 @@ use crate::gameplay::level::AdvanceLevel;
 use crate::theme::palette::HEADER_TEXT;
 use crate::{
 	shader_compilation::{LoadedPipelineCount, all_pipelines_loaded},
-	theme::{palette::SCREEN_BACKGROUND, prelude::*},
+	theme::prelude::*,
 };
 
 pub(super) fn plugin(app: &mut App) {
@@ -40,7 +40,6 @@ fn spawn_or_skip_shader_compilation_loading_screen(
 	}
 	commands.spawn((
 		widget::ui_root("Loading Screen"),
-		BackgroundColor(SCREEN_BACKGROUND),
 		DespawnOnExit(LoadingScreen::Shaders),
 		children![(
 			Name::new("Compiling shaders text"),

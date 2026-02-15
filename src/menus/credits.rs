@@ -2,12 +2,7 @@
 
 use crate::audio::MusicPool;
 use crate::ui_layout::RootWidget;
-use crate::{
-	Pause,
-	asset_tracking::LoadResource,
-	menus::Menu,
-	theme::{palette::SCREEN_BACKGROUND, prelude::*},
-};
+use crate::{asset_tracking::LoadResource, menus::Menu, theme::prelude::*};
 use bevy::{
 	ecs::spawn::SpawnIter, input::common_conditions::input_just_pressed, prelude::*, ui::Val::*,
 };
@@ -25,8 +20,8 @@ pub(super) fn plugin(app: &mut App) {
 	app.add_systems(OnEnter(Menu::Credits), start_credits_music);
 }
 
-fn spawn_credits_menu(mut commands: Commands, paused: Res<State<Pause>>) {
-	let mut entity_commands = commands.spawn((
+fn spawn_credits_menu(mut commands: Commands) {
+	commands.spawn((
 		RootWidget,
 		DespawnOnExit(Menu::Credits),
 		GlobalZIndex(2),
@@ -38,9 +33,6 @@ fn spawn_credits_menu(mut commands: Commands, paused: Res<State<Pause>>) {
 			widget::button("Back", go_back_on_click),
 		],
 	));
-	if paused.get() == &Pause(false) {
-		entity_commands.insert(BackgroundColor(SCREEN_BACKGROUND));
-	}
 }
 
 fn created_by() -> impl Bundle {
