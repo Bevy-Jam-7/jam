@@ -250,6 +250,8 @@ fn spawn_objective(
 	}
 }
 
+const OBJECTIVE_COMPLETED_COLOR: Color = Color::Srgba(Srgba::rgb(0.55, 0.44, 0.53));
+
 /// Updates the objective UI and completes parent objectives when an objective is completed.
 fn on_complete_objective(
 	completed: On<Insert, (ObjectiveCompleted, ObjectiveOfNode)>,
@@ -267,9 +269,11 @@ fn on_complete_objective(
 	};
 
 	let text_entity = children[0];
-	commands
-		.entity(text_entity)
-		.try_insert((Strikethrough, StrikethroughColor(Color::WHITE)));
+	commands.entity(text_entity).try_insert((
+		Strikethrough,
+		StrikethroughColor(OBJECTIVE_COMPLETED_COLOR),
+		TextColor(OBJECTIVE_COMPLETED_COLOR),
+	));
 
 	// Remove the sub-objectives from the world.
 	if let Some(sub_objective_list) = children.get(1) {
