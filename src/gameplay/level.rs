@@ -101,7 +101,6 @@ pub(crate) fn spawn_level(
 	level_train_assets: Option<Res<LevelTrainAssets>>,
 	level_karoline_assets: Option<Res<LevelKarolineAssets>>,
 	current_level: Res<CurrentLevel>,
-	scatter_root: Single<Entity, With<ScatterRoot>>,
 	compile_shaders_assets: Res<CompileShadersAssets>,
 ) {
 	match *current_level {
@@ -167,7 +166,6 @@ pub(crate) fn spawn_level(
 			let level_two_assets = level_two_assets.expect("If we don't have level two assets when spawning level two, we're in deep shit. Sorry player, we bail here.");
 
 			commands.spawn((
-				ChildOf(*scatter_root),
 				Name::new("Level"),
 				SceneRoot(level_two_assets.level.clone()),
 				DespawnOnExit(Screen::Gameplay),
@@ -333,10 +331,6 @@ pub(crate) struct EnvironmentAssets {
 	#[dependency]
 	pub(crate) rocks: Handle<Scene>,
 	#[dependency]
-	pub(crate) rocks_med: Handle<Scene>,
-	#[dependency]
-	pub(crate) rocks_low: Handle<Scene>,
-	#[dependency]
 	pub(crate) grass_density_map: Handle<Image>,
 	#[dependency]
 	pub(crate) rock_density_map: Handle<Image>,
@@ -355,8 +349,6 @@ impl FromWorld for EnvironmentAssets {
 			grass_med: assets.load("models/grass/grass_medium_lod.gltf#Scene0"),
 			grass_low: assets.load("models/grass/grass_low_lod.gltf#Scene0"),
 			rocks: assets.load("models/rocks/rocks_low_lod.gltf#Scene0"),
-			rocks_med: assets.load("models/rocks/rocks_low_lod.gltf#Scene0"),
-			rocks_low: assets.load("models/rocks/rocks_low_lod.gltf#Scene0"),
 			#[cfg(feature = "dev")]
 			grass_density_map: assets.load("textures/density_map.png"),
 			#[cfg(feature = "release")]
