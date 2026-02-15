@@ -32,7 +32,7 @@ impl Plugin for ScatterPlugin {
 			GpuCullComputePlugin::<InstancedWindAffectedMaterial>::default(),
 		));
 
-		app.add_systems(OnEnter(ScatterState::Ready), scatter)
+		app.add_systems(OnEnter(Screen::Gameplay), scatter)
 			.add_systems(Startup, spawn_scatter_root)
 			.add_systems(
 				Update,
