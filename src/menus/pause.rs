@@ -47,7 +47,7 @@ fn spawn_pause_menu(
 		DespawnOnExit(Menu::Pause),
 		RootWidget,
 		GlobalZIndex(3),
-		widget::button("main menu", quit_to_title),
+		widget::button("Main menu", quit_to_title),
 	));
 	crosshair
 		.wants_free_cursor
