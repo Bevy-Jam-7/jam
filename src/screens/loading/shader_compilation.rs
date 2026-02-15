@@ -25,9 +25,13 @@ pub(super) fn plugin(app: &mut App) {
 			exit_shader_level.run_if(all_pipelines_loaded),
 		)
 			.chain()
-			.run_if(in_state(LoadingScreen::Shaders)),
+			.run_if(in_state(LoadingScreen::Shaders))
+			.run_if(resource_exists::<ShaderTimeout>),
 	);
 }
+
+#[derive(Debug, Deref, DerefMut, Resource, Clone, Default)]
+pub struct ShaderTimeout(Timer);
 
 fn spawn_or_skip_shader_compilation_loading_screen(
 	mut commands: Commands,
@@ -54,6 +58,7 @@ fn spawn_or_skip_shader_compilation_loading_screen(
 			LoadingShadersLabel
 		)],
 	));
+	commands.insert_resource(ShaderTimeout(Timer::from_seconds(30.0, TimerMode::Once)))
 }
 
 fn exit_shader_level(mut cmd: Commands) {
@@ -67,10 +72,14 @@ struct LoadingShadersLabel;
 fn update_loading_shaders_label(
 	mut query: Query<&mut Text, With<LoadingShadersLabel>>,
 	loaded_pipeline_count: Res<LoadedPipelineCount>,
+	time: Res<Time<Real>>,
+	mut shader_timeout: ResMut<ShaderTimeout>,
 ) {
+	shader_timeout.tick(time.delta());
+
 	for mut text in query.iter_mut() {
 		text.0 = format!(
-			"Compiling shaders: {} / {}",
+			"Compiling shaders: {} / {}\nThis may take up to 30 seconds, sit back and relax <3",
 			loaded_pipeline_count.0,
 			LoadedPipelineCount::TOTAL_PIPELINES
 		);

@@ -3,31 +3,27 @@
 //! The code is adapted from <https://bevyengine.org/examples/camera/first-person-view-model/>.
 //! See that example for more information.
 
-use std::iter;
-
 use super::Player;
+use crate::asset_tracking::LoadResource;
 use crate::gameplay::fever::postprocess::FeverPostProcessSettings;
 use crate::gameplay::level::CurrentLevel;
 use crate::{
 	CameraOrder, PostPhysicsAppSystems, RenderLayer,
 	gameplay::animation::{AnimationPlayerAncestor, AnimationPlayerOf, AnimationPlayers},
 	screens::{Screen, loading::LoadingScreen},
-	third_party::{avian3d::CollisionLayer, bevy_trenchbroom::LoadTrenchbroomModel as _},
+	third_party::avian3d::CollisionLayer,
 };
 
 use avian_pickup::prelude::*;
 use avian3d::{picking::PhysicsPickingCamera, prelude::*};
-#[cfg(feature = "native")]
-use bevy::pbr::ScreenSpaceAmbientOcclusion;
 use bevy::{
 	anti_alias::taa::TemporalAntiAliasing,
 	camera::{Exposure, visibility::RenderLayers},
 	core_pipeline::prepass::DeferredPrepass,
-	light::{AtmosphereEnvironmentMapLight, NotShadowCaster, ShadowFilteringMethod},
+	light::{AtmosphereEnvironmentMapLight, ShadowFilteringMethod},
 	pbr::{Atmosphere, ScatteringMedium},
 	post_process::bloom::Bloom,
 	prelude::*,
-	scene::SceneInstanceReady,
 };
 use bevy_ahoy::camera::CharacterControllerCameraOf;
 use bevy_eidolon::prepass::CullComputeCamera;
@@ -48,6 +44,9 @@ pub(super) fn plugin(app: &mut App) {
 			.run_if(resource_changed::<WorldModelFov>)
 			.in_set(PostPhysicsAppSystems::Update),
 	);
+
+	app.load_asset::<Image>("cubemaps/voortrekker_interior_1k_diffuse.ktx2")
+		.load_asset::<Image>("cubemaps/voortrekker_interior_1k_specular.ktx2");
 }
 
 /// The parent entity of the player's cameras.
@@ -76,12 +75,13 @@ fn spawn_view_model(
 
 	let medium = media.add(ScatteringMedium::default());
 
-	let (exposure, env_light) = match *current_level {
+	let current_level = *current_level;
+	let (exposure, env_light) = match current_level {
 		CurrentLevel::Shaders => (12., 0.4),
 		CurrentLevel::DayOne => (12., 0.4),
 		CurrentLevel::DayTwo => (12., 0.2),
 		CurrentLevel::Commune => (12., 0.2),
-		CurrentLevel::Karoline => (12., 0.4),
+		CurrentLevel::Karoline => (13., 0.4),
 	};
 
 	// Spawn the player camera
@@ -116,7 +116,7 @@ fn spawn_view_model(
 			SpatialListener3D,
 		))
 		.with_children(|parent| {
-			parent.spawn((
+			let mut cam = parent.spawn((
 				Name::new("World Model Camera"),
 				WorldModelCamera,
 				bevy_feronia::prelude::Center,
@@ -147,28 +147,34 @@ fn spawn_view_model(
 				),
 				(
 					FeverPostProcessSettings::default(),
-					#[cfg(feature = "native")]
-					// See https://github.com/bevyengine/bevy/issues/20459
-					ScreenSpaceAmbientOcclusion::default(),
-					AtmosphereEnvironmentMapLight {
-						intensity: env_light,
-						..default()
-					},
-					Atmosphere::earthlike(medium.clone()),
 					DistanceFog {
 						falloff: FogFalloff::Exponential { density: 0.0005 },
 						..default()
 					},
 				),
 			));
-
-			// Spawn the player's view model
-			parent
-				.spawn((
-					Name::new("View Model"),
-					SceneRoot(assets.load_trenchbroom_model::<Player>()),
-				))
-				.observe(configure_player_view_model);
+			if current_level == CurrentLevel::Commune {
+				cam.insert((
+					AtmosphereEnvironmentMapLight {
+						intensity: env_light,
+						..default()
+					},
+					Atmosphere::earthlike(medium.clone()),
+				));
+			} else {
+				cam.insert(EnvironmentMapLight {
+					diffuse_map: assets.load("cubemaps/voortrekker_interior_1k_diffuse.ktx2"),
+					specular_map: assets.load("cubemaps/voortrekker_interior_1k_specular.ktx2"),
+					intensity: match current_level {
+						CurrentLevel::Shaders => 0.0,
+						CurrentLevel::DayOne => 800.0,
+						CurrentLevel::DayTwo => 600.0,
+						CurrentLevel::Commune => 600.0,
+						CurrentLevel::Karoline => 300.0,
+					},
+					..default()
+				});
+			}
 		})
 		.observe(move_anim_players_relationship_to_player);
 }
@@ -186,27 +192,6 @@ fn move_anim_players_relationship_to_player(
 		commands
 			.entity(anim_player)
 			.insert(AnimationPlayerOf(*player));
-	}
-}
-
-fn configure_player_view_model(
-	ready: On<SceneInstanceReady>,
-	mut commands: Commands,
-	q_children: Query<&Children>,
-	q_mesh: Query<(), With<Mesh3d>>,
-) {
-	let view_model = ready.entity;
-
-	for child in iter::once(view_model)
-		.chain(q_children.iter_descendants(view_model))
-		.filter(|e| q_mesh.contains(*e))
-	{
-		commands.entity(child).insert((
-			// Ensure the arm is only rendered by the view model camera.
-			RenderLayers::from(RenderLayer::VIEW_MODEL),
-			// The arm is free-floating, so shadows would look weird.
-			NotShadowCaster,
-		));
 	}
 }
 

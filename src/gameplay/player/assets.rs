@@ -29,10 +29,6 @@ pub(crate) struct PlayerAssets {
 	pub(crate) land_sounds: ShuffleBag<Handle<AudioSample>>,
 	#[dependency]
 	pub(crate) jump_start_sounds: ShuffleBag<Handle<AudioSample>>,
-	#[dependency]
-	pub(crate) idle_animation: Handle<AnimationClip>,
-	#[dependency]
-	pub(crate) a_pose_animation: Handle<AnimationClip>,
 }
 
 impl FromWorld for PlayerAssets {
@@ -97,8 +93,6 @@ impl FromWorld for PlayerAssets {
 				rng,
 			)
 			.unwrap(),
-			idle_animation: assets.load(Player::animation_path(9)),
-			a_pose_animation: assets.load(Player::animation_path(5)),
 		}
 	}
 }

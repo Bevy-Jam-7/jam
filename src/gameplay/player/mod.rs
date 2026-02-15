@@ -3,7 +3,6 @@
 //! Note that this is separate from the `movement` module as that could be used
 //! for other characters as well.
 
-use animation::{PlayerAnimationState, setup_player_animations};
 use avian3d::prelude::*;
 use bevy::prelude::*;
 use bevy_ahoy::prelude::*;
@@ -14,13 +13,8 @@ use input::PlayerInputContext;
 use navmesh_position::LastValidPlayerNavmeshPosition;
 
 use crate::gameplay::core::*;
-use crate::{
-	animation::AnimationState,
-	asset_tracking::LoadResource,
-	third_party::{avian3d::CollisionLayer, bevy_trenchbroom::GetTrenchbroomModelPath as _},
-};
+use crate::third_party::avian3d::CollisionLayer;
 
-mod animation;
 pub(crate) mod assets;
 pub(crate) mod camera;
 pub(crate) mod dialogue;
@@ -30,7 +24,6 @@ pub(crate) mod navmesh_position;
 
 pub(super) fn plugin(app: &mut App) {
 	app.add_plugins((
-		animation::plugin,
 		assets::plugin,
 		camera::plugin,
 		input::plugin,
@@ -39,14 +32,10 @@ pub(super) fn plugin(app: &mut App) {
 		navmesh_position::plugin,
 	));
 	app.add_observer(setup_player);
-	app.load_asset::<Gltf>(Player::model_path());
 	app.add_systems(PreUpdate, assert_only_one_player);
 }
 
-#[point_class(
-	base(Transform, Visibility),
-	model("models/view_model/view_model.gltf")
-)]
+#[point_class(base(Transform, Visibility), model("models/jan_npc/jan.gltf"))]
 pub(crate) struct Player;
 
 // Shoulder-width of 45 cm (over average but not too diabolical)
@@ -60,41 +49,37 @@ fn setup_player(
 	mut commands: Commands,
 	archipelago: Single<Entity, With<Archipelago3d>>,
 ) {
-	commands
-		.entity(add.entity)
-		.insert((
-			RigidBody::Kinematic,
-			PlayerInputContext,
-			Collider::cylinder(PLAYER_RADIUS, PLAYER_HEIGHT),
-			CharacterController {
-				speed: 5.0,
-				friction_hz: 15.0,
-				filter: SpatialQueryFilter::DEFAULT
-					.with_mask(LayerMask::ALL & !CollisionLayer::Stomach.to_bits()),
-				..default()
-			},
-			ColliderDensity(1000.0),
-			CollisionLayers::new(CollisionLayer::PlayerCharacter, LayerMask::ALL),
-			AnimationState::<PlayerAnimationState>::default(),
-			Fever,
-			related!(FeverSources[FeverSource::default()]),
-			children![
-				TemperatureSensor,
-				(
-					Name::new("Player Landmass Character"),
-					Transform::from_xyz(0.0, -PLAYER_HALF_HEIGHT, 0.0),
-					Character3dBundle {
-						character: Character::default(),
-						settings: CharacterSettings {
-							radius: PLAYER_RADIUS,
-						},
-						archipelago_ref: ArchipelagoRef3d::new(*archipelago),
+	commands.entity(add.entity).insert((
+		RigidBody::Kinematic,
+		PlayerInputContext,
+		Collider::cylinder(PLAYER_RADIUS, PLAYER_HEIGHT),
+		CharacterController {
+			speed: 5.0,
+			friction_hz: 15.0,
+			filter: SpatialQueryFilter::DEFAULT
+				.with_mask(LayerMask::ALL & !CollisionLayer::Stomach.to_bits()),
+			..default()
+		},
+		ColliderDensity(1000.0),
+		CollisionLayers::new(CollisionLayer::PlayerCharacter, LayerMask::ALL),
+		Fever,
+		related!(FeverSources[FeverSource::default()]),
+		children![
+			TemperatureSensor,
+			(
+				Name::new("Player Landmass Character"),
+				Transform::from_xyz(0.0, -PLAYER_HALF_HEIGHT, 0.0),
+				Character3dBundle {
+					character: Character::default(),
+					settings: CharacterSettings {
+						radius: PLAYER_RADIUS,
 					},
-					LastValidPlayerNavmeshPosition::default(),
-				)
-			],
-		))
-		.observe(setup_player_animations);
+					archipelago_ref: ArchipelagoRef3d::new(*archipelago),
+				},
+				LastValidPlayerNavmeshPosition::default(),
+			)
+		],
+	));
 }
 
 fn assert_only_one_player(player: Populated<(), With<Player>>) {
