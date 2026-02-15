@@ -191,7 +191,7 @@ impl QualitySettingsButton {
 			),));
 		} else {
 			cmd.entity(ctx.entity)
-				.insert(widget::label_small("Change in main menu"));
+				.insert(widget::label("Change in Main menu"));
 		}
 	}
 }
