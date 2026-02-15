@@ -1,4 +1,5 @@
 title: karoline_bookshelf
+dir: karoline
 ---
 <<declare $k_ate_camera = false>>
 <<if bool($k_ate_camera)>>
@@ -91,6 +92,7 @@ title: karoline_bookshelf
 ===
 
 title: karoline_cultist_1
+dir: karoline
 ---
 <<if not $k_introduced >>
   Cultist: ... #line:987459865
@@ -118,28 +120,30 @@ title: karoline_cultist_1
 ===
 
 title: karoline_cultist_2
+dir: karoline
 ---
 <<if not $k_introduced >>
-  Novice: Uh... go speak to the other guy, I'm not qualified. #line:465594
+  Novice: U-Uh... g-go speak to the other guy, I-I'm not qualified. #line:465594
 <<elseif $k_first_question>>
-  Novice: Praise on to the paper colossus. #line:7660512
+  Novice: P-Praise on to the paper colossus! #line:7660512
   -> So... what do you do all day? <<if not $k_2goof>> #line:5878613
-    Novice: Sniff old books. #line:8268668
+    Novice: I-I sniff old books. #line:8268668
   -> How long have you been in the cult? <<if not $k_2goof>> #line:6748722
-    Novice: On Monday, John told me at the coffee table that I should either join or go to Scunthorpe, that sounded kinda bad. #line:8926315
+    Novice: O-On Monday, John told me at the coffee table that I should either join or go to Scunthorpe, that sounded kinda bad. #line:8926315
   <<set $k_2goof = true>>
-  Novice: Be seeing you. #line:8835902
+  Novice: H-hehe, be seeing you. #line:8835902
 <<else>>
   Novice: 'Sup #line:4498
   -> Why is it so dark here? #line:6383036
-    Novice: We have dedicated all energy towards lighting the mighty one. It can make better use of resources than us humans anyway. #line:120130
+    Novice: W-We have dedicated all energy towards lighting the mighty one. I-It can make better use of resources than us humans a-anyway. #line:120130
     -> What is it using the resouces for? #line:4643946
       Novice: ... #line:3197451
-      Novice: How am I supposed to know that? #line:87649574
+      Novice: E-Eh... How am I supposed to know that? #line:87649574
 <<endif>>
 ===
 
 title: beep
+dir: karoline
 ---
 <<declare $beeps = 0>>
 <<if $beeps == 0>>
@@ -164,6 +168,7 @@ title: beep
 ===
 
 title: guardian
+dir: karoline
 ---
 <<declare $figure_name = "Jesus">>
 <<if get_current_objective() == "obj_1">>

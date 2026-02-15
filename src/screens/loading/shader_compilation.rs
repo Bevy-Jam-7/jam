@@ -79,7 +79,7 @@ fn update_loading_shaders_label(
 
 	for mut text in query.iter_mut() {
 		text.0 = format!(
-			"Compiling shaders: {} / {}\nThis may take up to 30 seconds, sit back and relax <3",
+			"Compiling shaders: {} / {}\n(This may take up to 30 seconds, the fun begins soon!)",
 			loaded_pipeline_count.0,
 			LoadedPipelineCount::TOTAL_PIPELINES
 		);
