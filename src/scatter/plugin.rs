@@ -47,7 +47,8 @@ impl Plugin for ScatterPlugin {
 				(
 					scatter.run_if(
 						resource_exists_and_changed::<EnvironmentAssets>
-							.and(in_state(Screen::Gameplay)),
+							.and(in_state(Screen::Gameplay))
+							.and(in_state(ScatterState::Ready)),
 					),
 					update_density_map.run_if(resource_exists::<EnvironmentAssets>),
 				),
