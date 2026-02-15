@@ -73,6 +73,7 @@ fn advance_to_gameplay_screen(
 	just_added_scenes: Query<(), (With<SceneRoot>, Without<SceneInstance>)>,
 	just_added_meshes: Query<(), Added<Mesh3d>>,
 	nav_mesh_events: MessageReader<AssetEvent<NavMesh<ThreeD>>>,
+	_: Single<Entity, (With<ScatterRoot>, With<ScatterReadyToAdvance>)>,
 ) {
 	if !(just_added_meshes.is_empty() && just_added_scenes.is_empty()) {
 		return;
