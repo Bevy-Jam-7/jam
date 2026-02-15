@@ -39,8 +39,12 @@ pub fn toggle_layers(
 	}
 }
 
-pub fn advance_to_setup(mut ns_scatter: ResMut<NextState<ScatterState>>) {
+pub fn advance_to_setup(
+	mut ns_scatter: ResMut<NextState<ScatterState>>,
+	mut ns_height_state: ResMut<NextState<HeightMapState>>,
+) {
 	ns_scatter.set(ScatterState::Setup);
+	ns_height_state.set(HeightMapState::Setup);
 }
 
 pub fn scatter(

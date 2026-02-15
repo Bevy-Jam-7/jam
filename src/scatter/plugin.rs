@@ -54,6 +54,7 @@ impl Plugin for ScatterPlugin {
 				),
 			)
 			.add_observer(scatter_extended)
-			.add_observer(scatter_instanced);
+			.add_observer(scatter_instanced)
+			.add_observer(scatter_done);
 	}
 }

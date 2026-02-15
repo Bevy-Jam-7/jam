@@ -27,7 +27,7 @@ impl Landscape {
 		world
 			.get_resource_mut::<NextState<HeightMapState>>()
 			.unwrap()
-			.set(HeightMapState::Setup);
+			.set(HeightMapState::Loading);
 
 		let level = world.get_resource::<CurrentLevel>().cloned().unwrap();
 		match level {
