@@ -41,7 +41,7 @@ dir: day_two_crt
 
 <<elseif get_current_objective() == "work_1">>
   <<llmanager_emote "smile">>
-  LLManager: Proceed to the main office. Analysis shows you are aware what a machine is. If not, please fill out the concussion report form. #line:11608533
+  LLManager: Proceed to the main office. Analysis shows you are aware what a machine is. #line:11608533
   LLManager: If not, please fill out the concussion report form. #line:12632121
   <<llmanager_emote "off">>
 
