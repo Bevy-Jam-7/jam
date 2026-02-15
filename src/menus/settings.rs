@@ -2,7 +2,9 @@
 //! We can add all manner of settings and accessibility options here.
 //! For 3D, we'd also place the camera sensitivity and FOV here.
 
+use bevy::ecs::lifecycle::HookContext;
 use bevy::ecs::query::QueryFilter;
+use bevy::ecs::world::DeferredWorld;
 use bevy::window::PresentMode;
 use bevy::{input::common_conditions::input_just_pressed, prelude::*, ui::Val::*};
 use bevy_framepace::{FramepaceSettings, Limiter};
@@ -46,130 +48,151 @@ pub(super) fn plugin(app: &mut App) {
 	.add_observer(on_add_quality);
 }
 
-fn spawn_settings_menu(mut commands: Commands, screen: Res<State<Screen>>) {
-	let root_entity = commands
-		.spawn((
-			RootWidget,
-			DespawnOnExit(Menu::Settings),
-			DespawnOnExit(Screen::Gameplay),
-			GlobalZIndex(2),
-			children![
-				widget::header("Settings"),
-				(
-					Name::new("Settings Grid"),
-					Node {
-						display: Display::Grid,
-						row_gap: Px(10.0),
-						column_gap: Px(30.0),
-						grid_template_columns: RepeatedGridTrack::px(2, 400.0),
-						..default()
-					},
-					children![
-						// Audio
-						(
-							widget::label("Global Volume"),
-							Node {
-								justify_self: JustifySelf::End,
-								..default()
-							}
-						),
-						widget::plus_minus_bar(
-							GlobalVolumeLabel,
-							lower_volume::<With<MainBus>>,
-							raise_volume::<With<MainBus>>
-						),
-						(
-							widget::label("Music Volume"),
-							Node {
-								justify_self: JustifySelf::End,
-								..default()
-							}
-						),
-						widget::plus_minus_bar(
-							MusicVolumeLabel,
-							lower_volume::<With<SamplerPool<MusicPool>>>,
-							raise_volume::<With<SamplerPool<MusicPool>>>
-						),
-						(
-							widget::label("Sound Effects Volume"),
-							Node {
-								justify_self: JustifySelf::End,
-								..default()
-							}
-						),
-						widget::plus_minus_bar(
-							SfxVolumeLabel,
-							lower_volume::<With<SoundEffectsBus>>,
-							raise_volume::<With<SoundEffectsBus>>
-						),
-						(
-							widget::label("Quality"),
-							Node {
-								justify_self: JustifySelf::End,
-								..default()
-							}
-						),
-						widget::plus_minus_bar(
-							CameraSensitivityLabel,
-							lower_camera_sensitivity,
-							raise_camera_sensitivity
-						),
-						// Camera FOV
-						(
-							widget::label("Camera FOV"),
-							Node {
-								justify_self: JustifySelf::End,
-								..default()
-							}
-						),
-						widget::plus_minus_bar(CameraFovLabel, lower_camera_fov, raise_camera_fov),
-						// VSync
-						(
-							widget::label("VSync"),
-							Node {
-								justify_self: JustifySelf::End,
-								..default()
-							}
-						),
-						widget::plus_minus_bar(VsyncLabel, disable_vsync, enable_vsync),
-						// FPS Limiter (Enable/Disable)
-						(
-							widget::label("FPS Limiter"),
-							Node {
-								justify_self: JustifySelf::End,
-								..default()
-							}
-						),
-						widget::plus_minus_bar(
-							FpsLimiterEnabledLabel,
-							disable_fps_limiter,
-							enable_fps_limiter
-						),
-						// FPS Target
-						(
-							widget::label("FPS Target"),
-							Node {
-								justify_self: JustifySelf::End,
-								..default()
-							}
-						),
-						widget::plus_minus_bar(
-							FpsLimiterTargetLabel,
-							lower_fps_target,
-							raise_fps_target
-						),
-					],
-				),
-				widget::button("Back", go_back_on_click),
-			],
-		))
-		.id();
+fn spawn_settings_menu(mut commands: Commands) {
+	commands.spawn((
+		RootWidget,
+		DespawnOnExit(Menu::Settings),
+		DespawnOnExit(Screen::Gameplay),
+		GlobalZIndex(2),
+		children![
+			widget::header("Settings"),
+			(
+				Name::new("Settings Grid"),
+				Node {
+					display: Display::Grid,
+					row_gap: Px(10.0),
+					column_gap: Px(30.0),
+					grid_template_columns: RepeatedGridTrack::px(2, 400.0),
+					..default()
+				},
+				children![
+					// Audio
+					(
+						widget::label("Global Volume"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					widget::plus_minus_bar(
+						GlobalVolumeLabel,
+						lower_volume::<With<MainBus>>,
+						raise_volume::<With<MainBus>>
+					),
+					(
+						widget::label("Music Volume"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					widget::plus_minus_bar(
+						MusicVolumeLabel,
+						lower_volume::<With<SamplerPool<MusicPool>>>,
+						raise_volume::<With<SamplerPool<MusicPool>>>
+					),
+					(
+						widget::label("Sound Effects Volume"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					widget::plus_minus_bar(
+						SfxVolumeLabel,
+						lower_volume::<With<SoundEffectsBus>>,
+						raise_volume::<With<SoundEffectsBus>>
+					),
+					// Camera Sensitivity
+					(
+						widget::label("Camera Sensitivity"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					widget::plus_minus_bar(
+						CameraSensitivityLabel,
+						lower_camera_sensitivity,
+						raise_camera_sensitivity
+					),
+					// Camera FOV
+					(
+						widget::label("Camera FOV"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					widget::plus_minus_bar(CameraFovLabel, lower_camera_fov, raise_camera_fov),
+					// VSync
+					(
+						widget::label("VSync"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					widget::plus_minus_bar(VsyncLabel, disable_vsync, enable_vsync),
+					// FPS Limiter (Enable/Disable)
+					(
+						widget::label("FPS Limiter"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					widget::plus_minus_bar(
+						FpsLimiterEnabledLabel,
+						disable_fps_limiter,
+						enable_fps_limiter
+					),
+					// FPS Target
+					(
+						widget::label("FPS Target"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					widget::plus_minus_bar(
+						FpsLimiterTargetLabel,
+						lower_fps_target,
+						raise_fps_target
+					),
+					(
+						widget::label("Quality"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					QualitySettingsButton
+				],
+			),
+			widget::button("Back", go_back_on_click),
+		],
+	));
+}
 
-	if *screen != Screen::Gameplay {
-		commands.spawn((
-			ChildOf(root_entity),
-			widget::settings_button(QualitySettingsLabel, "+", change_quality),
-		));
+#[derive(Component)]
+#[component(on_add = Self::on_add)]
+struct QualitySettingsButton;
+
+impl QualitySettingsButton {
+	fn on_add(mut world: DeferredWorld, ctx: HookContext) {
+		let screen = *(*world.resource::<State<Screen>>());
+		let mut cmd = world.commands();
+		if screen != Screen::Gameplay {
+			cmd.entity(ctx.entity).insert((widget::settings_button(
+				QualitySettingsLabel,
+				"+",
+				change_quality,
+			),));
+		} else {
+			cmd.entity(ctx.entity)
+				.insert(widget::label_small("Change in main menu"));
+		}
 	}
 }
 

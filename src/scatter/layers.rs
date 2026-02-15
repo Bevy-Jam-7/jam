@@ -40,7 +40,7 @@ impl RockLayer {
 			.cloned()
 			.expect("Assets should be added!");
 
-		let settings = world.resource::<QualitySetting>().clone();
+		let settings = *world.resource::<QualitySetting>();
 		let density_settings = RockDensitySetting::from(settings);
 		let visibility_settings = RockVisibilityRangeQuality::from(settings);
 		let collider_hierarchy =
@@ -97,7 +97,7 @@ impl MushroomLayer {
 			.cloned()
 			.expect("Assets should be added!");
 
-		let settings = world.resource::<QualitySetting>().clone();
+		let settings = *world.resource::<QualitySetting>();
 		let density_settings = MushroomDensitySetting::from(settings);
 		let visibility_settings = MushroomVisibilityRangeQuality::from(settings);
 		let collider_hierarchy =
@@ -168,7 +168,7 @@ impl GrassLayer {
 			..
 		} = world.resource::<EnvironmentAssets>().clone();
 
-		let settings = world.resource::<QualitySetting>().clone();
+		let settings = *world.resource::<QualitySetting>();
 		let density_settings = GrassDensitySetting::from(settings);
 		let visibility_settings = GrassVisibilityRangeQuality::from(settings);
 		let collider_hierarchy =

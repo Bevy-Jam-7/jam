@@ -129,10 +129,10 @@ pub fn toggle_rock_layer(
 
 fn toggle<T: Default + Component>(
 	cmd: &mut Commands,
-	mut iter: impl Iterator<Item = Entity>,
+	iter: impl Iterator<Item = Entity>,
 	enabled: bool,
 ) {
-	while let Some(e) = iter.next() {
+	for e in iter {
 		if enabled {
 			cmd.entity(e).remove::<T>();
 		} else {

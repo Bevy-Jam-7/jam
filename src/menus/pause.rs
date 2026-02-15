@@ -47,7 +47,7 @@ fn spawn_pause_menu(
 		DespawnOnExit(Menu::Pause),
 		RootWidget,
 		GlobalZIndex(3),
-		widget::button("Quit to title", quit_to_title),
+		widget::button("main menu", quit_to_title),
 	));
 	crosshair
 		.wants_free_cursor
@@ -72,7 +72,7 @@ fn close_pause_menu(
 	unpause(crosshair, time, blocks_input);
 }
 
-fn quit_to_title(
+pub(crate) fn quit_to_title(
 	_on: On<Pointer<Click>>,
 	mut next_screen: ResMut<NextState<Screen>>,
 	crosshair: Single<&mut CrosshairState>,
