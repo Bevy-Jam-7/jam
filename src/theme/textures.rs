@@ -157,7 +157,7 @@ fn load_image(bytes: &[u8], _path: String) -> Image {
 	Image::from_buffer(
 		bytes,
 		ImageType::Format(format),
-		CompressedImageFormats::default(),
+		CompressedImageFormats::BC,
 		true,
 		ImageSampler::default(),
 		RenderAssetUsages::default(),
