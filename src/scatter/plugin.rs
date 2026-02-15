@@ -40,7 +40,12 @@ impl Plugin for ScatterPlugin {
 				Update,
 				(
 					spawn_scatter_layers.run_if(resource_added::<EnvironmentAssets>),
-					update_layers.run_if(resource_changed::<QualitySetting>),
+					(
+						update_rock_layers,
+						update_mushroom_layers,
+						update_grass_layers,
+					)
+						.run_if(resource_changed::<QualitySetting>),
 				),
 			)
 			.add_systems(
