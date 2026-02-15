@@ -279,7 +279,7 @@ fn update_camera_sensitivity(
 	sens: Res<CamSensitivitySetting>,
 ) {
 	let (entity, camera) = cam.into_inner();
-	let mut camera = camera.clone();
+	let mut camera = *camera;
 	camera.mult = sens.0;
 	commands.entity(entity).insert(camera);
 }
