@@ -58,7 +58,7 @@ fn spawn_or_skip_asset_loading_screen(
 			Text("Loading Assets".into()),
 			TextFont {
 				font: VARIABLE_FONT,
-				font_size: 22.0,
+				font_size: 24.0,
 				weight: FontWeight(800),
 				..default()
 			},

@@ -51,7 +51,7 @@ fn spawn_level_loading_screen(mut commands: Commands) {
 			Text("Spawning Level".into()),
 			TextFont {
 				font: VARIABLE_FONT,
-				font_size: 22.0,
+				font_size: 24.0,
 				weight: FontWeight(800),
 				..default()
 			},
