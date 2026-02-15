@@ -1,6 +1,6 @@
 use crate::{
 	asset_tracking::LoadResource,
-	gameplay::{TargetName, interaction::InteractEvent, core::EnvironmentTemperature},
+	gameplay::{TargetName, core::EnvironmentTemperature, interaction::InteractEvent},
 	props::interactables::InteractableEntity,
 	third_party::{
 		avian3d::CollisionLayer,
