@@ -217,25 +217,27 @@ title: guardian
   Glossy {$religion}: The path is there for all to follow. #line:11928825
   Glossy {$religion}: Once the station is clear. #line:1426473
 <<elseif get_current_objective() == "obj_3">>
-  Glossy {$religion}: Excellent work, my child. #line:15160383 
-  -> You know I'm an adult, right? #line:1062072 
-    Glossy {$religion}: It's not meant literally. #line:10602682 
-    -> Fair enough #line:7024949 
+  Glossy {$religion}: Excellent work, my child. #line:15160383
+  -> You know I'm an adult, right? #line:1062072
+    Glossy {$religion}: It's not meant literally. #line:10602682
+    -> Fair enough #line:7024949
       <<set $k_name = "child">>
-      Glossy {$religion}: Glad to hear. #line:3012934 
-    -> It's patronizing #line:8522012 
+      Glossy {$religion}: Glad to hear. #line:3012934
+    -> It's patronizing #line:8522012
       <<set $k_name = "adult">>
-      Glossy {$religion}: Very well, I will respect your wishes. #line:14606435 
-
-  -> Will you help me now? #line:4411852 
-    Glossy {$religion}: Not yet. #line:8981252 
+      Glossy {$religion}: Very well, I will respect your wishes. #line:14606435
+  Glossy {$religion}: Anyways, you did well. #line:2107112
+  -> Will you help me now? #line:4411852
+    Glossy {$religion}: Not yet, {$k_name}. #line:8981252
     <<complete_objective "obj_3">>
     <<set_value "teen" "is_edible" "true">>
-    Glossy {$religion}: As part of your initiation, you need to consume one more thing. #line:2924679 
-    -> But there's nothing here #line:1475546 
-      Glossy {$religion}: There is, for those with eyes to see and mouths to feed. #line:14938249 
+    <<set_value "teen" "interaction_text_override" "Consume">>
+    <<set_value "teen" "completes_subobjective" "obj_4">>
+    Glossy {$religion}: As part of your initiation, you need to consume one more thing. #line:2924679
+    -> But there's nothing here #line:1475546
+      Glossy {$religion}: There is, for those with eyes to see and mouths to feed. #line:14938249
   <<elseif get_current_objective() == "obj_4">>
-    Glossy {$religion}: Consume them. #line:2270695 
+    Glossy {$religion}: Consume them. #line:2270695
 <<endif>>
 ===
 

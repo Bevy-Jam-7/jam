@@ -271,7 +271,7 @@ pub(crate) fn spawn_level(
 				Level,
 				children![(
 					Name::new("Level Music"),
-					SamplePlayer::new(level_karoline_assets.music.clone()).looping(),
+					SamplePlayer::new(level_karoline_assets.music_1.clone()).looping(),
 					MusicPool
 				)],
 			));
@@ -451,7 +451,9 @@ pub(crate) struct LevelKarolineAssets {
 	#[dependency]
 	pub(crate) navmesh: Handle<Navmesh>,
 	#[dependency]
-	pub(crate) music: Handle<AudioSample>,
+	pub(crate) music_1: Handle<AudioSample>,
+	#[dependency]
+	pub(crate) music_2: Handle<AudioSample>,
 }
 
 impl FromWorld for LevelKarolineAssets {
@@ -463,7 +465,8 @@ impl FromWorld for LevelKarolineAssets {
 			level: assets.load("maps/main/karoline/karoline.map#Scene"),
 			// You can regenerate the navmesh by using `bevy_rerecast_editor`
 			navmesh: assets.load("maps/main/karoline/karoline.nav"),
-			music: assets.load("audio/music/station.mp3"),
+			music_1: assets.load("audio/music/station.mp3"),
+			music_2: assets.load("audio/music/station.mp3"),
 		}
 	}
 }

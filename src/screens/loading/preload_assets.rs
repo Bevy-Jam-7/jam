@@ -93,7 +93,7 @@ fn update_loading_assets_label(
 			})
 			.unwrap_or_else(|| "Done".to_string());
 		text.0 = format!(
-			"Loading Assets: {} / {} \n{waiting}",
+			"Loading Assets: {} / {} \n{waiting}\nIf this gets stuck, please restart the game :D",
 			resource_handles.finished_count(),
 			resource_handles.total_count()
 		);
