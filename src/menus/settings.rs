@@ -221,7 +221,7 @@ fn lower_camera_sensitivity(
 	mut command: Commands,
 ) {
 	let (entity, cam) = cam.into_inner();
-	let mut cam = cam.clone();
+	let mut cam = *cam;
 	cam.mult -= 0.1;
 	const MIN_SENSITIVITY: f32 = 0.1;
 	cam.mult.x = cam.mult.x.max(MIN_SENSITIVITY);
@@ -235,7 +235,7 @@ fn raise_camera_sensitivity(
 	mut command: Commands,
 ) {
 	let (entity, cam) = cam.into_inner();
-	let mut cam = cam.clone();
+	let mut cam = *cam;
 	cam.mult += 0.1;
 	const MAX_SENSITIVITY: f32 = 20.0;
 	cam.mult.x = cam.mult.x.min(MAX_SENSITIVITY);
@@ -272,13 +272,9 @@ fn update_camera_fov_label(
 }
 
 #[derive(Resource, Reflect, Debug)]
+#[derive(Default)]
 struct VsyncSetting(bool);
 
-impl Default for VsyncSetting {
-	fn default() -> Self {
-		Self(false)
-	}
-}
 
 #[derive(Component, Reflect)]
 #[reflect(Component)]
