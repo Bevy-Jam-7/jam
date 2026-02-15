@@ -3,19 +3,14 @@ use bevy_seedling::prelude::*;
 use bevy_trenchbroom::prelude::*;
 use rand::Rng;
 
-use crate::{
-	audio::{SpatialPool, doppler::DopplerSound},
-	menus::Menu,
-};
+use crate::audio::{SpatialPool, doppler::DopplerSound};
 
 pub struct EmitterPlugin;
 
 impl Plugin for EmitterPlugin {
 	fn build(&self, app: &mut App) {
 		app.init_resource::<SoundMap>()
-			.add_observer(observe_world_emitter)
-			.add_systems(OnExit(Menu::None), pause_world_emitters)
-			.add_systems(OnEnter(Menu::None), play_world_emitters);
+			.add_observer(observe_world_emitter);
 	}
 }
 
@@ -120,19 +115,4 @@ fn observe_world_emitter(
 	));
 
 	Ok(())
-}
-
-fn pause_world_emitters(emitters: Query<&mut PlaybackSettings, With<WorldEmitter>>) {
-	for mut emitter in emitters {
-		emitter.pause();
-	}
-}
-
-fn play_world_emitters(emitters: Query<&mut PlaybackSettings, With<WorldEmitter>>) {
-	for mut emitter in emitters {
-		if !*emitter.play {
-			emitter.play_from = PlayFrom::Resume;
-			emitter.play();
-		}
-	}
 }
