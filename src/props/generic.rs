@@ -27,6 +27,8 @@ pub(super) fn plugin(app: &mut App) {
 		.add_observer(setup_static_prop_with_convex_hull::<CrateSquare>)
 		.add_observer(setup_static_prop_with_convex_hull::<FenceBarsDecorativeSingle>)
 		.add_observer(setup_static_prop_with_convex_hull::<DoorStainedGlass>)
+		.add_observer(setup_static_prop_with_convex_hull::<FlowerPot>)
+		.add_observer(setup_static_prop_with_convex_hull::<PottedShroom>)
 		.add_observer(setup_static_prop_with_convex_hull::<Jesus>)
 		.add_observer(setup_static_prop_with_convex_hull::<Speaker>)
 		.add_observer(setup_static_prop_with_convex_hull::<Teeth>)
@@ -43,7 +45,8 @@ pub(super) fn plugin(app: &mut App) {
 		.add_observer(setup_dynamic_prop_with_convex_hull::<Trash>);
 
 	app.add_observer(setup_nonphysical_prop::<IvyPart8>)
-		.add_observer(setup_nonphysical_prop::<SmallDoorSign1>);
+		.add_observer(setup_nonphysical_prop::<SmallDoorSign1>)
+		.add_observer(setup_nonphysical_prop::<PottedPlant>);
 
 	app.load_asset::<Gltf>(Crt::model_path())
 		.load_asset::<Gltf>(Keyboard::model_path())
@@ -62,6 +65,9 @@ pub(super) fn plugin(app: &mut App) {
 		.load_asset::<Gltf>(IvyPart8::model_path())
 		.load_asset::<Gltf>(SmallDoorSign1::model_path())
 		.load_asset::<Gltf>(Rohlik::model_path())
+		.load_asset::<Gltf>(FlowerPot::model_path())
+		.load_asset::<Gltf>(PottedPlant::model_path())
+		.load_asset::<Gltf>(PottedShroom::model_path())
 		.load_asset::<Gltf>(Train::model_path())
 		.load_asset::<Gltf>(Teeth::model_path())
 		.load_asset::<Gltf>(Speaker::model_path())
@@ -114,6 +120,24 @@ pub(crate) struct Keyboard;
 	model("models/office/mouse.gltf")
 )]
 pub(crate) struct Mouse;
+
+#[point_class(
+	base(TargetName, Transform, Visibility),
+	model("models/office/pot.gltf")
+)]
+pub(crate) struct FlowerPot;
+
+#[point_class(
+	base(TargetName, Transform, Visibility),
+	model("models/office/plant.gltf")
+)]
+pub(crate) struct PottedPlant;
+
+#[point_class(
+	base(TargetName, Transform, Visibility),
+	model("models/office/shroom.gltf")
+)]
+pub(crate) struct PottedShroom;
 
 // darkmod
 
