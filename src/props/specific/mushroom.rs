@@ -7,7 +7,7 @@ use crate::props::setup::{setup_static_prop_with_convex_hull, static_bundle};
 use crate::scatter::layers::MushroomLayer;
 use crate::third_party::bevy_trenchbroom::GetTrenchbroomModelPath;
 
-use avian3d::prelude::{ColliderConstructor,RigidBody};
+use avian3d::prelude::{ColliderConstructor, RigidBody};
 use bevy::prelude::*;
 use bevy_feronia::prelude::ScatteredInstance;
 use bevy_trenchbroom::prelude::ReflectQuakeClass;
@@ -66,13 +66,11 @@ pub fn scattered_shroom(
 			return;
 		}
 
-		cmd.entity(trigger.entity).insert(
-			InteractableEntity {
-				is_edible: true,
-				interaction_text_override: Some("Take a bite".to_string()),
-				completes_subobjective: Some("leave".to_string()),
-				interaction_relay: None,
-			},
-		);
+		cmd.entity(trigger.entity).insert(InteractableEntity {
+			is_edible: true,
+			interaction_text_override: Some("Take a bite".to_string()),
+			completes_subobjective: Some("leave".to_string()),
+			interaction_relay: None,
+		});
 	}
 }
