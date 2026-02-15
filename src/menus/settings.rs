@@ -16,6 +16,7 @@ use crate::{
 	screens::Screen,
 	theme::prelude::*,
 };
+use crate::scatter::quality::QualitySetting;
 
 pub(super) fn plugin(app: &mut App) {
 	app.init_resource::<VsyncSetting>();
@@ -99,6 +100,18 @@ fn spawn_settings_menu(mut commands: Commands) {
 						lower_volume::<With<SoundEffectsBus>>,
 						raise_volume::<With<SoundEffectsBus>>
 					),
+					(
+						widget::label("Quality"),
+						Node {
+							justify_self: JustifySelf::End,
+							..default()
+						}
+					),
+					(widget::settings_button(
+						QualitySettingsLabel,
+						format!("{:?}", QualitySetting::default()),
+						change_quality
+					)),
 					// Camera Sensitivity
 					(
 						widget::label("Camera Sensitivity"),
@@ -424,4 +437,20 @@ fn go_back(screen: Res<State<Screen>>, mut next_menu: ResMut<NextState<Menu>>) {
 	} else {
 		Menu::Pause
 	});
+}
+
+fn change_quality(
+	on: On<Pointer<Click>>,
+	mut cmd: Commands,
+	mut label: Query<&mut Text, With<QualitySettingsLabel>>,
+	settings: ResMut<QualitySetting>,
+) {
+	let settings = settings.next();
+	println!("hellooo {settings:?}");
+	let Ok(mut label) = label.get_mut(on.entity) else {
+		return;
+	};
+
+	cmd.insert_resource(settings);
+	label.0 = format!("{:?}", settings);
 }
