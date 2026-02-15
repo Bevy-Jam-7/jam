@@ -144,9 +144,19 @@ fn animate_textured_ui_material(
 }
 
 fn load_image(bytes: &[u8], _path: String) -> Image {
+	let format = {
+		#[cfg(feature = "dev")]
+		{
+			ImageFormat::Png
+		}
+		#[cfg(feature = "release")]
+		{
+			ImageFormat::Ktx2
+		}
+	};
 	Image::from_buffer(
 		bytes,
-		ImageType::Format(ImageFormat::Png),
+		ImageType::Format(format),
 		CompressedImageFormats::default(),
 		true,
 		ImageSampler::default(),
