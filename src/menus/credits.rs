@@ -84,6 +84,7 @@ fn assets() -> impl Bundle {
 		["Fluorescent Light 1", "CC0 by EverydaySounds"],
 		["Fluorescent Light 2", "CC0 by kyles"],
 		["Floppy Disk", "CC0 by BigSoundBank"],
+		["Door sounds", "CC0 by BigSoundBank"],
 		["More stuffs", "TODO :)"],
 	])
 }

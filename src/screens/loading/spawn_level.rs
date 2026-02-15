@@ -6,7 +6,7 @@ use bevy_landmass::{NavMesh, coords::ThreeD};
 
 use super::LoadingScreen;
 use crate::font::VARIABLE_FONT;
-use crate::gameplay::level::{spawn_landscape, spawn_level};
+use crate::gameplay::level::{CurrentLevel, spawn_landscape, spawn_level};
 use crate::scatter::ScatterDone;
 use crate::theme::palette::HEADER_TEXT;
 use crate::{
@@ -23,7 +23,8 @@ pub(super) fn plugin(app: &mut App) {
 		OnEnter(LoadingScreen::Shaders),
 		(spawn_landscape, spawn_level),
 	)
-	.add_systems(OnExit(Screen::Gameplay), reset_scatter_state);
+	.add_systems(OnExit(Screen::Gameplay), reset_scatter_state)
+	.add_systems(OnEnter(Screen::Title), reset_current_level);
 
 	app.add_systems(
 		Update,
@@ -32,12 +33,16 @@ pub(super) fn plugin(app: &mut App) {
 	.add_observer(on_scatter_done);
 }
 
+fn reset_current_level(mut current_level: ResMut<CurrentLevel>) {
+	*current_level = CurrentLevel::default();
+}
+
 fn reset_scatter_state(
 	mut ns_scatter: ResMut<NextState<ScatterState>>,
 	mut ns_height_map: ResMut<NextState<HeightMapState>>,
 ) {
-	ns_scatter.set(ScatterState::Loading);
-	ns_height_map.set(HeightMapState::Loading);
+	ns_scatter.set(ScatterState::default());
+	ns_height_map.set(HeightMapState::default());
 }
 
 fn spawn_level_loading_screen(mut commands: Commands) {
