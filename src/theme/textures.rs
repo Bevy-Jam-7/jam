@@ -14,12 +14,24 @@ pub(crate) const BUTTON_TEXTURE: Handle<Image> =
 const BUTTON_SHADER_ASSET_PATH: &str = "shaders/button_material.wgsl";
 
 pub(crate) fn plugin(app: &mut App) {
-	load_internal_binary_asset!(
-		app,
-		BUTTON_TEXTURE,
-		"../../assets/textures/crate/crate_ambientOcclusion.png",
-		load_image
-	);
+	#[cfg(feature = "dev")]
+	{
+		load_internal_binary_asset!(
+			app,
+			BUTTON_TEXTURE,
+			"../../assets/textures/crate/crate_ambientOcclusion.png",
+			load_image
+		);
+	}
+	#[cfg(feature = "release")]
+	{
+		load_internal_binary_asset!(
+			app,
+			BUTTON_TEXTURE,
+			"../../assets/textures/crate/crate_ambientOcclusion.ktx2",
+			load_image
+		);
+	}
 
 	app.add_plugins(UiMaterialPlugin::<TexturedUiMaterial>::default());
 	app.add_observer(on_add_button);

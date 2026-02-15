@@ -10,6 +10,7 @@ use crate::{
 	props::logic_entity::ObjectiveEntity,
 	screens::{Screen, loading::LoadingScreen},
 };
+#[cfg(feature = "dev")]
 use bevy::input::common_conditions::input_just_pressed;
 use bevy::prelude::*;
 use bevy_eidolon::prelude::*;
