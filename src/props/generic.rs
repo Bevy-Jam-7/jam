@@ -1,6 +1,6 @@
 use crate::{
 	asset_tracking::LoadResource,
-	gameplay::{TargetName, interaction::InteractEvent},
+	gameplay::{TargetName, core::EnvironmentTemperature, interaction::InteractEvent},
 	props::interactables::InteractableEntity,
 	third_party::{
 		avian3d::CollisionLayer,
@@ -137,6 +137,7 @@ pub(crate) struct PottedPlant;
 	base(TargetName, Transform, Visibility),
 	model("models/office/shroom.gltf")
 )]
+#[require(EnvironmentTemperature(38.5))]
 pub(crate) struct PottedShroom;
 
 // darkmod
