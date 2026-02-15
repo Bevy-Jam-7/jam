@@ -25,9 +25,8 @@ pub fn clear_scatter_root(
 	mw_clear_root.write((*scatter_root).into());
 }
 
-pub fn advance_to_setup(
+pub fn toggle_layers(
 	mut cmd: Commands,
-	mut ns_scatter: ResMut<NextState<ScatterState>>,
 	q_layer: Query<Entity, With<ScatterLayer>>,
 	current_level: Res<CurrentLevel>,
 ) {
@@ -38,7 +37,11 @@ pub fn advance_to_setup(
 	for layer in q_layer.iter() {
 		cmd.entity(layer).insert(ScatterLayerEnabled(enabled));
 	}
+}
 
+pub fn advance_to_setup(
+	mut ns_scatter: ResMut<NextState<ScatterState>>,
+) {
 	ns_scatter.set(ScatterState::Setup);
 }
 
